@@ -43,7 +43,7 @@ public final class WebElementUtils
 
             List<WebElement> innerElements = element.findElements(By.className("*"));
 
-            if (!TestUtils.isEmpty(innerElements))
+            if (!SeleniumUtils.isEmpty(innerElements))
             {
                 builder.append("\t").append(toString(innerElements).replace("\n", "\n\t"));
             }

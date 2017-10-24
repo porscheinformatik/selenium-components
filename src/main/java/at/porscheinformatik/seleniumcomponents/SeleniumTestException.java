@@ -5,17 +5,17 @@ package at.porscheinformatik.seleniumcomponents;
  * 
  * @author ham
  */
-public class TestException extends RuntimeException
+public class SeleniumTestException extends RuntimeException
 {
 
     private static final long serialVersionUID = -2439556835339621020L;
 
-    public TestException(String s)
+    public SeleniumTestException(String s)
     {
         super(s);
     }
 
-    public TestException(String message, Throwable t)
+    public SeleniumTestException(String message, Throwable t)
     {
         super(message, t);
     }

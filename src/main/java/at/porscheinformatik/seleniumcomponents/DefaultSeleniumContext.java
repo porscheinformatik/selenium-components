@@ -50,7 +50,7 @@ public class DefaultSeleniumContext implements SeleniumContext
     {
         getDriver().quit();
 
-        TestUtils.waitForSeconds(5);
+        SeleniumUtils.waitForSeconds(5);
 
         driver = buildDriver();
     }
@@ -67,7 +67,7 @@ public class DefaultSeleniumContext implements SeleniumContext
         }
         catch (Exception ex)
         {
-            TestUtils.waitForSeconds(5);
+            SeleniumUtils.waitForSeconds(5);
 
             return driverFactory.createWebDriver(sessionName);
         }

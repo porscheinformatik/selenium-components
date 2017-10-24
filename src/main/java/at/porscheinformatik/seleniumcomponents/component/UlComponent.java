@@ -12,7 +12,7 @@ import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
-import at.porscheinformatik.seleniumcomponents.TestUtils;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -43,7 +43,7 @@ public class UlComponent<ENTRY_TYPE extends AbstractSeleniumComponent> extends A
 
     public boolean containsItem(Predicate<ENTRY_TYPE> predicate)
     {
-        return TestUtils.keepTrying(1, () -> listEntries.find(predicate)).isPresent();
+        return SeleniumUtils.keepTrying(1, () -> listEntries.find(predicate)).isPresent();
     }
 
     public SeleniumComponentList<ENTRY_TYPE> getVisibleItems()

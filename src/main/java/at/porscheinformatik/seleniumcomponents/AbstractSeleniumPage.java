@@ -45,8 +45,8 @@ public abstract class AbstractSeleniumPage implements SeleniumPage
     @Override
     public WebElement element(double timeoutInSeconds) throws NoSuchElementException
     {
-        return TestUtils.keepTrying(timeoutInSeconds, () -> selector.find(context.getDriver())).orElseThrow(
-            () -> new TestException("Element not found: " + selector));
+        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(context.getDriver())).orElseThrow(
+            () -> new SeleniumTestException("Element not found: " + selector));
     }
 
     @Override
@@ -79,8 +79,8 @@ public abstract class AbstractSeleniumPage implements SeleniumPage
         String url = getStartUrl();
         String navigate = "Calling " + url;
 
-        logger.info(String.format("\n\n%s\n%s\n%s\n\n", TestUtils.repeat("-", navigate.length()), navigate,
-            TestUtils.repeat("-", navigate.length())));
+        logger.info(String.format("\n\n%s\n%s\n%s\n\n", SeleniumUtils.repeat("-", navigate.length()), navigate,
+            SeleniumUtils.repeat("-", navigate.length())));
 
         context.getDriver().get(url);
 
@@ -99,7 +99,7 @@ public abstract class AbstractSeleniumPage implements SeleniumPage
 
     protected void waitUntilReady(double timeoutInSeconds)
     {
-        TestUtils.waitUntil(timeoutInSeconds, SeleniumConditions.readyState(context().getDriver()));
+        SeleniumUtils.waitUntil(timeoutInSeconds, SeleniumConditions.readyState(context().getDriver()));
     }
 
     @Override

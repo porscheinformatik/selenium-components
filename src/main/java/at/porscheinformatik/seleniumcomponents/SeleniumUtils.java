@@ -23,16 +23,16 @@ import java.util.regex.Pattern;
  *
  * @author ham
  */
-public final class TestUtils
+public final class SeleniumUtils
 {
 
     private static final Pattern IGNORE_PATTERN = Pattern.compile("^"
-        + TestUtils.class.getName().substring(0, TestUtils.class.getName().lastIndexOf(".")).replace(".", "\\.")
+        + SeleniumUtils.class.getName().substring(0, SeleniumUtils.class.getName().lastIndexOf(".")).replace(".", "\\.")
         + ".*");
 
     private static final AtomicInteger TEST_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService TEST_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
-        Thread thread = new Thread(runnable, "PNet Test Pool Thread #" + TEST_THREAD_ID.getAndIncrement());
+        Thread thread = new Thread(runnable, "Selenium Utils Pool Thread #" + TEST_THREAD_ID.getAndIncrement());
 
         thread.setDaemon(true);
 
@@ -41,7 +41,7 @@ public final class TestUtils
 
     private static double timeoutMultiplier = 1;
 
-    private TestUtils()
+    private SeleniumUtils()
     {
         super();
     }
@@ -53,7 +53,7 @@ public final class TestUtils
 
     public static void setTimeoutMultiplier(double timeoutMultiplier)
     {
-        TestUtils.timeoutMultiplier = timeoutMultiplier;
+        SeleniumUtils.timeoutMultiplier = timeoutMultiplier;
     }
 
     /**
@@ -103,49 +103,50 @@ public final class TestUtils
         }
         catch (InterruptedException e)
         {
-            throw new TestException("WaitForSeconds got interrupted", e);
+            throw new SeleniumTestException("WaitForSeconds got interrupted", e);
         }
     }
 
     /**
      * Waits until the check does not throw an exception and returns true. Does this four times per second. Throws a
-     * {@link TestException} on timeout or exception. If the timeout is <= 0, it checks it at least once.
+     * {@link SeleniumTestException} on timeout or exception. If the timeout is &lt;= 0, it checks it at least once.
      *
      * @param timeoutInSeconds the timeout
      * @param check the check
-     * @throws TestException wrapper for exceptions
+     * @throws SeleniumTestException wrapper for exceptions
      */
-    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws TestException
+    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumTestException
     {
-        keepTrying(timeoutInSeconds, () -> check.get() ? true : null).orElseThrow(() -> new TestException(
+        keepTrying(timeoutInSeconds, () -> check.get() ? true : null).orElseThrow(() -> new SeleniumTestException(
             String.format("WaitUntil timed out after %,.1fs: %s", timeoutInSeconds, describeCallLine(IGNORE_PATTERN))));
     }
 
     /**
      * Keeps calling the callable until it does not throw an exception and returns a non-null value. Does this four
-     * times per second. TIf the timeout <= 0, it calls the callable at least once.
+     * times per second. If the timeout &lt;= 0, it calls the callable at least once.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout
      * @param callable the callable
      * @return the optional result
-     * @throws TestException wrapper for exceptions
+     * @throws SeleniumTestException wrapper for exceptions
      */
-    public static <Any> Optional<Any> keepTrying(double timeoutInSeconds, Callable<Any> callable) throws TestException
+    public static <Any> Optional<Any> keepTrying(double timeoutInSeconds, Callable<Any> callable)
+        throws SeleniumTestException
     {
         return keepTrying(timeoutInSeconds, callable, 0.25);
     }
 
     /**
-     * Keeps calling the callable until it does not throw an exception and returns a non-null value. If the timeout <=
-     * 0, it calls the callable at least once.
+     * Keeps calling the callable until it does not throw an exception and returns a non-null value. If the timeout
+     * &lt;= 0, it calls the callable at least once.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout
      * @param callable the callable
      * @param delayInSeconds the delay between calls
      * @return the optional result
-     * @throws TestException if the callable fails horribly
+     * @throws SeleniumTestException if the callable fails horribly
      */
     public static <Any> Optional<Any> keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
     {
@@ -155,13 +156,13 @@ public final class TestUtils
             {
                 return Optional.ofNullable(callable.call());
             }
-            catch (TestException e)
+            catch (SeleniumTestException e)
             {
                 throw e;
             }
             catch (Exception e)
             {
-                throw new TestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                throw new SeleniumTestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
             }
         }
 
@@ -178,7 +179,7 @@ public final class TestUtils
                 {
                     result = callable.call();
                 }
-                catch (TestException e)
+                catch (SeleniumTestException e)
                 {
                     if (System.currentTimeMillis() > endMillis)
                     {
@@ -189,7 +190,8 @@ public final class TestUtils
                 {
                     if (System.currentTimeMillis() > endMillis)
                     {
-                        throw new TestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                        throw new SeleniumTestException(
+                            String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
                     }
                 }
 
@@ -222,10 +224,10 @@ public final class TestUtils
      * @param timeoutInSeconds the timeout
      * @param callable the callable
      * @return the optional result
-     * @throws TestException wrapper for exceptions
+     * @throws SeleniumTestException wrapper for exceptions
      */
     public static <Any> Optional<Any> callWithTimeout(double timeoutInSeconds, Callable<Any> callable)
-        throws TestException
+        throws SeleniumTestException
     {
         Future<Any> future = TEST_THREAD_POOL.submit(callable);
 
@@ -235,7 +237,7 @@ public final class TestUtils
         }
         catch (ExecutionException e)
         {
-            throw new TestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+            throw new SeleniumTestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
         }
         catch (InterruptedException | TimeoutException e)
         {
@@ -350,7 +352,7 @@ public final class TestUtils
                 }
                 catch (InterruptedException e)
                 {
-                    throw new TestException("Adding callables to thread pool got interrupted");
+                    throw new SeleniumTestException("Adding callables to thread pool got interrupted");
                 }
 
                 futures.add(TEST_THREAD_POOL.submit(worker));
@@ -462,7 +464,7 @@ public final class TestUtils
         {
             String methodName = element.getClassName() + "." + element.getMethodName();
 
-            if (methodName.startsWith(TestUtils.class.getName()))
+            if (methodName.startsWith(SeleniumUtils.class.getName()))
             {
                 // skip myself
                 continue;

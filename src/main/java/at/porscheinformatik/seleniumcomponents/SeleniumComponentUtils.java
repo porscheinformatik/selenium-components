@@ -44,7 +44,7 @@ public final class SeleniumComponentUtils
 
     public static void waitUntilExists(double timeoutInSeconds, SeleniumComponent component)
     {
-        TestUtils.waitUntil(timeoutInSeconds, () -> exists(component));
+        SeleniumUtils.waitUntil(timeoutInSeconds, () -> exists(component));
     }
 
     public static String getTagName(SeleniumComponent component)
@@ -79,7 +79,7 @@ public final class SeleniumComponentUtils
 
     public static void waitUntilClickable(double timeoutInSeconds, SeleniumComponent component)
     {
-        TestUtils.waitUntil(timeoutInSeconds, () -> isClickable(component));
+        SeleniumUtils.waitUntil(timeoutInSeconds, () -> isClickable(component));
     }
 
     public static void click(double timeoutInSeconds, SeleniumComponent component)
@@ -106,12 +106,12 @@ public final class SeleniumComponentUtils
 
     public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        TestUtils.waitUntil(timeoutInSeconds, () -> isVisible(component));
+        SeleniumUtils.waitUntil(timeoutInSeconds, () -> isVisible(component));
     }
 
     public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        TestUtils.waitUntil(timeoutInSeconds, () -> !isVisible(component));
+        SeleniumUtils.waitUntil(timeoutInSeconds, () -> !isVisible(component));
     }
 
     public static String getText(SeleniumComponent component)
@@ -125,10 +125,10 @@ public final class SeleniumComponentUtils
 
     public static String getText(double timeoutInSeconds, SeleniumComponent component)
     {
-        return TestUtils.keepTrying(timeoutInSeconds, () -> {
+        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> {
             String text = getText(component);
 
-            return TestUtils.isEmpty(text) ? null : text;
+            return SeleniumUtils.isEmpty(text) ? null : text;
         }).orElse(null);
     }
 

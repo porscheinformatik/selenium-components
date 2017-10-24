@@ -45,10 +45,10 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return TestUtils.keepTrying(timeoutInSeconds, () -> selector.find(parent)).orElseThrow(
-                () -> new TestException("Element not found: " + selector));
+            return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(parent)).orElseThrow(
+                () -> new SeleniumTestException("Element not found: " + selector));
         }
-        catch (TestException e)
+        catch (SeleniumTestException e)
         {
             if (parent != null)
             {
@@ -135,7 +135,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     @Override
     public String describe()
     {
-        return String.format("%s -> %s[%s]", parent.describe(), TestUtils.toClassName(getClass()), selector);
+        return String.format("%s -> %s[%s]", parent.describe(), SeleniumUtils.toClassName(getClass()), selector);
     }
 
 }
