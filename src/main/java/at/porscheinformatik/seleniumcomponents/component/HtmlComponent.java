@@ -2,7 +2,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SeleniumComponentUtils;
+import at.porscheinformatik.seleniumcomponents.SeleniumActions;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -32,23 +32,23 @@ public class HtmlComponent extends AbstractSeleniumComponent
 
     public void click()
     {
-        click(DEFAULT_TIMEOUOT_IN_SECONDS);
+        click(DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     public void click(double timeoutInSeconds)
     {
-        SeleniumComponentUtils.click(timeoutInSeconds, this);
+        SeleniumActions.click(timeoutInSeconds, this);
     }
 
     public String getText()
     {
-        return SeleniumComponentUtils.getText(this);
+        return SeleniumActions.getText(this);
     }
 
     @Override
     public String getAttribute(String name)
     {
-        return SeleniumComponentUtils.getAttribute(this, name);
+        return SeleniumActions.getAttribute(this, name);
     }
 
     public boolean containsClassName(String className)

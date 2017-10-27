@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
- * Some utilities for testing
+ * Some utilities for testing.
  *
  * @author ham
  */
@@ -46,18 +47,28 @@ public final class SeleniumUtils
         super();
     }
 
+    /**
+     * Returns the multiplier, that will be applied to any timeout passed to this class.
+     *
+     * @return the multiplier
+     */
     public static double getTimeoutMultiplier()
     {
         return timeoutMultiplier;
     }
 
+    /**
+     * Any timeout passed to this class, will be multiplied by the specified multiplier. The default value is 1.
+     *
+     * @param timeoutMultiplier the multiplier
+     */
     public static void setTimeoutMultiplier(double timeoutMultiplier)
     {
         SeleniumUtils.timeoutMultiplier = timeoutMultiplier;
     }
 
     /**
-     * Nullsafe empty and blank check for strings
+     * Null-safe empty and blank check for strings.
      *
      * @param s the string
      * @return true if empty
@@ -68,7 +79,7 @@ public final class SeleniumUtils
     }
 
     /**
-     * Nullsafe empty function for arrays
+     * Null-safe empty function for arrays.
      *
      * @param <Any> the type of array items
      * @param array the array
@@ -80,7 +91,7 @@ public final class SeleniumUtils
     }
 
     /**
-     * Nullsafe empty function for collections
+     * Null-safe empty function for collections.
      *
      * @param collection the collection
      * @return true if null or empty
@@ -91,9 +102,20 @@ public final class SeleniumUtils
     }
 
     /**
-     * Waits some seconds
+     * Null-safe empty function for maps.
      *
-     * @param seconds seconds
+     * @param map the maps
+     * @return true if null or empty
+     */
+    public static boolean isEmpty(Map<?, ?> map)
+    {
+        return (map == null) || (map.isEmpty());
+    }
+
+    /**
+     * Waits some seconds. The seconds will be scaled by the timeout multiplier.
+     *
+     * @param seconds the seconds to wait
      */
     public static void waitForSeconds(double seconds)
     {
@@ -109,9 +131,10 @@ public final class SeleniumUtils
 
     /**
      * Waits until the check does not throw an exception and returns true. Does this four times per second. Throws a
-     * {@link SeleniumTestException} on timeout or exception. If the timeout is &lt;= 0, it checks it at least once.
+     * {@link SeleniumTestException} on timeout or exception. If the timeout is &lt;= 0, it checks it at least once. The
+     * timeout will be scaled by the timeout multiplier.
      *
-     * @param timeoutInSeconds the timeout
+     * @param timeoutInSeconds the timeout in seconds
      * @param check the check
      * @throws SeleniumTestException wrapper for exceptions
      */
@@ -123,7 +146,8 @@ public final class SeleniumUtils
 
     /**
      * Keeps calling the callable until it does not throw an exception and returns a non-null value. Does this four
-     * times per second. If the timeout &lt;= 0, it calls the callable at least once.
+     * times per second. If the timeout &lt;= 0, it calls the callable at least once. The timeout will be scaled by the
+     * timeout multiplier.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout
@@ -139,7 +163,7 @@ public final class SeleniumUtils
 
     /**
      * Keeps calling the callable until it does not throw an exception and returns a non-null value. If the timeout
-     * &lt;= 0, it calls the callable at least once.
+     * &lt;= 0, it calls the callable at least once. The timeout will be scaled by the timeout multiplier.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout
@@ -166,12 +190,10 @@ public final class SeleniumUtils
             }
         }
 
-        final double scaledTimeout = scaleTimeout(timeoutInSeconds);
-
-        return callWithTimeout(scaledTimeout, () -> {
+        return callWithTimeout(timeoutInSeconds, () -> {
             Any result = null;
             long startMillis = System.currentTimeMillis();
-            long endMillis = (long) (startMillis + (scaledTimeout * 1000));
+            long endMillis = (long) (startMillis + (scaleTimeout(timeoutInSeconds) * 1000));
 
             while (true)
             {
@@ -218,7 +240,8 @@ public final class SeleniumUtils
     }
 
     /**
-     * Calls the callable once. Returns an empty optional on timeout.
+     * Calls the callable once. Returns an empty optional on timeout. The timeout will be scaled by the timeout
+     * multiplier.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout
@@ -233,7 +256,7 @@ public final class SeleniumUtils
 
         try
         {
-            return Optional.of(future.get((long) (timeoutInSeconds * 1000), TimeUnit.MILLISECONDS));
+            return Optional.of(future.get((long) (scaleTimeout(timeoutInSeconds) * 1000), TimeUnit.MILLISECONDS));
         }
         catch (ExecutionException e)
         {
@@ -310,7 +333,7 @@ public final class SeleniumUtils
 
     /**
      * Calls the callable "iterationCount" times. Uses "threadCount" threads for this task. The total timeout is
-     * estimated by the iteration count and the thread count.
+     * estimated by the iteration count and the thread count. The timeout will be scaled by the timeout multiplier.
      *
      * @param <Any> the expected return type
      * @param iterationCount the iterationCount
@@ -369,9 +392,9 @@ public final class SeleniumUtils
         }).get();
     }
 
-    private static double scaleTimeout(double timeoutInSeconds)
+    private static double scaleTimeout(double timeout)
     {
-        return timeoutInSeconds * timeoutMultiplier;
+        return timeout * timeoutMultiplier;
     }
 
     /**

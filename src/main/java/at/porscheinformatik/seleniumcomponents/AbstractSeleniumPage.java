@@ -50,9 +50,9 @@ public abstract class AbstractSeleniumPage implements SeleniumPage
     }
 
     @Override
-    public List<WebElement> elements()
+    public WebElementSelector selector()
     {
-        return selector.findAll(context().getDriver());
+        return selector;
     }
 
     @Override

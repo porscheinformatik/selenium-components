@@ -1,16 +1,12 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 /**
- * The base implementation of a {@link SeleniumComponent}.
+ * The abstract base implementation of a {@link SeleniumComponent}.
  *
  * @author ham
  */
@@ -66,76 +62,41 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
     }
 
-    /**
-     * Returns a list of all {@link WebElement}s, that match the selector of this component.
-     *
-     * @return a list of elements, never null
-     */
     @Override
-    public List<WebElement> elements()
+    public WebElementSelector selector()
     {
-        return selector.findAll(parent);
+        return selector;
     }
-
+    
     protected String getTagName()
     {
-        return SeleniumComponentUtils.getTagName(this);
+        return SeleniumActions.getTagName(this);
     }
 
     protected String getAttribute(String name)
     {
-        return SeleniumComponentUtils.getAttribute(this, name);
+        return SeleniumActions.getAttribute(this, name);
     }
 
     public boolean exists()
     {
-        return SeleniumComponentUtils.exists(this);
+        return SeleniumActions.exists(this);
     }
 
     public boolean isVisible()
     {
-        return SeleniumComponentUtils.isVisible(this);
+        return SeleniumActions.isVisible(this);
     }
 
     public void waitUntilVisible(double timeoutInSeconds)
     {
-        SeleniumComponentUtils.waitUntilVisible(timeoutInSeconds, this);
-    }
-
-    /**
-     * Selects all children of this component by the given selector and wraps each element in a component with ourself
-     * as the parent.
-     *
-     * @param selector the selector to select the children
-     * @param componentFactory the factory to create components out of the elements. Is called with the parent and the
-     *            selector.
-     * @param <COMPONENT_TYPE> type of components to produce
-     * @return list of components
-     */
-    protected <COMPONENT_TYPE extends SeleniumComponent> List<COMPONENT_TYPE> descendants(WebElementSelector selector,
-        SeleniumComponentFactory<COMPONENT_TYPE> componentFactory)
-    {
-        List<WebElement> allElements = elements();
-        List<COMPONENT_TYPE> components = new ArrayList<>();
-
-        for (WebElement element : allElements)
-        {
-            components.add(componentFactory.apply(this, selectElement(element)));
-        }
-
-        return components;
+        SeleniumActions.waitUntilVisible(timeoutInSeconds, this);
     }
 
     @Override
     public String toString()
     {
         return describe();
-    }
-
-    @Override
-    public String describe()
-    {
-        return String.format("%s -> %s[%s]", parent.describe(), SeleniumUtils.toClassName(getClass()), selector);
     }
 
 }

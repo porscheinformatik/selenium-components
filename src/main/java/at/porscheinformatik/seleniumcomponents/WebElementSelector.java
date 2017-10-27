@@ -19,13 +19,11 @@ public interface WebElementSelector
 {
 
     /**
-     * Describe the selector
+     * Creates a selector that always uses the specified element. This selector ignores the search context.
      *
-     * @return a string representation
+     * @param element the element to return
+     * @return the selector
      */
-    @Override
-    String toString();
-
     static WebElementSelector selectElement(WebElement element)
     {
         return new WebElementSelector()
@@ -81,8 +79,7 @@ public interface WebElementSelector
     }
 
     /**
-     * A selector that uses the id of an element. This selector usually acts globally and ignores the hierarchy of
-     * components.
+     * A selector that uses the id of an element. This selector usually does not ignore the hierarchy of components.
      *
      * @param id the id of the element
      * @return the selector
@@ -176,6 +173,63 @@ public interface WebElementSelector
     }
 
     /**
+     * Returns the element that represents the specified column. Expects the elements to be a th or td. The column
+     * respects the colspan attribute.
+     *
+     * @param column the column
+     * @return the selector
+     */
+    static WebElementSelector selectByColumn(int column)
+    {
+        return new WebElementSelector()
+        {
+            @Override
+            public WebElement find(SearchContext context)
+            {
+                List<WebElement> elements = context.findElements(By.cssSelector("th, td"));
+                int currentColumn = 0;
+
+                for (WebElement element : elements)
+                {
+                    currentColumn += getColspan(element);
+
+                    if (currentColumn > column)
+                    {
+                        return element;
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            public List<WebElement> findAll(SearchContext context)
+            {
+                return Arrays.asList(find(context));
+            }
+
+            private int getColspan(WebElement element)
+            {
+                String colspan = element.getAttribute("colspan");
+
+                if (SeleniumUtils.isEmpty(colspan))
+                {
+                    return 1;
+                }
+
+                try
+                {
+                    return Integer.parseInt(colspan);
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new SeleniumTestException("Failed to parse colspan: " + colspan, e);
+                }
+            }
+        };
+    }
+
+    /**
      * A selector that selects the component itself.
      *
      * @return the selector
@@ -201,6 +255,20 @@ public interface WebElementSelector
      */
     List<WebElement> findAll(SearchContext context);
 
+    /**
+     * Describe the selector to simplify debugging.
+     *
+     * @return a string representation
+     */
+    @Override
+    String toString();
+
+    /**
+     * Chains the specified selector after this selector.
+     *
+     * @param selector the selector
+     * @return the new selector instance
+     */
     default WebElementSelector descendant(WebElementSelector selector)
     {
         // I could never imagine a situation for needing the following in Java
@@ -231,7 +299,9 @@ public interface WebElementSelector
     /**
      * @param xpath the xpath to the parent
      * @return the parent
+     * @deprecated I think this is too complex. It should not be used.
      */
+    @Deprecated
     default WebElementSelector ancestor(String xpath)
     {
         WebElementSelector parent = selectByXPath("ancestor::" + xpath);

@@ -12,13 +12,6 @@ public interface SeleniumPage extends SeleniumComponent
         return null;
     }
 
-    @Override
-    @Deprecated
-    default SeleniumComponent root()
-    {
-        return this;
-    }
-
     void open();
 
     void close();

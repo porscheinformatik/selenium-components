@@ -28,7 +28,7 @@ public final class SeleniumConditions
             @Override
             public Boolean get()
             {
-                return SeleniumComponentUtils.isClickable(component);
+                return SeleniumActions.isClickable(component);
             }
 
             @Override
@@ -46,7 +46,7 @@ public final class SeleniumConditions
             @Override
             public Boolean get()
             {
-                return SeleniumComponentUtils.isVisible(component);
+                return SeleniumActions.isVisible(component);
             }
 
             @Override
@@ -174,7 +174,7 @@ public final class SeleniumConditions
         @Override
         public Boolean get()
         {
-            return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+            return SeleniumActions.retryOnStaleAndReturn(() -> {
                 try
                 {
                     WebElement element = component.element();

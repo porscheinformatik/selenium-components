@@ -15,10 +15,10 @@ import org.openqa.selenium.WebElement;
 public interface WebElementContainer extends SearchContext
 {
 
-    double DEFAULT_TIMEOUOT_IN_SECONDS = 2;
+    double DEFAULT_TIMEOUT_IN_SECONDS = 2;
 
     /**
-     * Selects and returns the element of this container from the DOM. Waits {@value #DEFAULT_TIMEOUOT_IN_SECONDS} for
+     * Selects and returns the element of this container from the DOM. Waits {@value #DEFAULT_TIMEOUT_IN_SECONDS} for
      * the element. If you use this method outside of your container, it is generally considered a bad idea, and you
      * should switch to use a {@link SeleniumComponent} instead.
      *
@@ -27,7 +27,7 @@ public interface WebElementContainer extends SearchContext
      */
     default WebElement element() throws NoSuchElementException
     {
-        return element(DEFAULT_TIMEOUOT_IN_SECONDS);
+        return element(DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     /**
@@ -40,15 +40,6 @@ public interface WebElementContainer extends SearchContext
      * @throws NoSuchElementException if the element was not found
      */
     WebElement element(double timeoutInSeconds) throws NoSuchElementException;
-
-    /**
-     * Selects and returns a list of all {@link WebElement}s of this container from the DOM. If you use this method
-     * outside of your container, it is generally considered a bad idea, any you should switch to use a
-     * {@link SeleniumComponent} instead.
-     *
-     * @return a list of elements, never null
-     */
-    List<WebElement> elements();
 
     @Override
     default WebElement findElement(By by)

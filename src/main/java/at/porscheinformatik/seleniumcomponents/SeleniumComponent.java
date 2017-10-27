@@ -1,7 +1,9 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import java.util.Objects;
+
 /**
- * The base class for components accessible by the Selenium tests. A {@link SeleniumComponent} usually represents a node
+ * The base class for components accessible by the Selenium tests. A {@link SeleniumComponent} usually describes a node
  * in the DOM.
  *
  * @author ham
@@ -10,53 +12,52 @@ public interface SeleniumComponent extends WebElementContainer
 {
 
     /**
-     * Returns the parent of the component.
+     * Returns the parent of this component.
      *
-     * @return the parent, may be null
+     * @return the parent, may be null if the component is root (like a page).
      */
     SeleniumComponent parent();
 
     /**
-     * Returns the root of the parent. If the component is a root, it must implement this method and return itself.
-     *
-     * @return the top-most parent, never null
-     * @deprecated use {@link SeleniumComponentUtils#root(SeleniumComponent)}
-     */
-    @Deprecated
-    default SeleniumComponent root()
-    {
-        return SeleniumComponentUtils.root(this);
-    }
-
-    /**
-     * Returns the {@link SeleniumContext} of the parent. If this component is root, it must implement this method and
-     * return a valid context.
+     * Returns the {@link SeleniumContext} of this component, which is, by default, the context of the parent. If this
+     * component is root, it must implement this method and return a valid context.
      *
      * @return the context, never null
      */
     default SeleniumContext context()
     {
-        return parent().context();
+        SeleniumComponent parent = parent();
+
+        Objects.requireNonNull(parent, () -> String.format(
+            "The parent is null which means, that this component is root. Implement this method by supplying a valid context"));
+
+        return Objects.requireNonNull(parent.context(),
+            () -> String.format("The context of the component defined by %s is null", parent.getClass()));
     }
 
     /**
-     * Returns a description of this component, usually as selector and content tuple.
+     * Returns the {@link WebElementSelector} of this component.
+     *
+     * @return the selector
+     */
+    WebElementSelector selector();
+
+    /**
+     * Returns a description of this component, usually as name and selector tuple.
      *
      * @return a description of this component
      */
-    String describe();
-
-    /**
-     * Returns true if there is a descendant
-     *
-     * @param selector the selector
-     * @return true if one component was found
-     * @deprecated it is considered a bad habit to directly access the elements
-     */
-    @Deprecated
-    default boolean containsDescendant(WebElementSelector selector)
+    default String describe()
     {
-        return !selector.findAll(this).isEmpty();
+        String description = String.format("%s[%s]", SeleniumUtils.toClassName(getClass()), selector());
+        SeleniumComponent parent = parent();
+
+        if (parent != null)
+        {
+            description = String.format("%s->%s", parent.describe(), description);
+        }
+
+        return description;
     }
 
 }

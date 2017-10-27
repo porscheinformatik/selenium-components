@@ -11,10 +11,10 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public final class SeleniumComponentUtils
+public final class SeleniumActions
 {
 
-    private SeleniumComponentUtils()
+    private SeleniumActions()
     {
     }
 
@@ -32,14 +32,26 @@ public final class SeleniumComponentUtils
     {
         try
         {
-            return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
-                return !component.elements().isEmpty();
+            return SeleniumActions.retryOnStaleAndReturn(() -> {
+                SeleniumComponent parent = component.parent();
+
+                if (parent != null)
+                {
+                    return !component.selector().findAll(parent).isEmpty();
+                }
+
+                return component.element(0) != null;
             }, 2);
         }
         catch (NoSuchElementException e)
         {
             return false;
         }
+    }
+
+    public static boolean exists(double timeoutInSeconds, SeleniumComponent component)
+    {
+        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> exists(component) ? true : null).orElse(false);
     }
 
     public static void waitUntilExists(double timeoutInSeconds, SeleniumComponent component)
@@ -49,14 +61,14 @@ public final class SeleniumComponentUtils
 
     public static String getTagName(SeleniumComponent component)
     {
-        return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+        return SeleniumActions.retryOnStaleAndReturn(() -> {
             return component.element().getTagName();
         }, 2);
     }
 
     public static String getAttribute(SeleniumComponent component, String name)
     {
-        return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+        return SeleniumActions.retryOnStaleAndReturn(() -> {
             return component.element().getAttribute(name);
         }, 2);
     }
@@ -65,7 +77,7 @@ public final class SeleniumComponentUtils
     {
         try
         {
-            return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+            return SeleniumActions.retryOnStaleAndReturn(() -> {
                 WebElement element = component.element();
 
                 return element.isDisplayed() && element.isEnabled();
@@ -75,6 +87,11 @@ public final class SeleniumComponentUtils
         {
             return false;
         }
+    }
+
+    public static boolean isClickable(double timeoutInSeconds, SeleniumComponent component)
+    {
+        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> isClickable(component) ? true : null).orElse(false);
     }
 
     public static void waitUntilClickable(double timeoutInSeconds, SeleniumComponent component)
@@ -92,7 +109,7 @@ public final class SeleniumComponentUtils
     {
         try
         {
-            return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+            return SeleniumActions.retryOnStaleAndReturn(() -> {
                 WebElement element = component.element();
 
                 return element.isDisplayed();
@@ -102,6 +119,11 @@ public final class SeleniumComponentUtils
         {
             return false;
         }
+    }
+
+    public static boolean isVisible(double timeoutInSeconds, SeleniumComponent component)
+    {
+        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> isVisible(component) ? true : null).orElse(false);
     }
 
     public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
@@ -116,7 +138,7 @@ public final class SeleniumComponentUtils
 
     public static String getText(SeleniumComponent component)
     {
-        return SeleniumComponentUtils.retryOnStaleAndReturn(() -> {
+        return SeleniumActions.retryOnStaleAndReturn(() -> {
             WebElement element = component.element();
 
             return element.getText().trim();
@@ -130,6 +152,18 @@ public final class SeleniumComponentUtils
 
             return SeleniumUtils.isEmpty(text) ? null : text;
         }).orElse(null);
+    }
+
+    /**
+     * Returns true if there is a descendant.
+     *
+     * @param component the component, that should contain the descendant
+     * @param selector the selector
+     * @return true if one component was found
+     */
+    public static boolean containsDescendant(SeleniumComponent component, WebElementSelector selector)
+    {
+        return !selector.findAll(component).isEmpty();
     }
 
     /**
