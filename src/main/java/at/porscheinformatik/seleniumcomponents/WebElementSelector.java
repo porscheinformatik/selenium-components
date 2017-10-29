@@ -173,27 +173,27 @@ public interface WebElementSelector
     }
 
     /**
-     * Returns the element that represents the specified column. Expects the elements to be a th or td. The column
-     * respects the colspan attribute.
+     * Returns the element that represents the specified index or column. Look a all direct children of the search
+     * context. If the element has a "colspan" attribute it is assumed, that the element spans over multiple indices.
      *
-     * @param column the column
+     * @param index the index
      * @return the selector
      */
-    static WebElementSelector selectByColumn(int column)
+    static WebElementSelector selectByIndex(int index)
     {
         return new WebElementSelector()
         {
             @Override
             public WebElement find(SearchContext context)
             {
-                List<WebElement> elements = context.findElements(By.cssSelector("th, td"));
-                int currentColumn = 0;
+                List<WebElement> elements = context.findElements(By.cssSelector("*"));
+                int currentIndex = 0;
 
                 for (WebElement element : elements)
                 {
-                    currentColumn += getColspan(element);
+                    currentIndex += getColspan(element);
 
-                    if (currentColumn > column)
+                    if (currentIndex > index)
                     {
                         return element;
                     }
@@ -223,7 +223,7 @@ public interface WebElementSelector
                 }
                 catch (NumberFormatException e)
                 {
-                    throw new SeleniumTestException("Failed to parse colspan: " + colspan, e);
+                    throw new SeleniumException("Failed to parse colspan: " + colspan, e);
                 }
             }
         };

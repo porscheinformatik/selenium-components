@@ -34,7 +34,7 @@ public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumC
         }
         catch (NoSuchMethodException | SecurityException e1)
         {
-            throw new SeleniumTestException(String.format("The $s has no constructor with types (%s, %s)", type,
+            throw new SeleniumException(String.format("The $s has no constructor with types (%s, %s)", type,
                 SeleniumUtils.toClassName(SeleniumComponent.class),
                 SeleniumUtils.toClassName(WebElementSelector.class)));
         }
@@ -47,7 +47,7 @@ public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumC
             catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e)
             {
-                throw new SeleniumTestException("Failed to create clone", e);
+                throw new SeleniumException("Failed to create clone", e);
             }
         };
     }

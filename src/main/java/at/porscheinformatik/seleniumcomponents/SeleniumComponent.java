@@ -2,6 +2,8 @@ package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
 
+import org.openqa.selenium.WebElement;
+
 /**
  * The base class for components accessible by the Selenium tests. A {@link SeleniumComponent} usually describes a node
  * in the DOM.
@@ -36,28 +38,29 @@ public interface SeleniumComponent extends WebElementContainer
     }
 
     /**
-     * Returns the {@link WebElementSelector} of this component.
+     * Returns true if there is at least one {@link WebElement} that matches this component (it must no
+     * be visible, though). This method has no timeout, it does not wait for the component to become existent.
      *
-     * @return the selector
+     * @return true if the component exists
      */
-    WebElementSelector selector();
+    boolean exists()
+    {
+        try
+        {
+            return SeleniumActions.retryOnStaleAndReturn(() -> !selector.findAll(parent).isEmpty(), 2);
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+
+    }
 
     /**
      * Returns a description of this component, usually as name and selector tuple.
      *
      * @return a description of this component
      */
-    default String describe()
-    {
-        String description = String.format("%s[%s]", SeleniumUtils.toClassName(getClass()), selector());
-        SeleniumComponent parent = parent();
-
-        if (parent != null)
-        {
-            description = String.format("%s->%s", parent.describe(), description);
-        }
-
-        return description;
-    }
+    String describe();
 
 }

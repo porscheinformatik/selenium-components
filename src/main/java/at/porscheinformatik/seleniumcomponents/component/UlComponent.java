@@ -43,7 +43,7 @@ public class UlComponent<ENTRY_TYPE extends AbstractSeleniumComponent> extends A
 
     public boolean containsItem(Predicate<ENTRY_TYPE> predicate)
     {
-        return SeleniumUtils.keepTrying(1, () -> listEntries.find(predicate)).isPresent();
+        return SeleniumUtils.optional(() -> SeleniumUtils.keepTrying(1, () -> listEntries.find(predicate))).isPresent();
     }
 
     public SeleniumComponentList<ENTRY_TYPE> getVisibleItems()

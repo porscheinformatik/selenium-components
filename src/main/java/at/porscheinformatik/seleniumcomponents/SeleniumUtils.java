@@ -33,14 +33,15 @@ public final class SeleniumUtils
 
     private static final AtomicInteger TEST_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService TEST_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
-        Thread thread = new Thread(runnable, "Selenium Utils Pool Thread #" + TEST_THREAD_ID.getAndIncrement());
+        Thread thread = new Thread(runnable,
+            SeleniumUtils.toClassName(SeleniumUtils.class) + " Pool Thread #" + TEST_THREAD_ID.getAndIncrement());
 
         thread.setDaemon(true);
 
         return thread;
     });
 
-    private static double timeoutMultiplier = 1;
+    private static double timeMultiplier = 1;
 
     private SeleniumUtils()
     {
@@ -48,23 +49,24 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns the multiplier, that will be applied to any timeout passed to this class.
+     * Returns the multiplier, that will be applied to any timeout or delay passed to this class.
      *
      * @return the multiplier
      */
-    public static double getTimeoutMultiplier()
+    public static double getTimeMultiplier()
     {
-        return timeoutMultiplier;
+        return timeMultiplier;
     }
 
     /**
-     * Any timeout passed to this class, will be multiplied by the specified multiplier. The default value is 1.
+     * Any timeout or delay passed to this class, will be multiplied by the specified multiplier. The default value is
+     * 1.
      *
-     * @param timeoutMultiplier the multiplier
+     * @param timeMultiplier the multiplier
      */
-    public static void setTimeoutMultiplier(double timeoutMultiplier)
+    public static void setTimeMultiplier(double timeMultiplier)
     {
-        SeleniumUtils.timeoutMultiplier = timeoutMultiplier;
+        SeleniumUtils.timeMultiplier = timeMultiplier;
     }
 
     /**
@@ -87,7 +89,7 @@ public final class SeleniumUtils
      */
     public static <Any> boolean isEmpty(Any[] array)
     {
-        return (array == null) || (Array.getLength(array) <= 0);
+        return array == null || Array.getLength(array) <= 0;
     }
 
     /**
@@ -98,7 +100,7 @@ public final class SeleniumUtils
      */
     public static boolean isEmpty(Collection<?> collection)
     {
-        return (collection == null) || (collection.isEmpty());
+        return collection == null || collection.isEmpty();
     }
 
     /**
@@ -109,11 +111,40 @@ public final class SeleniumUtils
      */
     public static boolean isEmpty(Map<?, ?> map)
     {
-        return (map == null) || (map.isEmpty());
+        return map == null || map.isEmpty();
     }
 
     /**
-     * Waits some seconds. The seconds will be scaled by the timeout multiplier.
+     * Calls the {@link Callable}. If the call returns null, the optional is empty. If the call throws a
+     * {@link SeleniumTimeoutException} or a {@link SeleniumInterruptedException}, the optional is empty. If the call
+     * throws another exception this exception will be wrappen in a {@link SeleniumException}.
+     *
+     * @param callable the {@link Callable}
+     * @return the optional result
+     * @throws SeleniumException on occasion
+     */
+    public static <Any> Optional<Any> optional(Callable<Any> callable) throws SeleniumException
+    {
+        try
+        {
+            return Optional.ofNullable(callable.call());
+        }
+        catch (SeleniumTimeoutException | SeleniumInterruptedException e)
+        {
+            return Optional.empty();
+        }
+        catch (SeleniumException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new SeleniumException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+        }
+    }
+
+    /**
+     * Waits some seconds. The seconds will be scaled by the {@value #timeMultiplier}.
      *
      * @param seconds the seconds to wait
      */
@@ -121,150 +152,204 @@ public final class SeleniumUtils
     {
         try
         {
-            Thread.sleep((long) (scaleTimeout(seconds) * 1000));
+            Thread.sleep((long) (scaleTime(seconds) * 1000));
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumTestException("WaitForSeconds got interrupted", e);
+            throw new SeleniumException("WaitForSeconds got interrupted", e);
         }
     }
 
     /**
-     * Waits until the check does not throw an exception and returns true. Does this four times per second. Throws a
-     * {@link SeleniumTestException} on timeout or exception. If the timeout is &lt;= 0, it checks it at least once. The
-     * timeout will be scaled by the timeout multiplier.
+     * Waits until the check function does not throw an exception and returns true. If the timeout is &lt;= 0 or NaN, it
+     * checks it at least once. The timeout will be scaled by the {@value #timeMultiplier}. The check function will be
+     * called four times a second. If the check throws an exception at the end the exception will be wrapped by a
+     * {@link SeleniumException} and gets thrown this way.
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param check the check
-     * @throws SeleniumTestException wrapper for exceptions
+     * @throws SeleniumException if the {@link Callable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
      */
-    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumTestException
+    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumException
     {
-        keepTrying(timeoutInSeconds, () -> check.get() ? true : null).orElseThrow(() -> new SeleniumTestException(
-            String.format("WaitUntil timed out after %,.1fs: %s", timeoutInSeconds, describeCallLine(IGNORE_PATTERN))));
+        keepTrying(timeoutInSeconds, () -> check.get() ? true : null);
     }
 
     /**
-     * Keeps calling the callable until it does not throw an exception and returns a non-null value. Does this four
-     * times per second. If the timeout &lt;= 0, it calls the callable at least once. The timeout will be scaled by the
-     * timeout multiplier.
+     * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
+     * or another non-null value. If the timeout &lt;= 0 or NaN, it calls the {@link Callable} at least once and the
+     * timeout will be ignored. The timeout will be scaled by the {@value #timeMultiplier}. If the call throws an
+     * exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown this way. The
+     * {@link Callable} will be called four times a second.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout
-     * @param callable the callable
-     * @return the optional result
-     * @throws SeleniumTestException wrapper for exceptions
+     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param callable the {@link Callable}
+     * @return the result
+     * @throws SeleniumException if the {@link Callable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
      */
-    public static <Any> Optional<Any> keepTrying(double timeoutInSeconds, Callable<Any> callable)
-        throws SeleniumTestException
+    public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable) throws SeleniumException
     {
         return keepTrying(timeoutInSeconds, callable, 0.25);
     }
 
     /**
-     * Keeps calling the callable until it does not throw an exception and returns a non-null value. If the timeout
-     * &lt;= 0, it calls the callable at least once. The timeout will be scaled by the timeout multiplier.
+     * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
+     * or another non-null value. If the timeout &lt;= 0 or NaN, it calls the {@link Callable} at least once and the
+     * timeout will be ignored. The timeout will be scaled by the {@value #timeMultiplier}. If the call throws an
+     * exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown this way.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout
-     * @param callable the callable
-     * @param delayInSeconds the delay between calls
-     * @return the optional result
-     * @throws SeleniumTestException if the callable fails horribly
+     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param callable the {@link Callable}
+     * @param delayInSeconds the delay between calls (will be scaled by the {@value #timeMultiplier})
+     * @return the result or the call
+     * @throws SeleniumFailException if the call fails to produce a value in time
      */
-    public static <Any> Optional<Any> keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
+    public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
+        throws SeleniumFailException
     {
-        if (timeoutInSeconds <= 0 || Double.isNaN(timeoutInSeconds))
+        double scaledTimeoutInSeconds = scaleTime(timeoutInSeconds);
+
+        if (Double.isNaN(scaledTimeoutInSeconds) || (long) (scaledTimeoutInSeconds * 1000) <= 0)
         {
+            Any result;
+
             try
             {
-                return Optional.ofNullable(callable.call());
-            }
-            catch (SeleniumTestException e)
-            {
-                throw e;
+                result = callWithTimeout(timeoutInSeconds, callable);
             }
             catch (Exception e)
             {
-                throw new SeleniumTestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                throw new SeleniumFailException(
+                    String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)), e);
             }
-        }
 
-        return callWithTimeout(timeoutInSeconds, () -> {
-            Any result = null;
-            long startMillis = System.currentTimeMillis();
-            long endMillis = (long) (startMillis + (scaleTimeout(timeoutInSeconds) * 1000));
-
-            while (true)
+            if (result instanceof Optional)
             {
-                try
-                {
-                    result = callable.call();
-                }
-                catch (SeleniumTestException e)
-                {
-                    if (System.currentTimeMillis() > endMillis)
-                    {
-                        throw e;
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (System.currentTimeMillis() > endMillis)
-                    {
-                        throw new SeleniumTestException(
-                            String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
-                    }
-                }
-
-                if (result != null)
+                if (((Optional<?>) result).isPresent())
                 {
                     return result;
                 }
-
-                long currentMillis = System.currentTimeMillis();
-
-                if (currentMillis > endMillis)
-                {
-                    throw new TimeoutException();
-                }
-
-                long delay = Math.min((long) (delayInSeconds * 1000), endMillis - currentMillis);
-
-                if (delay > 0)
-                {
-                    Thread.sleep(delay);
-                }
             }
-        });
+            else if (result != null)
+            {
+                return result;
+            }
+
+            throw new SeleniumFailException(
+                String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)));
+        }
+
+        try
+        {
+            return callWithTimeout(timeoutInSeconds, () -> {
+                Any result = null;
+                long startMillis = System.currentTimeMillis();
+                long endMillis = (long) (startMillis + scaledTimeoutInSeconds * 1000);
+
+                while (true)
+                {
+                    try
+                    {
+                        result = callable.call();
+                    }
+                    catch (Exception e)
+                    {
+                        if (System.currentTimeMillis() > endMillis)
+                        {
+                            throw new SeleniumFailException(
+                                String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                        }
+                    }
+
+                    if (result instanceof Optional)
+                    {
+                        if (((Optional<?>) result).isPresent())
+                        {
+                            return result;
+                        }
+                    }
+                    else if (result != null)
+                    {
+                        return result;
+                    }
+
+                    long currentMillis = System.currentTimeMillis();
+
+                    if (currentMillis > endMillis)
+                    {
+                        throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds): %s",
+                            scaledTimeoutInSeconds, describeCallLine(IGNORE_PATTERN)));
+                    }
+
+                    waitForSeconds(delayInSeconds);
+                }
+            });
+        }
+        catch (SeleniumFailException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)),
+                e);
+        }
     }
 
     /**
-     * Calls the callable once. Returns an empty optional on timeout. The timeout will be scaled by the timeout
-     * multiplier.
+     * Calls the {@link Callable} once. The timeout will be scaled by the {@value #timeMultiplier}. If the timeout is <=
+     * 0 or NaN, the timeout will be ignored.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout
-     * @param callable the callable
-     * @return the optional result
-     * @throws SeleniumTestException wrapper for exceptions
+     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param callable the {@link Callable}
+     * @return the result of the call
+     * @throws SeleniumException wrapper for exceptions
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
      */
-    public static <Any> Optional<Any> callWithTimeout(double timeoutInSeconds, Callable<Any> callable)
-        throws SeleniumTestException
+    public static <Any> Any callWithTimeout(double timeoutInSeconds, Callable<Any> callable)
+        throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException
     {
+        double scaledTimeoutInSeconds = scaleTime(timeoutInSeconds);
+
         Future<Any> future = TEST_THREAD_POOL.submit(callable);
 
         try
         {
-            return Optional.of(future.get((long) (scaleTimeout(timeoutInSeconds) * 1000), TimeUnit.MILLISECONDS));
+            if (Double.isNaN(scaledTimeoutInSeconds) || (long) (scaledTimeoutInSeconds * 1000) <= 0)
+            {
+                return future.get();
+            }
+
+            return future.get((long) (scaledTimeoutInSeconds * 1000), TimeUnit.MILLISECONDS);
         }
         catch (ExecutionException e)
         {
-            throw new SeleniumTestException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+
+            if (cause instanceof SeleniumException)
+            {
+                throw (SeleniumException) cause;
+            }
+
+            throw new SeleniumException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), cause);
         }
-        catch (InterruptedException | TimeoutException e)
+        catch (InterruptedException e)
         {
-            return Optional.empty();
+            throw new SeleniumInterruptedException(
+                String.format("Call interrupted: %s", describeCallLine(IGNORE_PATTERN)), e);
+        }
+        catch (TimeoutException e)
+        {
+            throw new SeleniumTimeoutException(String.format("Call timed out (%,.1f seconds): %s",
+                scaledTimeoutInSeconds, describeCallLine(IGNORE_PATTERN)), e);
         }
     }
 
@@ -272,8 +357,8 @@ public final class SeleniumUtils
      * Executes a task in the background.
      *
      * @param <Any> the expected result type
-     * @param callable the callable
-     * @return the future for the callable
+     * @param callable the {@link Callable}
+     * @return the future for the {@link Callable}
      */
     public static <Any> Future<Any> meanwhile(Callable<Any> callable)
     {
@@ -284,9 +369,9 @@ public final class SeleniumUtils
      * Executes a task in the background.
      *
      * @param <Any> the expected result type
-     * @param callable the callable
+     * @param callable the {@link Callable}
      * @param successCallback the callback on success, may be null
-     * @return the future for the callable
+     * @return the future for the {@link Callable}
      */
     public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback)
     {
@@ -297,10 +382,10 @@ public final class SeleniumUtils
      * Executes a task in the background.
      *
      * @param <Any> the expected result type
-     * @param callable the callable
+     * @param callable the {@link Callable}
      * @param successCallback the callback on success, may be null
      * @param errorCallback the callback on failure, may be null
-     * @return the future for the callable
+     * @return the future for the {@link Callable}
      */
     public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback,
         Consumer<Exception> errorCallback)
@@ -332,18 +417,22 @@ public final class SeleniumUtils
     }
 
     /**
-     * Calls the callable "iterationCount" times. Uses "threadCount" threads for this task. The total timeout is
-     * estimated by the iteration count and the thread count. The timeout will be scaled by the timeout multiplier.
+     * Calls the {@link Callable} "iterationCount" times. Uses "threadCount" threads for this task. The total timeout is
+     * estimated by the iteration count and the thread count. The timeout will be scaled by the
+     * {@value #timeMultiplier}.
      *
      * @param <Any> the expected return type
      * @param iterationCount the iterationCount
      * @param threadCount the threadCount
      * @param timeoutPerCallableInSeconds the timeout for one (!) call
-     * @param callable the callable
+     * @param callable the {@link Callable}
      * @return a list of results
+     * @throws SeleniumException wrapper for exceptions
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
      */
     public static <Any> List<Any> parallel(int iterationCount, int threadCount, double timeoutPerCallableInSeconds,
-        Callable<Any> callable)
+        Callable<Any> callable) throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException
     {
         Semaphore semaphore = new Semaphore(threadCount);
         Callable<Any> worker = () -> {
@@ -361,7 +450,7 @@ public final class SeleniumUtils
         timeoutPerCallableInSeconds = timeoutPerCallableInSeconds * (1 + Math.log10(threadCount));
 
         // the total timeout shrinks with the thread count
-        double totalTimeoutInSeconds = (timeoutPerCallableInSeconds * iterationCount) / threadCount;
+        double totalTimeoutInSeconds = timeoutPerCallableInSeconds * iterationCount / threadCount;
 
         return callWithTimeout(totalTimeoutInSeconds, () -> {
             List<Future<Any>> futures = new ArrayList<>();
@@ -375,7 +464,7 @@ public final class SeleniumUtils
                 }
                 catch (InterruptedException e)
                 {
-                    throw new SeleniumTestException("Adding callables to thread pool got interrupted");
+                    throw new SeleniumInterruptedException("Adding callables to thread pool got interrupted");
                 }
 
                 futures.add(TEST_THREAD_POOL.submit(worker));
@@ -389,12 +478,12 @@ public final class SeleniumUtils
             }
 
             return results;
-        }).get();
+        });
     }
 
-    private static double scaleTimeout(double timeout)
+    private static double scaleTime(double timeout)
     {
-        return timeout * timeoutMultiplier;
+        return timeout * timeMultiplier;
     }
 
     /**
@@ -466,12 +555,12 @@ public final class SeleniumUtils
 
     public static String toCallLine(StackTraceElement element)
     {
-        return (element != null) ? "(" + element.getFileName() + ":" + element.getLineNumber() + ")" : "(?:?)";
+        return element != null ? "(" + element.getFileName() + ":" + element.getLineNumber() + ")" : "(?:?)";
     }
 
     public static String toCallMethod(StackTraceElement element)
     {
-        return (element != null) ? element.getClassName() + "." + element.getMethodName() : "<#UNKNOWN>";
+        return element != null ? element.getClassName() + "." + element.getMethodName() : "<#UNKNOWN>";
     }
 
     public static String toCall(StackTraceElement element)

@@ -31,7 +31,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     }
 
     @Override
-    public SeleniumComponent parent()
+    public final SeleniumComponent parent()
     {
         return parent;
     }
@@ -41,33 +41,57 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(parent)).orElseThrow(
-                () -> new SeleniumTestException("Element not found: " + selector));
+            return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(parent));
         }
-        catch (SeleniumTestException e)
+        catch (Exception e)
         {
-            if (parent != null)
-            {
-                try
-                {
-                    parent.element();
-                }
-                catch (NoSuchElementException e2)
-                {
-                    throw new NoSuchElementException(describe(), e2);
-                }
-            }
-
             throw new NoSuchElementException(describe(), e);
         }
     }
 
+    /**
+     * Returns a description of this component, usually as name and selector tuple.
+     *
+     * @return a description of this component
+     */
     @Override
-    public WebElementSelector selector()
+    public String describe()
+    {
+        String description = String.format("%s[%s]", SeleniumUtils.toClassName(getClass()), selector);
+        SeleniumComponent parent = parent();
+
+        if (parent != null)
+        {
+            description = String.format("%s->%s", parent.describe(), description);
+        }
+
+        return description;
+    }
+
+    /**
+     * Returns true if there is at least one {@link WebElement} that matches the selector of this component (it must no
+     * be visible, though). This method has no timeout, it does not wait for the component to become existent.
+     *
+     * @return true if the component exists
+     */
+    public boolean exists()
+    {
+        try
+        {
+            return SeleniumActions.retryOnStaleAndReturn(() -> !selector.findAll(parent).isEmpty(), 2);
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+
+    }
+
+    protected final WebElementSelector getSelector()
     {
         return selector;
     }
-    
+
     protected String getTagName()
     {
         return SeleniumActions.getTagName(this);
@@ -76,11 +100,6 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     protected String getAttribute(String name)
     {
         return SeleniumActions.getAttribute(this, name);
-    }
-
-    public boolean exists()
-    {
-        return SeleniumActions.exists(this);
     }
 
     public boolean isVisible()

@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static at.porscheinformatik.seleniumcomponents.SeleniumUtils.*;
+
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
@@ -18,6 +20,13 @@ public final class SeleniumActions
     {
     }
 
+    /**
+     * Returns the topmost {@link SeleniumComponent} following the chain of parents of the specified component or the
+     * component itself, if it has no parent component.
+     *
+     * @param component the component
+     * @return the root component
+     */
     public static SeleniumComponent root(SeleniumComponent component)
     {
         while (component.parent() != null)
@@ -28,7 +37,7 @@ public final class SeleniumActions
         return component;
     }
 
-    public static boolean exists(SeleniumComponent component)
+    public static boolean exists(AbstractSeleniumComponent component)
     {
         try
         {
@@ -51,12 +60,12 @@ public final class SeleniumActions
 
     public static boolean exists(double timeoutInSeconds, SeleniumComponent component)
     {
-        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> exists(component) ? true : null).orElse(false);
+        return optional(() -> keepTrying(timeoutInSeconds, () -> exists(component) ? true : null)).orElse(false);
     }
 
     public static void waitUntilExists(double timeoutInSeconds, SeleniumComponent component)
     {
-        SeleniumUtils.waitUntil(timeoutInSeconds, () -> exists(component));
+        waitUntil(timeoutInSeconds, () -> exists(component));
     }
 
     public static String getTagName(SeleniumComponent component)
@@ -91,12 +100,12 @@ public final class SeleniumActions
 
     public static boolean isClickable(double timeoutInSeconds, SeleniumComponent component)
     {
-        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> isClickable(component) ? true : null).orElse(false);
+        return optional(() -> keepTrying(timeoutInSeconds, () -> isClickable(component) ? true : null)).orElse(false);
     }
 
     public static void waitUntilClickable(double timeoutInSeconds, SeleniumComponent component)
     {
-        SeleniumUtils.waitUntil(timeoutInSeconds, () -> isClickable(component));
+        waitUntil(timeoutInSeconds, () -> isClickable(component));
     }
 
     public static void click(double timeoutInSeconds, SeleniumComponent component)
@@ -123,17 +132,17 @@ public final class SeleniumActions
 
     public static boolean isVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> isVisible(component) ? true : null).orElse(false);
+        return optional(() -> keepTrying(timeoutInSeconds, () -> isVisible(component) ? true : null)).orElse(false);
     }
 
     public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        SeleniumUtils.waitUntil(timeoutInSeconds, () -> isVisible(component));
+        waitUntil(timeoutInSeconds, () -> isVisible(component));
     }
 
     public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        SeleniumUtils.waitUntil(timeoutInSeconds, () -> !isVisible(component));
+        waitUntil(timeoutInSeconds, () -> !isVisible(component));
     }
 
     public static String getText(SeleniumComponent component)
@@ -147,11 +156,11 @@ public final class SeleniumActions
 
     public static String getText(double timeoutInSeconds, SeleniumComponent component)
     {
-        return SeleniumUtils.keepTrying(timeoutInSeconds, () -> {
+        return optional(() -> keepTrying(timeoutInSeconds, () -> {
             String text = getText(component);
 
-            return SeleniumUtils.isEmpty(text) ? null : text;
-        }).orElse(null);
+            return isEmpty(text) ? null : text;
+        })).orElse(null);
     }
 
     /**

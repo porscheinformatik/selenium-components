@@ -3,7 +3,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumActions;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SeleniumTestException;
+import at.porscheinformatik.seleniumcomponents.SeleniumException;
 import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
@@ -35,7 +35,7 @@ public abstract class AbstractTableCellComponent extends AbstractSeleniumCompone
         }
         catch (NumberFormatException e)
         {
-            throw new SeleniumTestException("Failed to parse colspan: " + colspan, e);
+            throw new SeleniumException("Failed to parse colspan: " + colspan, e);
         }
     }
 

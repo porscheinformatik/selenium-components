@@ -6,7 +6,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.StringDescription;
-import org.openqa.selenium.TimeoutException;
 
 /**
  * Asserts for {@link SeleniumComponent}s.
@@ -91,8 +90,7 @@ public final class SeleniumAsserts extends MatcherAssert
 
                     return null;
                 }
-            }).orElseThrow(
-                () -> new TimeoutException(String.format("Failed to get value in %,.1fs.", timeoutInSeconds)));
+            });
         }
         catch (Exception e)
         {
