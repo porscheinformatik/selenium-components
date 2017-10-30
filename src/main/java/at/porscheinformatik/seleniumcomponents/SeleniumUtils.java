@@ -27,10 +27,6 @@ import java.util.regex.Pattern;
 public final class SeleniumUtils
 {
 
-    private static final Pattern IGNORE_PATTERN = Pattern.compile("^"
-        + SeleniumUtils.class.getName().substring(0, SeleniumUtils.class.getName().lastIndexOf(".")).replace(".", "\\.")
-        + ".*");
-
     private static final AtomicInteger TEST_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService TEST_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread(runnable,
@@ -41,32 +37,9 @@ public final class SeleniumUtils
         return thread;
     });
 
-    private static double timeMultiplier = 1;
-
     private SeleniumUtils()
     {
         super();
-    }
-
-    /**
-     * Returns the multiplier, that will be applied to any timeout or delay passed to this class.
-     *
-     * @return the multiplier
-     */
-    public static double getTimeMultiplier()
-    {
-        return timeMultiplier;
-    }
-
-    /**
-     * Any timeout or delay passed to this class, will be multiplied by the specified multiplier. The default value is
-     * 1.
-     *
-     * @param timeMultiplier the multiplier
-     */
-    public static void setTimeMultiplier(double timeMultiplier)
-    {
-        SeleniumUtils.timeMultiplier = timeMultiplier;
     }
 
     /**
@@ -119,6 +92,7 @@ public final class SeleniumUtils
      * {@link SeleniumTimeoutException} or a {@link SeleniumInterruptedException}, the optional is empty. If the call
      * throws another exception this exception will be wrappen in a {@link SeleniumException}.
      *
+     * @param <Any> any type
      * @param callable the {@link Callable}
      * @return the optional result
      * @throws SeleniumException on occasion
@@ -133,13 +107,13 @@ public final class SeleniumUtils
         {
             return Optional.empty();
         }
-        catch (SeleniumException e)
+        catch (RuntimeException e)
         {
             throw e;
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+            throw new SeleniumException(String.format("Call failed: %s", describeCallLine()), e);
         }
     }
 
@@ -225,8 +199,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumFailException(
-                    String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()), e);
             }
 
             if (result instanceof Optional)
@@ -241,8 +214,7 @@ public final class SeleniumUtils
                 return result;
             }
 
-            throw new SeleniumFailException(
-                String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)));
+            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()));
         }
 
         try
@@ -262,8 +234,8 @@ public final class SeleniumUtils
                     {
                         if (System.currentTimeMillis() > endMillis)
                         {
-                            throw new SeleniumFailException(
-                                String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)), e);
+                            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()),
+                                e);
                         }
                     }
 
@@ -284,7 +256,7 @@ public final class SeleniumUtils
                     if (currentMillis > endMillis)
                     {
                         throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds): %s",
-                            scaledTimeoutInSeconds, describeCallLine(IGNORE_PATTERN)));
+                            scaledTimeoutInSeconds, describeCallLine()));
                     }
 
                     waitForSeconds(delayInSeconds);
@@ -297,8 +269,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine(IGNORE_PATTERN)),
-                e);
+            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()), e);
         }
     }
 
@@ -339,17 +310,16 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            throw new SeleniumException(String.format("Call failed: %s", describeCallLine(IGNORE_PATTERN)), cause);
+            throw new SeleniumException(String.format("Call failed: %s", describeCallLine()), cause);
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumInterruptedException(
-                String.format("Call interrupted: %s", describeCallLine(IGNORE_PATTERN)), e);
+            throw new SeleniumInterruptedException(String.format("Call interrupted: %s", describeCallLine()), e);
         }
         catch (TimeoutException e)
         {
-            throw new SeleniumTimeoutException(String.format("Call timed out (%,.1f seconds): %s",
-                scaledTimeoutInSeconds, describeCallLine(IGNORE_PATTERN)), e);
+            throw new SeleniumTimeoutException(
+                String.format("Call timed out (%,.1f seconds): %s", scaledTimeoutInSeconds, describeCallLine()), e);
         }
     }
 
@@ -483,7 +453,7 @@ public final class SeleniumUtils
 
     private static double scaleTime(double timeout)
     {
-        return timeout * timeMultiplier;
+        return timeout * SeleniumGlobals.getTimeMultiplier();
     }
 
     /**
@@ -543,36 +513,21 @@ public final class SeleniumUtils
         return builder.substring(0, length);
     }
 
-    public static String describeCall(Pattern ignorePattern)
+    public static String describeCallLine()
     {
-        return toCall(findCallElement(ignorePattern));
+        return toCallLine(findCallElement(SeleniumGlobals.getIgnorableCallElements()));
     }
 
-    public static String describeCallLine(Pattern ignorePattern)
-    {
-        return toCallLine(findCallElement(ignorePattern));
-    }
-
-    public static String toCallLine(StackTraceElement element)
+    private static String toCallLine(StackTraceElement element)
     {
         return element != null ? "(" + element.getFileName() + ":" + element.getLineNumber() + ")" : "(?:?)";
     }
 
-    public static String toCallMethod(StackTraceElement element)
-    {
-        return element != null ? element.getClassName() + "." + element.getMethodName() : "<#UNKNOWN>";
-    }
-
-    public static String toCall(StackTraceElement element)
-    {
-        return toCallMethod(element) + " " + toCallLine(element);
-    }
-
-    public static StackTraceElement findCallElement(Pattern ignorePattern)
+    private static StackTraceElement findCallElement(List<Pattern> ignorableCallElements)
     {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
-        for (StackTraceElement element : stackTrace)
+        outerLoop: for (StackTraceElement element : stackTrace)
         {
             String methodName = element.getClassName() + "." + element.getMethodName();
 
@@ -582,9 +537,12 @@ public final class SeleniumUtils
                 continue;
             }
 
-            if (ignorePattern != null && ignorePattern.matcher(methodName).matches())
+            for (Pattern pattern : ignorableCallElements)
             {
-                continue;
+                if (pattern.matcher(methodName).matches())
+                {
+                    continue outerLoop;
+                }
             }
 
             return element;

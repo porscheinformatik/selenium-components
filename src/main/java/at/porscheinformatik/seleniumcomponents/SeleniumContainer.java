@@ -9,6 +9,11 @@ package at.porscheinformatik.seleniumcomponents;
 public interface SeleniumContainer<AnyChildComponent extends SeleniumComponent> extends SeleniumComponent
 {
 
+    /**
+     * Returns a {@link SeleniumComponentList} of all childs.
+     *
+     * @return a list, never null
+     */
     SeleniumComponentList<AnyChildComponent> findAllChilds();
 
 }

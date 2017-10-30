@@ -2,7 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 /**
  * A matcher for {@link SeleniumAsserts}.
- * 
+ *
  * @author ham
  * @param <T> the type of the item
  */

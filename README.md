@@ -26,7 +26,7 @@ Let's look at this (simplified) example:
 
 If you want to test this awfully complicated page, start to describe the page as component tree (you can do it by using final variables, it does not matter if the elements are not loaded, yet):
 
-	private final SelenumPage page = new SelenumPage("https://localhost:8080");
+	private final HtmlPage page = new HtmlPage("https://localhost:8080");
 	private final DivComponent inputDiv = new DivComponent(page, WebElementSelector.selectById("result"));  
 	private final ButtonComponent button = new ButtonComponent(inputDiv);  
 	private final InputComponent inputField = new InputComponent(inputDiv, WebElementSelector.selectByName("text"));  

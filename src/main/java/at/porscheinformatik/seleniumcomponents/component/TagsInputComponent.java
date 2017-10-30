@@ -3,9 +3,9 @@ package at.porscheinformatik.seleniumcomponents.component;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;

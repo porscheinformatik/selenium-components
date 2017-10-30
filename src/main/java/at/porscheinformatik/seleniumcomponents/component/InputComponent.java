@@ -35,7 +35,7 @@ public class InputComponent extends HtmlComponent
 
     /**
      * Clears the input field an types all specified values.
-     * 
+     *
      * @param values one or more values to enter
      */
     public void enter(CharSequence... values)

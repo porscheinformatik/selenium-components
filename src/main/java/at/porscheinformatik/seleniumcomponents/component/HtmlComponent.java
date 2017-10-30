@@ -1,8 +1,8 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumActions;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -32,12 +32,7 @@ public class HtmlComponent extends AbstractSeleniumComponent
 
     public void click()
     {
-        click(DEFAULT_TIMEOUT_IN_SECONDS);
-    }
-
-    public void click(double timeoutInSeconds)
-    {
-        SeleniumActions.click(timeoutInSeconds, this);
+        SeleniumActions.click(this);
     }
 
     public String getText()

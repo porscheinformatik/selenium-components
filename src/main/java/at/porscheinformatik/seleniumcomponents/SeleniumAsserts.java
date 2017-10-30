@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
 
 /**
@@ -12,11 +13,11 @@ import org.hamcrest.StringDescription;
  *
  * @author HAM
  */
-public final class SeleniumAsserts extends MatcherAssert
+public final class SeleniumAsserts
 {
 
     /**
-     * A derived value
+     * A derived value.
      *
      * @author ham
      * @param <Any> the type of the value
@@ -53,23 +54,66 @@ public final class SeleniumAsserts extends MatcherAssert
         super();
     }
 
-    public static <Any> void assertThatSoon(Supplier<Any> supplier, Matcher<Any> matcher)
+    /**
+     * An assertion that keeps calling the supplier for {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds until
+     * the matcher succeeds. The assertion fails after the specified {@link SeleniumGlobals#getShortTimeoutInSeconds()}
+     * seconds.
+     *
+     * @param <Any> the type of the tested value
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatSoon(Supplier<Any> supplier, Matcher<? super Any> matcher)
     {
-        assertThatSoon(1, "", supplier, matcher);
+        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), "", supplier, matcher);
     }
 
-    public static <Any> void assertThatSoon(double timeoutInSeconds, Supplier<Any> supplier, Matcher<Any> matcher)
+    /**
+     * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
+     * assertion fails after the specified timeout.
+     *
+     * @param <Any> the type of the tested value
+     * @param timeoutInSeconds the timeout in seconds
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatSoon(double timeoutInSeconds, Supplier<Any> supplier,
+        Matcher<? super Any> matcher)
     {
-        assertThatSoon(timeoutInSeconds, "", supplier, matcher);
+        return assertThatSoon(timeoutInSeconds, "", supplier, matcher);
     }
 
-    public static <Any> void assertThatSoon(String reason, Supplier<Any> supplier, Matcher<Any> matcher)
+    /**
+     * An assertion that keeps calling the supplier for {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds until
+     * the matcher succeeds. The assertion fails after the specified {@link SeleniumGlobals#getShortTimeoutInSeconds()}
+     * seconds.
+     *
+     * @param <Any> the type of the tested value
+     * @param reason the reason for the assertion
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatSoon(String reason, Supplier<Any> supplier, Matcher<? super Any> matcher)
     {
-        assertThatSoon(1, reason, supplier, matcher);
+        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), reason, supplier, matcher);
     }
 
-    public static <Any> void assertThatSoon(double timeoutInSeconds, String reason, Supplier<Any> supplier,
-        Matcher<Any> matcher)
+    /**
+     * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
+     * assertion fails after the specified timeout.
+     *
+     * @param <Any> the type of the tested value
+     * @param timeoutInSeconds the timeout in seconds
+     * @param reason the reason for the assertion
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatSoon(double timeoutInSeconds, String reason, Supplier<Any> supplier,
+        Matcher<? super Any> matcher)
     {
         Result<Any> result = new Result<>();
 
@@ -91,6 +135,8 @@ public final class SeleniumAsserts extends MatcherAssert
                     return null;
                 }
             });
+
+            return result.getValue();
         }
         catch (Exception e)
         {
@@ -117,41 +163,78 @@ public final class SeleniumAsserts extends MatcherAssert
         }
     }
 
-    public static void assertExists(SeleniumComponent component)
+    /**
+     * An assertion using {@link SeleniumActions#isReady(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
+    public static void assertIsReady(SeleniumComponent component)
     {
-        assertThat("There exists " + component.describe(), SeleniumActions.exists(component));
+        MatcherAssert.assertThat("The component " + component.describe() + " is ready",
+            SeleniumActions.isReady(component));
     }
 
-    public static void assertExists(double timeoutInSeconds, SeleniumComponent component)
+    /**
+     * An assertion using {@link SeleniumActions#isReady(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
+    public static void assertIsReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThat("There exists " + component.describe(), SeleniumActions.exists(timeoutInSeconds, component));
+        assertThatSoon(timeoutInSeconds, "There exists " + component.describe(),
+            () -> SeleniumActions.isReady(component), Matchers.is(true));
     }
 
+    /**
+     * An assertion using {@link SeleniumActions#isClickable(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
     public static void assertIsClickable(SeleniumComponent component)
     {
-        assertThat("The component " + component.describe() + " is clickable", SeleniumActions.isClickable(component));
+        MatcherAssert.assertThat("The component " + component.describe() + " is clickable",
+            SeleniumActions.isClickable(component));
     }
 
+    /**
+     * An assertion using {@link SeleniumActions#isClickable(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
     public static void assertIsClickable(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThat("The component " + component.describe() + " is clickable",
-            SeleniumActions.isClickable(timeoutInSeconds, component));
+        assertThatSoon(timeoutInSeconds, "The component " + component.describe() + " is clickable",
+            () -> SeleniumActions.isClickable(component), Matchers.is(true));
     }
 
+    /**
+     * An assertion using {@link SeleniumActions#isVisible(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
     public static void assertIsVisible(SeleniumComponent component)
     {
-        assertThat("The component " + component.describe() + " is visible", SeleniumActions.isVisible(component));
+        MatcherAssert.assertThat("The component " + component.describe() + " is visible",
+            SeleniumActions.isVisible(component));
     }
 
+    /**
+     * An assertion using {@link SeleniumActions#isVisible(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
     public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThat("The component " + component.describe() + " is visible",
-            SeleniumActions.isVisible(timeoutInSeconds, component));
+        assertThatSoon(timeoutInSeconds, "The component " + component.describe() + " is visible",
+            () -> SeleniumActions.isVisible(component), Matchers.is(true));
     }
 
     public static void assertContainsDescendant(SeleniumComponent component, WebElementSelector selector)
     {
-        assertThat("The component \"" + component.describe() + "\" has a descendant: " + selector,
+        MatcherAssert.assertThat("The component \"" + component.describe() + "\" has a descendant: " + selector,
             SeleniumActions.containsDescendant(component, selector));
     }
 }

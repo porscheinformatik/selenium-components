@@ -10,28 +10,6 @@ public interface SeleniumComponentTemplate<AnySeleniumComponent extends Selenium
     extends SeleniumComponentFactory<AnySeleniumComponent>
 {
 
-    //    /**
-    //     * Creates a {@link SeleniumComponentTemplate}, that uses the specified component as template. The child instance
-    //     * must provide the
-    //     * {@link AbstractSeleniumComponent#AbstractSeleniumComponent(SeleniumComponent, WebElementSelector)} constructor.
-    //     * If the specified component is a {@link SeleniumComponentTemplate}, it returns the component unmodified.
-    //     *
-    //     * @param <AnySeleniumComponent> the type of the component
-    //     * @param template a component instance used as template
-    //     * @return a list factory
-    //     */
-    //    @SuppressWarnings("unchecked")
-    //    static <AnySeleniumComponent extends SeleniumComponent> SeleniumComponentTemplate<AnySeleniumComponent> of(
-    //        AnySeleniumComponent template)
-    //    {
-    //        if (template instanceof SeleniumComponentTemplate)
-    //        {
-    //            return (SeleniumComponentTemplate<AnySeleniumComponent>) template;
-    //        }
-    //
-    //        return of(template.selector(), SeleniumComponentFactory.of(template.getClass()));
-    //    }
-
     /**
      * Creates a {@link SeleniumComponentTemplate} of the specified selector and the specified factory.
      *

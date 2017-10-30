@@ -38,23 +38,12 @@ public interface SeleniumComponent extends WebElementContainer
     }
 
     /**
-     * Returns true if there is at least one {@link WebElement} that matches this component (it must no
-     * be visible, though). This method has no timeout, it does not wait for the component to become existent.
+     * Returns true if a {@link WebElement} described by this component is ready and available (it must no be visible,
+     * though). This method has no timeout, it does not wait for the component to become existent.
      *
      * @return true if the component exists
      */
-    boolean exists()
-    {
-        try
-        {
-            return SeleniumActions.retryOnStaleAndReturn(() -> !selector.findAll(parent).isEmpty(), 2);
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-
-    }
+    boolean isReady();
 
     /**
      * Returns a description of this component, usually as name and selector tuple.

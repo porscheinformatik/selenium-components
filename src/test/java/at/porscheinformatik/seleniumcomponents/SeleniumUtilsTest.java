@@ -9,6 +9,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * Tests for {@link SeleniumUtils}.
+ *
+ * @author ham
+ */
 public class SeleniumUtilsTest
 {
 

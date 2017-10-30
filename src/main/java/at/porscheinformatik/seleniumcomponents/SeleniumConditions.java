@@ -4,10 +4,10 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -174,7 +174,7 @@ public final class SeleniumConditions
         @Override
         public Boolean get()
         {
-            return SeleniumActions.retryOnStaleAndReturn(() -> {
+            return SeleniumActions.retryOnStale(() -> {
                 try
                 {
                     WebElement element = component.element();
@@ -191,7 +191,7 @@ public final class SeleniumConditions
                     return shouldBeVisible ? false : true;
                 }
 
-            }, 2);
+            });
         }
 
         @Override

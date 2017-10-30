@@ -2,7 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 /**
  * A {@link RuntimeException} for tests.
- * 
+ *
  * @author ham
  */
 public class SeleniumException extends RuntimeException

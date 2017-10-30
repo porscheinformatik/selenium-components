@@ -37,11 +37,11 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     }
 
     @Override
-    public WebElement element(double timeoutInSeconds) throws NoSuchElementException
+    public WebElement element() throws NoSuchElementException
     {
         try
         {
-            return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(parent));
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> selector.find(parent));
         }
         catch (Exception e)
         {
@@ -49,11 +49,19 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
     }
 
-    /**
-     * Returns a description of this component, usually as name and selector tuple.
-     *
-     * @return a description of this component
-     */
+    @Override
+    public boolean isReady()
+    {
+        try
+        {
+            return SeleniumActions.retryOnStale(() -> !selector.findAll(parent).isEmpty());
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+    }
+
     @Override
     public String describe()
     {
@@ -66,25 +74,6 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
 
         return description;
-    }
-
-    /**
-     * Returns true if there is at least one {@link WebElement} that matches the selector of this component (it must no
-     * be visible, though). This method has no timeout, it does not wait for the component to become existent.
-     *
-     * @return true if the component exists
-     */
-    public boolean exists()
-    {
-        try
-        {
-            return SeleniumActions.retryOnStaleAndReturn(() -> !selector.findAll(parent).isEmpty(), 2);
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-
     }
 
     protected final WebElementSelector getSelector()
@@ -107,7 +96,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         return SeleniumActions.isVisible(this);
     }
 
-    public void waitUntilVisible(double timeoutInSeconds)
+    public final void waitUntilVisible(double timeoutInSeconds)
     {
         SeleniumActions.waitUntilVisible(timeoutInSeconds, this);
     }

@@ -2,7 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 /**
  * {@link RuntimeException} raised on timeout.
- * 
+ *
  * @author Family
  */
 public class SeleniumTimeoutException extends SeleniumException

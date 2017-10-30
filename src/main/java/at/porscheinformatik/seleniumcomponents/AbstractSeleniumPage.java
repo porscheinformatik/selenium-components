@@ -1,6 +1,3 @@
-/**
- *
- */
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.List;
@@ -8,6 +5,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -19,21 +17,19 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Daniel Furtlehner
  */
-public class SeleniumPage implements SeleniumComponent
+public abstract class AbstractSeleniumPage implements SeleniumComponent
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final String url;
     private final SeleniumContext context;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
     private final int defaultTimeoutInSeconds = 1;
 
-    public SeleniumPage(SeleniumContext context, String url)
+    public AbstractSeleniumPage(SeleniumContext context)
     {
         super();
 
         this.context = Objects.requireNonNull(context, "Context is null");
-        this.url = url;
 
         context.getDriver().manage().timeouts().implicitlyWait(defaultTimeoutInSeconds, TimeUnit.SECONDS);
     }
@@ -51,11 +47,12 @@ public class SeleniumPage implements SeleniumComponent
     }
 
     @Override
-    public final WebElement element(double timeoutInSeconds) throws NoSuchElementException
+    public final WebElement element() throws NoSuchElementException
     {
         try
         {
-            return SeleniumUtils.keepTrying(timeoutInSeconds, () -> selector.find(context.getDriver()));
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(),
+                () -> selector.find(context.getDriver()));
         }
         catch (Exception e)
         {
@@ -76,15 +73,26 @@ public class SeleniumPage implements SeleniumComponent
     }
 
     @Override
+    public boolean isReady()
+    {
+        JavascriptExecutor e = ((JavascriptExecutor) context.getDriver());
+        Object readyState = e.executeScript("return document.readyState");
+
+        return readyState.equals("complete");
+    }
+
+    @Override
     public String describe()
     {
         return String.format("%s(%s)", SeleniumUtils.toClassName(getClass()), getUrl());
     }
 
-    public String getUrl()
-    {
-        return url;
-    }
+    /**
+     * Returns the URL to open.
+     *
+     * @return the url
+     */
+    protected abstract String getUrl();
 
     public final WebElementSelector getSelector()
     {
@@ -93,20 +101,15 @@ public class SeleniumPage implements SeleniumComponent
 
     public void open()
     {
-        open(10);
-    }
-
-    public void open(double timeoutInSeconds)
-    {
         String url = getUrl();
-        String navigate = "Calling " + url;
+        String navigate = "Calling URL: " + url;
 
         logger.info(String.format("\n\n%s\n%s\n%s\n\n", SeleniumUtils.repeat("-", navigate.length()), navigate,
             SeleniumUtils.repeat("-", navigate.length())));
 
         context.getDriver().get(url);
 
-        waitUntilReady(timeoutInSeconds);
+        waitUntilReady();
     }
 
     public void close()
@@ -126,9 +129,14 @@ public class SeleniumPage implements SeleniumComponent
         return null;
     }
 
-    public void waitUntilReady(double timeoutInSeconds)
+    public final void waitUntilReady()
     {
-        SeleniumUtils.waitUntil(timeoutInSeconds, SeleniumConditions.readyState(context.getDriver()));
+        waitUntilReady(SeleniumGlobals.getLongTimeoutInSeconds());
+    }
+
+    public final void waitUntilReady(double timeoutInSeconds)
+    {
+        SeleniumActions.waitUntilReady(timeoutInSeconds, this);
     }
 
 }
