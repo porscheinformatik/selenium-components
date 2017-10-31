@@ -8,11 +8,8 @@
 
 ## Enhancements
 
-* SeleniumComponent now provides it's selector() to enable "external" searches.
-* WebElementSelector got a selectByColumn(int)
-* AComponent
-* DivComponent
-* TableComponent, TheadComponent, TbodyComponent, TfootComponent
+* WebElementSelector got a selectByIndex(int)
+* new predefined components
 
 # selenium-components-0.0.1
 
