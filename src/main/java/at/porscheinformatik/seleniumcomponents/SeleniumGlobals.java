@@ -100,7 +100,7 @@ public final class SeleniumGlobals
 
     /**
      * Adds an item to the list of {@link Pattern}s for method names, that should be ignored in call stacks. This
-     * patterns are used in the {@link SeleniumUtils#describeCallLine(Pattern)} methods to find the caller excluding the
+     * patterns are used in the {@link SeleniumUtils#describeCallLine()} methods to find the caller excluding the
      * framework itself.
      *
      * @param pattern the pattern
@@ -117,8 +117,7 @@ public final class SeleniumGlobals
 
     /**
      * Returns a list of {@link Pattern}s for method names, that should be ignored in call stacks. This patterns are
-     * used in the {@link SeleniumUtils#describeCallLine(Pattern)} methods to find the caller excluding the framework
-     * itself.
+     * used in the {@link SeleniumUtils#describeCallLine()} methods to find the caller excluding the framework itself.
      *
      * @return the patterns
      */

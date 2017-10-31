@@ -118,7 +118,7 @@ public final class SeleniumUtils
     }
 
     /**
-     * Waits some seconds. The seconds will be scaled by the {@value #timeMultiplier}.
+     * Waits some seconds. The seconds will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}.
      *
      * @param seconds the seconds to wait
      */
@@ -136,9 +136,9 @@ public final class SeleniumUtils
 
     /**
      * Waits until the check function does not throw an exception and returns true. If the timeout is &lt;= 0 or NaN, it
-     * checks it at least once. The timeout will be scaled by the {@value #timeMultiplier}. The check function will be
-     * called four times a second. If the check throws an exception at the end the exception will be wrapped by a
-     * {@link SeleniumException} and gets thrown this way.
+     * checks it at least once. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. The check
+     * function will be called four times a second. If the check throws an exception at the end the exception will be
+     * wrapped by a {@link SeleniumException} and gets thrown this way.
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param check the check
@@ -154,12 +154,12 @@ public final class SeleniumUtils
     /**
      * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
      * or another non-null value. If the timeout &lt;= 0 or NaN, it calls the {@link Callable} at least once and the
-     * timeout will be ignored. The timeout will be scaled by the {@value #timeMultiplier}. If the call throws an
-     * exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown this way. The
-     * {@link Callable} will be called four times a second.
+     * timeout will be ignored. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. If the
+     * call throws an exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown
+     * this way. The {@link Callable} will be called four times a second.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
      * @param callable the {@link Callable}
      * @return the result
      * @throws SeleniumException if the {@link Callable} fails horribly
@@ -174,13 +174,14 @@ public final class SeleniumUtils
     /**
      * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
      * or another non-null value. If the timeout &lt;= 0 or NaN, it calls the {@link Callable} at least once and the
-     * timeout will be ignored. The timeout will be scaled by the {@value #timeMultiplier}. If the call throws an
-     * exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown this way.
+     * timeout will be ignored. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. If the
+     * call throws an exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown
+     * this way.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
      * @param callable the {@link Callable}
-     * @param delayInSeconds the delay between calls (will be scaled by the {@value #timeMultiplier})
+     * @param delayInSeconds the delay between calls (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
      * @return the result or the call
      * @throws SeleniumFailException if the call fails to produce a value in time
      */
@@ -274,11 +275,11 @@ public final class SeleniumUtils
     }
 
     /**
-     * Calls the {@link Callable} once. The timeout will be scaled by the {@value #timeMultiplier}. If the timeout is <=
-     * 0 or NaN, the timeout will be ignored.
+     * Calls the {@link Callable} once. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}.
+     * If the timeout is &lt;= 0 or NaN, the timeout will be ignored.
      *
      * @param <Any> the expected return type
-     * @param timeoutInSeconds the timeout (will be scaled by the {@value #timeMultiplier})
+     * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
      * @param callable the {@link Callable}
      * @return the result of the call
      * @throws SeleniumException wrapper for exceptions
@@ -389,7 +390,7 @@ public final class SeleniumUtils
     /**
      * Calls the {@link Callable} "iterationCount" times. Uses "threadCount" threads for this task. The total timeout is
      * estimated by the iteration count and the thread count. The timeout will be scaled by the
-     * {@value #timeMultiplier}.
+     * {@link SeleniumGlobals#getTimeMultiplier()}.
      *
      * @param <Any> the expected return type
      * @param iterationCount the iterationCount
