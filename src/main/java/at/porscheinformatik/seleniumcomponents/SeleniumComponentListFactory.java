@@ -100,7 +100,8 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
         List<CHILD_TYPE> elements = childSelector
             .findAll(parent.element())
             .stream()
-            .map(element -> childFactory.create(parent, WebElementSelector.selectElement(element)))
+            .map(element -> childFactory.create(parent,
+                WebElementSelector.selectElement(childSelector.toString(), element)))
             .collect(Collectors.toList());
 
         return new SeleniumComponentList<>(elements);

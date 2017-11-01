@@ -170,8 +170,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsReady(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component.describe() + " is ready",
-            SeleniumActions.isReady(component));
+        MatcherAssert.assertThat("The component " + component + " is ready", SeleniumActions.isReady(component));
     }
 
     /**
@@ -182,8 +181,8 @@ public final class SeleniumAsserts
      */
     public static void assertIsReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "There exists " + component.describe(),
-            () -> SeleniumActions.isReady(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "There exists " + component, () -> SeleniumActions.isReady(component),
+            Matchers.is(true));
     }
 
     /**
@@ -193,7 +192,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsClickable(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component.describe() + " is clickable",
+        MatcherAssert.assertThat("The component " + component.toString() + " is clickable",
             SeleniumActions.isClickable(component));
     }
 
@@ -205,7 +204,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsClickable(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component.describe() + " is clickable",
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is clickable",
             () -> SeleniumActions.isClickable(component), Matchers.is(true));
     }
 
@@ -216,8 +215,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsVisible(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component.describe() + " is visible",
-            SeleniumActions.isVisible(component));
+        MatcherAssert.assertThat("The component " + component + " is visible", SeleniumActions.isVisible(component));
     }
 
     /**
@@ -228,13 +226,13 @@ public final class SeleniumAsserts
      */
     public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component.describe() + " is visible",
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is visible",
             () -> SeleniumActions.isVisible(component), Matchers.is(true));
     }
 
     public static void assertContainsDescendant(SeleniumComponent component, WebElementSelector selector)
     {
-        MatcherAssert.assertThat("The component \"" + component.describe() + "\" has a descendant: " + selector,
+        MatcherAssert.assertThat("The component \"" + component + "\" has a descendant: " + selector,
             SeleniumActions.containsDescendant(component, selector));
     }
 }

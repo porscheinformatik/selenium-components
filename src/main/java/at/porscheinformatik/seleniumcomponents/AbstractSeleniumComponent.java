@@ -45,7 +45,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
         catch (Exception e)
         {
-            throw new NoSuchElementException(describe(), e);
+            throw new NoSuchElementException(toString(), e);
         }
     }
 
@@ -60,20 +60,6 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         {
             return false;
         }
-    }
-
-    @Override
-    public String describe()
-    {
-        String description = String.format("%s[%s]", SeleniumUtils.toClassName(getClass()), selector);
-        SeleniumComponent parent = parent();
-
-        if (parent != null)
-        {
-            description = String.format("%s->%s", parent.describe(), description);
-        }
-
-        return description;
     }
 
     protected final WebElementSelector getSelector()
@@ -104,7 +90,15 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     @Override
     public String toString()
     {
-        return describe();
+        String description = selector.toString();
+        SeleniumComponent parent = parent();
+
+        if (parent != null)
+        {
+            description = parent.toString() + " " + description;
+        }
+
+        return description;
     }
 
 }

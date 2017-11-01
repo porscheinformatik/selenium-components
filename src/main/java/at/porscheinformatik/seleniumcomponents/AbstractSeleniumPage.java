@@ -56,7 +56,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         }
         catch (Exception e)
         {
-            throw new NoSuchElementException(describe(), e);
+            throw new NoSuchElementException(toString(), e);
         }
     }
 
@@ -75,16 +75,10 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     @Override
     public boolean isReady()
     {
-        JavascriptExecutor e = ((JavascriptExecutor) context.getDriver());
+        JavascriptExecutor e = (JavascriptExecutor) context.getDriver();
         Object readyState = e.executeScript("return document.readyState");
 
         return readyState.equals("complete");
-    }
-
-    @Override
-    public String describe()
-    {
-        return String.format("%s(%s)", SeleniumUtils.toClassName(getClass()), getUrl());
     }
 
     /**
@@ -139,4 +133,9 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         SeleniumActions.waitUntilReady(timeoutInSeconds, this);
     }
 
+    @Override
+    public String toString()
+    {
+        return String.format(getUrl());
+    }
 }

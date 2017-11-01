@@ -21,10 +21,12 @@ public interface WebElementSelector
     /**
      * Creates a selector that always uses the specified element. This selector ignores the search context.
      *
+     * @param description a description for toString, to make it easier to find the specified element. Most-often the
+     *            description looks like a CSS selector.
      * @param element the element to return
      * @return the selector
      */
-    static WebElementSelector selectElement(WebElement element)
+    static WebElementSelector selectElement(String description, WebElement element)
     {
         return new WebElementSelector()
         {
@@ -51,10 +53,12 @@ public interface WebElementSelector
     /**
      * This is a shortcut method to use a Selenium selector as selector.
      *
+     * @param description a description for toString, to make it easier to find the specified element. Most-often the
+     *            description looks like a CSS selector.
      * @param by the Selenium selector
      * @return the {@link WebElementSelector} for the given Selenium selector
      */
-    static WebElementSelector selectBy(By by)
+    static WebElementSelector selectBy(String description, By by)
     {
         return new WebElementSelector()
         {
@@ -73,7 +77,7 @@ public interface WebElementSelector
             @Override
             public String toString()
             {
-                return by.toString();
+                return description;
             }
         };
     }
@@ -86,7 +90,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectById(String id)
     {
-        return selectBy(By.id(id));
+        return selectBy("#" + id, By.id(id));
     }
 
     /**
@@ -98,7 +102,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByName(String name)
     {
-        return selectBy(By.name(name));
+        return selectBy(String.format("*[name='%s']", name), By.name(name));
     }
 
     /**
@@ -109,7 +113,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByTagName(String tagName)
     {
-        return selectBy(By.tagName(tagName));
+        return selectBy(tagName, By.tagName(tagName));
     }
 
     /**
@@ -121,7 +125,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByClassName(String className)
     {
-        return selectBy(By.className(className));
+        return selectBy("." + className, By.className(className));
     }
 
     /**
@@ -132,7 +136,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByCss(String css)
     {
-        return selectBy(By.cssSelector(css));
+        return selectBy(css.contains(" ") ? String.format("(%s)", css) : css, By.cssSelector(css));
     }
 
     /**
@@ -157,7 +161,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectBySeleniumKey(String tagName, String key)
     {
-        return selectBy(By.cssSelector(String.format("%s[selenium-key='%s']", tagName, key)));
+        return selectByCss(String.format("%s[selenium-key='%s']", tagName, key));
     }
 
     /**
@@ -169,7 +173,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByXPath(String xpath)
     {
-        return selectBy(By.xpath(xpath));
+        return selectBy(String.format("{%s}", xpath), By.xpath(xpath));
     }
 
     /**
@@ -226,6 +230,12 @@ public interface WebElementSelector
                     throw new SeleniumException("Failed to parse colspan: " + colspan, e);
                 }
             }
+
+            @Override
+            public String toString()
+            {
+                return String.format(":nth-child(%d)", index);
+            }
         };
     }
 
@@ -236,7 +246,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectSelf()
     {
-        return selectByXPath(".");
+        return selectBy("", By.xpath("."));
     }
 
     /**

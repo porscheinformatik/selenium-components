@@ -45,11 +45,4 @@ public interface SeleniumComponent extends WebElementContainer
      */
     boolean isReady();
 
-    /**
-     * Returns a description of this component, usually as name and selector tuple.
-     *
-     * @return a description of this component
-     */
-    String describe();
-
 }
