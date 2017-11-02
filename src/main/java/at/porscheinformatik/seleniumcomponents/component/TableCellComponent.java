@@ -12,10 +12,10 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author ham
  */
-public abstract class AbstractTableCellComponent extends AbstractSeleniumComponent
+public class TableCellComponent extends AbstractSeleniumComponent
 {
 
-    public AbstractTableCellComponent(SeleniumComponent parent, WebElementSelector selector)
+    public TableCellComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
     }

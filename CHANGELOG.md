@@ -4,6 +4,7 @@
 
 * Moved SeleniumActions to SeleniumUtils
 * Moved some SeleniumUtils to Utils
+* Removed component classes named after HTML elements
 
 ## Fixes
 

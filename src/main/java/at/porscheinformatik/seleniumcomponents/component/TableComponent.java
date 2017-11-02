@@ -13,26 +13,26 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 public class TableComponent extends AbstractSeleniumComponent
 {
 
-    private final TheadComponent headComponent = new TheadComponent(this);
-    private final TbodyComponent bodyComponent = new TbodyComponent(this);
-    private final TfootComponent footComponent = new TfootComponent(this);
+    private final TableContentComponent headComponent = new TableContentComponent(this, WebElementSelector.selectByTagName("thead"));
+    private final TableContentComponent bodyComponent = new TableContentComponent(this, WebElementSelector.selectByTagName("tbody"));
+    private final TableContentComponent footComponent = new TableContentComponent(this, WebElementSelector.selectByTagName("tfoot"));
 
     public TableComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
     }
 
-    public TheadComponent getHeadComponent()
+    public TableContentComponent getHeadComponent()
     {
         return headComponent;
     }
 
-    public TbodyComponent getBodyComponent()
+    public TableContentComponent getBodyComponent()
     {
         return bodyComponent;
     }
 
-    public TfootComponent getFootComponent()
+    public TableContentComponent getFootComponent()
     {
         return footComponent;
     }
