@@ -1,3 +1,9 @@
+# selenium-components-0.0.4
+
+## Enhancements
+
+* Added ListComponent 
+
 # selenium-components-0.0.3
 
 ## Changes
