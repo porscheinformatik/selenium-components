@@ -27,10 +27,10 @@ Let's look at this (simplified) example:
 If you want to test this awfully complicated page, start to describe the page as component tree (you can do it by using final variables, it does not matter if the elements are not loaded, yet):
 
 	private final HtmlPage page = new HtmlPage("https://localhost:8080");
-	private final DivComponent inputDiv = new DivComponent(page, WebElementSelector.selectById("result"));  
+	private final HtmlComponent inputDiv = new HtmlComponent(page, WebElementSelector.selectById("result"));  
 	private final ButtonComponent button = new ButtonComponent(inputDiv);  
 	private final InputComponent inputField = new InputComponent(inputDiv, WebElementSelector.selectByName("text"));  
-	private final DivComponent resultDiv = new DivComponent(page, WebElementSelector.selectById("result"));  
+	private final HtmlComponent resultDiv = new HtmlComponent(page, WebElementSelector.selectById("result"));  
 
 When defining a component you have to pass the parent as first parameter (e.g. the `testLink` has the `inputDiv` as parent and the `inputDiv` has the `page` as parent). The `WebElementSelector` just searches within element of the parent component.
  
@@ -74,6 +74,15 @@ As you can see, the strength of **Selenium Components** is to define a whole web
 
 **Selenium Components** is a fairly simple framework: everything focuses on the `SeleniumComponent` interface, it's derivates and some static utilities.
 
-Usually you define a `SeleniumComponent` by providing a parent and a `WebElementSelector`. The `WebElementSelector` is used to find Selenium's `WebElement`.  
+Usually you define a `SeleniumComponent` by providing a parent and a `WebElementSelector`. The `WebElementSelector` is used to find Selenium's `WebElement`. 
+
+To access a properties of a component, use the `SeleniumUtils` class. Additinally there a couple of standard components, like the `HtmlComponent`, the `LinkComponent`, the `InputComponent` and so on, that provide methods for their intended purpose.
+
+The `SeleniumUtils` class provides some handy methods for interactions with a timeout, like `waitUntil`, `keepTrying` and `callWithTimeout`. 
+
+For testing use the `SeleniumAsserts` class. It provides some handy assertions including the fabulous `assertThatSoon` call with a timeout. 
+
+Quite often, you need to work with some kind of lists. For this, you can either use the `ListComponent` or just the `SeleniumComponentListFactory`. Both classes need a child selector and a factory for the child components. You can then access all the items with a `SeleniumComponentList`.
+
 
  
