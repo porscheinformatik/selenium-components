@@ -1,3 +1,14 @@
+# selenium-components-0.0.3
+
+## Fixes
+
+* Fix for WebElementSelector.selectByIndex(..)
+
+## Enhancements
+
+* WebElementSelector.selectByColumn(..) added
+* Better toString descriptions for components and selectors
+
 # selenium-components-0.0.2
 
 ## Changes

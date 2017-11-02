@@ -177,21 +177,75 @@ public interface WebElementSelector
     }
 
     /**
-     * Returns the element that represents the specified index or column. Look a all direct children of the search
-     * context. If the element has a "colspan" attribute it is assumed, that the element spans over multiple indices.
+     * Returns the element at the specified index of all direct siblings. The index is zero-based.
      *
-     * @param index the index
+     * @param index the index (0-based)
      * @return the selector
      */
     static WebElementSelector selectByIndex(int index)
+    {
+        return selectByIndex(selectChildren(), index);
+    }
+
+    /**
+     * Returns the element at the specified index selected by the specified selector. The index is zero-based.
+     *
+     * @param selector the selector for the child elements
+     * @param index the index (0-based)
+     * @return the selector
+     */
+    static WebElementSelector selectByIndex(WebElementSelector selector, int index)
     {
         return new WebElementSelector()
         {
             @Override
             public WebElement find(SearchContext context)
             {
-                List<WebElement> elements = context.findElements(By.cssSelector("*"));
-                int currentIndex = 0;
+                if (index < 0)
+                {
+                    return null;
+                }
+
+                List<WebElement> elements = selector.findAll(context);
+
+                if (index >= elements.size())
+                {
+                    return null;
+                }
+
+                return elements.get(index);
+            }
+
+            @Override
+            public List<WebElement> findAll(SearchContext context)
+            {
+                return Arrays.asList(find(context));
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("%s:nth-child(%d)", selector, index);
+            }
+        };
+    }
+
+    /**
+     * Returns the element that represents the specified column. Looks at all direct children of the search context. If
+     * the element has a "colspan" attribute it is assumed, that the element spans over multiple indices.
+     *
+     * @param index the index
+     * @return the selector
+     */
+    static WebElementSelector selectByColumn(int index)
+    {
+        return new WebElementSelector()
+        {
+            @Override
+            public WebElement find(SearchContext context)
+            {
+                List<WebElement> elements = By.xpath("./*").findElements(context);
+                int currentIndex = 1;
 
                 for (WebElement element : elements)
                 {
@@ -234,7 +288,7 @@ public interface WebElementSelector
             @Override
             public String toString()
             {
-                return String.format(":nth-child(%d)", index);
+                return String.format("*:nth-column(%d)", index);
             }
         };
     }
@@ -247,6 +301,16 @@ public interface WebElementSelector
     static WebElementSelector selectSelf()
     {
         return selectBy("", By.xpath("."));
+    }
+
+    /**
+     * A selector that selects all direct children.
+     *
+     * @return the selector
+     */
+    static WebElementSelector selectChildren()
+    {
+        return selectBy("*", By.xpath("./*"));
     }
 
     /**
