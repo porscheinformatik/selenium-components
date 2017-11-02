@@ -54,7 +54,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return SeleniumActions.retryOnStale(() -> !selector.findAll(parent).isEmpty());
+            return SeleniumUtils.retryOnStale(() -> !selector.findAll(parent).isEmpty());
         }
         catch (NoSuchElementException e)
         {
@@ -69,22 +69,22 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
 
     protected String getTagName()
     {
-        return SeleniumActions.getTagName(this);
+        return SeleniumUtils.getTagName(this);
     }
 
     protected String getAttribute(String name)
     {
-        return SeleniumActions.getAttribute(this, name);
+        return SeleniumUtils.getAttribute(this, name);
     }
 
     public boolean isVisible()
     {
-        return SeleniumActions.isVisible(this);
+        return SeleniumUtils.isVisible(this);
     }
 
     public final void waitUntilVisible(double timeoutInSeconds)
     {
-        SeleniumActions.waitUntilVisible(timeoutInSeconds, this);
+        SeleniumUtils.waitUntilVisible(timeoutInSeconds, this);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SeleniumActions;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -32,18 +32,18 @@ public class HtmlComponent extends AbstractSeleniumComponent
 
     public void click()
     {
-        SeleniumActions.click(this);
+        SeleniumUtils.click(this);
     }
 
     public String getText()
     {
-        return SeleniumActions.getText(this);
+        return SeleniumUtils.getText(this);
     }
 
     @Override
     public String getAttribute(String name)
     {
-        return SeleniumActions.getAttribute(this, name);
+        return SeleniumUtils.getAttribute(this, name);
     }
 
     public boolean containsClassName(String className)

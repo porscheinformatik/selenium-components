@@ -1,10 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -17,7 +14,10 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebElement;
 
 /**
  * Some utilities for testing.
@@ -27,10 +27,10 @@ import java.util.regex.Pattern;
 public final class SeleniumUtils
 {
 
-    private static final AtomicInteger TEST_THREAD_ID = new AtomicInteger(1);
-    private static final ExecutorService TEST_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
+    private static final AtomicInteger POOL_THREAD_ID = new AtomicInteger(1);
+    private static final ExecutorService POOL_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread(runnable,
-            SeleniumUtils.toClassName(SeleniumUtils.class) + " Pool Thread #" + TEST_THREAD_ID.getAndIncrement());
+            Utils.toClassName(SeleniumUtils.class) + " Pool Thread #" + POOL_THREAD_ID.getAndIncrement());
 
         thread.setDaemon(true);
 
@@ -43,48 +43,212 @@ public final class SeleniumUtils
     }
 
     /**
-     * Null-safe empty and blank check for strings.
+     * Returns the topmost {@link SeleniumComponent} following the chain of parents of the specified component or the
+     * component itself, if it has no parent component.
      *
-     * @param s the string
-     * @return true if empty
+     * @param component the component
+     * @return the root component
      */
-    public static boolean isEmpty(String s)
+    public static SeleniumComponent root(SeleniumComponent component)
     {
-        return s == null || s.trim().length() == 0;
+        while (component.parent() != null)
+        {
+            component = component.parent();
+        }
+
+        return component;
     }
 
     /**
-     * Null-safe empty function for arrays.
+     * Returns true if the method {@link SeleniumComponent#isReady()} returns true.
      *
-     * @param <Any> the type of array items
-     * @param array the array
-     * @return true if null or empty
+     * @param component the component
+     * @return true if ready
      */
-    public static <Any> boolean isEmpty(Any[] array)
+    public static boolean isReady(SeleniumComponent component)
     {
-        return array == null || Array.getLength(array) <= 0;
+        return component.isReady();
     }
 
     /**
-     * Null-safe empty function for collections.
+     * Waits until the component becomes ready.
      *
-     * @param collection the collection
-     * @return true if null or empty
+     * @param timeoutInSeconds the timeout in seconds
+     * @param component the component
      */
-    public static boolean isEmpty(Collection<?> collection)
+    public static void waitUntilReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        return collection == null || collection.isEmpty();
+        waitUntil(timeoutInSeconds, () -> isReady(component));
     }
 
     /**
-     * Null-safe empty function for maps.
+     * Returns true if the component is clickable. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
+     * the component to become available.
      *
-     * @param map the maps
-     * @return true if null or empty
+     * @param component the component
+     * @return true if clickable
      */
-    public static boolean isEmpty(Map<?, ?> map)
+    public static boolean isClickable(SeleniumComponent component)
     {
-        return map == null || map.isEmpty();
+        try
+        {
+            return SeleniumUtils.retryOnStale(() -> {
+                WebElement element = component.element();
+
+                return element.isDisplayed() && element.isEnabled();
+            });
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Waits for the specified amount of seconds for the component to become clickable.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     * @param component the component
+     */
+    public static void waitUntilClickable(double timeoutInSeconds, SeleniumComponent component)
+    {
+        waitUntil(timeoutInSeconds, () -> isClickable(component));
+    }
+
+    /**
+     * Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the component to become clickable and clicks
+     * it.
+     *
+     * @param component the component
+     */
+    public static void click(SeleniumComponent component)
+    {
+        waitUntilClickable(SeleniumGlobals.getShortTimeoutInSeconds(), component);
+        component.element().click();
+    }
+
+    /**
+     * Returns true if the component is visible. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
+     * the component to become available.
+     *
+     * @param component the component
+     * @return true if visible
+     */
+    public static boolean isVisible(SeleniumComponent component)
+    {
+        try
+        {
+            return SeleniumUtils.retryOnStale(() -> {
+                WebElement element = component.element();
+
+                return element.isDisplayed();
+            });
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Waits for the specified amount of seconds for the component to become visible.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     * @param component the component
+     */
+    public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
+    {
+        waitUntil(timeoutInSeconds, () -> isVisible(component));
+    }
+
+    /**
+     * Waits for the specified amount of seconds for the component to become invisible.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     * @param component the component
+     */
+    public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
+    {
+        waitUntil(timeoutInSeconds, () -> !isVisible(component));
+    }
+
+    /**
+     * Returns the tag name of the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the
+     * component to become available.
+     *
+     * @param component the component
+     * @return the tag name
+     */
+    public static String getTagName(SeleniumComponent component)
+    {
+        return SeleniumUtils.retryOnStale(() -> component.element().getTagName());
+    }
+
+    /**
+     * Returns the attribute with the specified name. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds
+     * for the component to become available.
+     *
+     * @param component the component
+     * @param name the name of the attribute
+     * @return the value
+     */
+    public static String getAttribute(SeleniumComponent component, String name)
+    {
+        return SeleniumUtils.retryOnStale(() -> component.element().getAttribute(name));
+    }
+
+    /**
+     * Returns the text of the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the
+     * component to become available.
+     *
+     * @param component the component
+     * @return the text
+     */
+    public static String getText(SeleniumComponent component)
+    {
+        return SeleniumUtils.retryOnStale(() -> component.element().getText().trim());
+    }
+
+    /**
+     * Clears the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the component to
+     * become available.
+     *
+     * @param component the component
+     */
+    public static void clear(SeleniumComponent component)
+    {
+        SeleniumUtils.retryOnStale(() -> component.element().clear());
+    }
+
+    /**
+     * Sends the key sequences to the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
+     * the component to become available.
+     *
+     * @param component the component
+     * @param keysToSend the keys to send (multiple)
+     */
+    public static void sendKeys(SeleniumComponent component, CharSequence... keysToSend)
+    {
+        SeleniumUtils.retryOnStale(() -> {
+            WebElement element = component.element();
+
+            for (CharSequence current : keysToSend)
+            {
+                element.sendKeys(current);
+            }
+        });
+    }
+
+    /**
+     * Returns true if there is a descendant.
+     *
+     * @param component the component, that should contain the descendant
+     * @param selector the selector
+     * @return true if one component was found
+     */
+    public static boolean containsDescendant(SeleniumComponent component, WebElementSelector selector)
+    {
+        return !selector.findAll(component).isEmpty();
     }
 
     /**
@@ -113,7 +277,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed: %s", describeCallLine()), e);
+            throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
         }
     }
 
@@ -200,7 +364,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()), e);
+                throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
             }
 
             if (result instanceof Optional)
@@ -215,7 +379,7 @@ public final class SeleniumUtils
                 return result;
             }
 
-            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()));
+            throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()));
         }
 
         try
@@ -235,8 +399,8 @@ public final class SeleniumUtils
                     {
                         if (System.currentTimeMillis() > endMillis)
                         {
-                            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()),
-                                e);
+                            throw new SeleniumFailException(
+                                String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
                         }
                     }
 
@@ -257,7 +421,7 @@ public final class SeleniumUtils
                     if (currentMillis > endMillis)
                     {
                         throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds): %s",
-                            scaledTimeoutInSeconds, describeCallLine()));
+                            scaledTimeoutInSeconds, Utils.describeCallLine()));
                     }
 
                     waitForSeconds(delayInSeconds);
@@ -270,7 +434,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumFailException(String.format("Keep trying failed: %s", describeCallLine()), e);
+            throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
         }
     }
 
@@ -291,7 +455,7 @@ public final class SeleniumUtils
     {
         double scaledTimeoutInSeconds = scaleTime(timeoutInSeconds);
 
-        Future<Any> future = TEST_THREAD_POOL.submit(callable);
+        Future<Any> future = POOL_THREAD_POOL.submit(callable);
 
         try
         {
@@ -311,16 +475,17 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            throw new SeleniumException(String.format("Call failed: %s", describeCallLine()), cause);
+            throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), cause);
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumInterruptedException(String.format("Call interrupted: %s", describeCallLine()), e);
+            throw new SeleniumInterruptedException(String.format("Call interrupted: %s", Utils.describeCallLine()), e);
         }
         catch (TimeoutException e)
         {
             throw new SeleniumTimeoutException(
-                String.format("Call timed out (%,.1f seconds): %s", scaledTimeoutInSeconds, describeCallLine()), e);
+                String.format("Call timed out (%,.1f seconds): %s", scaledTimeoutInSeconds, Utils.describeCallLine()),
+                e);
         }
     }
 
@@ -361,7 +526,7 @@ public final class SeleniumUtils
     public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback,
         Consumer<Exception> errorCallback)
     {
-        return TEST_THREAD_POOL.submit(() -> {
+        return POOL_THREAD_POOL.submit(() -> {
             Any result = null;
 
             try
@@ -438,7 +603,7 @@ public final class SeleniumUtils
                     throw new SeleniumInterruptedException("Adding callables to thread pool got interrupted");
                 }
 
-                futures.add(TEST_THREAD_POOL.submit(worker));
+                futures.add(POOL_THREAD_POOL.submit(worker));
             }
 
             List<Any> results = new ArrayList<>();
@@ -458,98 +623,73 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns the name of the class in a short and readable form.
+     * Sometimes it is possible that we want to perform a operation on an element. But some JavaScript is currently
+     * messing around with the DOM. Then we have a stale element and an exception is thrown. We can retry to perform the
+     * operation on the element again and it should work.
      *
-     * @param type the class, may be null
-     * @return the name
+     * @param <Any> type of return value
+     * @param callable the operation to perform
+     * @return the operations result
      */
-    public static String toClassName(Class<?> type)
+    public static <Any> Any retryOnStale(Callable<Any> callable)
     {
-        if (type == null)
+        int attempts = 3;
+
+        while (true)
         {
-            return "?";
-        }
-
-        String name = "";
-
-        while (type.isArray())
-        {
-            name = "[]" + name;
-            type = type.getComponentType();
-        }
-
-        if (type.isPrimitive())
-        {
-            name = type.getName() + name;
-        }
-        else
-        {
-            name = getShortName(type.getName()) + name;
-        }
-
-        return name;
-    }
-
-    private static String getShortName(String currentName)
-    {
-        int beginIndex = currentName.lastIndexOf('.');
-
-        if (beginIndex >= 0)
-        {
-            currentName = currentName.substring(beginIndex + 1);
-        }
-
-        return currentName;
-    }
-
-    public static String repeat(String s, int length)
-    {
-        StringBuilder builder = new StringBuilder();
-
-        while (builder.length() < length)
-        {
-            builder.append(s);
-        }
-
-        return builder.substring(0, length);
-    }
-
-    public static String describeCallLine()
-    {
-        return toCallLine(findCallElement(SeleniumGlobals.getIgnorableCallElements()));
-    }
-
-    private static String toCallLine(StackTraceElement element)
-    {
-        return element != null ? "(" + element.getFileName() + ":" + element.getLineNumber() + ")" : "(?:?)";
-    }
-
-    private static StackTraceElement findCallElement(List<Pattern> ignorableCallElements)
-    {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-        outerLoop: for (StackTraceElement element : stackTrace)
-        {
-            String methodName = element.getClassName() + "." + element.getMethodName();
-
-            if (methodName.startsWith(SeleniumUtils.class.getName()))
+            try
             {
-                // skip myself
-                continue;
+                return callable.call();
             }
-
-            for (Pattern pattern : ignorableCallElements)
+            catch (StaleElementReferenceException e)
             {
-                if (pattern.matcher(methodName).matches())
+                if (attempts-- <= 0)
                 {
-                    continue outerLoop;
+                    throw e;
                 }
             }
-
-            return element;
+            catch (RuntimeException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+            }
         }
+    }
 
-        return null;
+    /**
+     * Sometimes it is possible that we want to perform a operation on an element. But some JavaScript is currently
+     * messing around with the DOM. Then we have a stale element and an exception is thrown. We can retry to perform the
+     * operation on the element again and it should work.
+     *
+     * @param runnable the operation to perform
+     */
+    public static void retryOnStale(Runnable runnable)
+    {
+        int attempts = 3;
+
+        while (true)
+        {
+            try
+            {
+                runnable.run();
+            }
+            catch (StaleElementReferenceException e)
+            {
+                if (attempts-- <= 0)
+                {
+                    throw e;
+                }
+
+                waitForSeconds(0.1);
+            }
+            catch (Exception e)
+            {
+                throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+            }
+        }
     }
 
 }

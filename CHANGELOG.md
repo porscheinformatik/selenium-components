@@ -1,5 +1,10 @@
 # selenium-components-0.0.3
 
+## Changes
+
+* Moved SeleniumActions to SeleniumUtils
+* Moved some SeleniumUtils to Utils
+
 ## Fixes
 
 * Fix for WebElementSelector.selectByIndex(..)

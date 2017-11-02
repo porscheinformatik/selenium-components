@@ -270,7 +270,7 @@ public interface WebElementSelector
             {
                 String colspan = element.getAttribute("colspan");
 
-                if (SeleniumUtils.isEmpty(colspan))
+                if (Utils.isEmpty(colspan))
                 {
                     return 1;
                 }

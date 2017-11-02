@@ -98,8 +98,8 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         String url = getUrl();
         String navigate = "Calling URL: " + url;
 
-        logger.info(String.format("\n\n%s\n%s\n%s\n\n", SeleniumUtils.repeat("-", navigate.length()), navigate,
-            SeleniumUtils.repeat("-", navigate.length())));
+        logger.info(String.format("\n\n%s\n%s\n%s\n\n", Utils.repeat("-", navigate.length()), navigate,
+            Utils.repeat("-", navigate.length())));
 
         context.getDriver().get(url);
 
@@ -130,7 +130,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
 
     public final void waitUntilReady(double timeoutInSeconds)
     {
-        SeleniumActions.waitUntilReady(timeoutInSeconds, this);
+        SeleniumUtils.waitUntilReady(timeoutInSeconds, this);
     }
 
     @Override

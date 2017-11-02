@@ -164,40 +164,40 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isReady(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isReady(SeleniumComponent)} and expecting true.
      *
      * @param component the component
      */
     public static void assertIsReady(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is ready", SeleniumActions.isReady(component));
+        MatcherAssert.assertThat("The component " + component + " is ready", SeleniumUtils.isReady(component));
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isReady(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isReady(SeleniumComponent)} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
     public static void assertIsReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "There exists " + component, () -> SeleniumActions.isReady(component),
+        assertThatSoon(timeoutInSeconds, "There exists " + component, () -> SeleniumUtils.isReady(component),
             Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isClickable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isClickable(SeleniumComponent)} and expecting true.
      *
      * @param component the component
      */
     public static void assertIsClickable(SeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component.toString() + " is clickable",
-            SeleniumActions.isClickable(component));
+            SeleniumUtils.isClickable(component));
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isClickable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isClickable(SeleniumComponent)} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -205,21 +205,21 @@ public final class SeleniumAsserts
     public static void assertIsClickable(double timeoutInSeconds, SeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is clickable",
-            () -> SeleniumActions.isClickable(component), Matchers.is(true));
+            () -> SeleniumUtils.isClickable(component), Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isVisible(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isVisible(SeleniumComponent)} and expecting true.
      *
      * @param component the component
      */
     public static void assertIsVisible(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is visible", SeleniumActions.isVisible(component));
+        MatcherAssert.assertThat("The component " + component + " is visible", SeleniumUtils.isVisible(component));
     }
 
     /**
-     * An assertion using {@link SeleniumActions#isVisible(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumUtils#isVisible(SeleniumComponent)} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -227,12 +227,91 @@ public final class SeleniumAsserts
     public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is visible",
-            () -> SeleniumActions.isVisible(component), Matchers.is(true));
+            () -> SeleniumUtils.isVisible(component), Matchers.is(true));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getTagName(SeleniumComponent)} and expects the specified name.
+     *
+     * @param component the component
+     * @param tagName the name
+     */
+    public static void assertTagName(SeleniumComponent component, String tagName)
+    {
+        MatcherAssert.assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, tagName),
+            SeleniumUtils.getTagName(component), Matchers.is(tagName));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getTagName(SeleniumComponent)} and expects the specified name.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     * @param tagName the name
+     */
+    public static void assertTagName(double timeoutInSeconds, SeleniumComponent component, String tagName)
+    {
+        assertThatSoon(timeoutInSeconds,
+            String.format("The component \"%s\" has the tag name \"%s\"", component, tagName),
+            () -> SeleniumUtils.getTagName(component), Matchers.is(tagName));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getAttribute(SeleniumComponent, String)} and expects the specified value.
+     *
+     * @param component the component
+     * @param name the name of the attribute
+     * @param value the expected value
+     */
+    public static void assertAttribute(SeleniumComponent component, String name, String value)
+    {
+        MatcherAssert.assertThat(String.format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"",
+            component, name, value), SeleniumUtils.getAttribute(component, name), Matchers.is(value));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getAttribute(SeleniumComponent, String)} and expects the specified value.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     * @param name the name of the attribute
+     * @param value the expected value
+     */
+    public static void assertAttribute(double timeoutInSeconds, SeleniumComponent component, String name, String value)
+    {
+        assertThatSoon(timeoutInSeconds, String
+            .format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"", component, name, value),
+            () -> SeleniumUtils.getAttribute(component, name), Matchers.is(value));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getText(SeleniumComponent)} and expects the specified text.
+     *
+     * @param component the component
+     * @param text the text
+     */
+    public static void assertText(SeleniumComponent component, String text)
+    {
+        MatcherAssert.assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, text),
+            SeleniumUtils.getText(component), Matchers.is(text));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#getText(SeleniumComponent)} and expects the specified text.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     * @param text the text
+     */
+    public static void assertText(double timeoutInSeconds, SeleniumComponent component, String text)
+    {
+        assertThatSoon(timeoutInSeconds, String.format("The component \"%s\" has the tag name \"%s\"", component, text),
+            () -> SeleniumUtils.getText(component), Matchers.is(text));
     }
 
     public static void assertContainsDescendant(SeleniumComponent component, WebElementSelector selector)
     {
         MatcherAssert.assertThat("The component \"" + component + "\" has a descendant: " + selector,
-            SeleniumActions.containsDescendant(component, selector));
+            SeleniumUtils.containsDescendant(component, selector));
     }
 }

@@ -35,8 +35,8 @@ public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumC
         catch (NoSuchMethodException | SecurityException e1)
         {
             throw new SeleniumException(String.format("The $s has no constructor with types (%s, %s)", type,
-                SeleniumUtils.toClassName(SeleniumComponent.class),
-                SeleniumUtils.toClassName(WebElementSelector.class)));
+                Utils.toClassName(SeleniumComponent.class),
+                Utils.toClassName(WebElementSelector.class)));
         }
 
         return (parent, selector) -> {
