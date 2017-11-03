@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Global settings for Selenium. The settings can be set by System properties.
  * <table>
+ * <caption>Supported System properties</caption>
  * <tr>
  * <th>{@value #DEBUG_KEY}</th>
  * <td>If set to true, timeouts are set to {@link Double#POSITIVE_INFINITY}.</td>
