@@ -791,10 +791,17 @@ public final class SeleniumUtils
             try
             {
                 runnable.run();
+                
+                return;
             }
             catch (StaleElementReferenceException e)
             {
-                if (!SeleniumGlobals.isDebug() && attempts-- <= 0)
+                if (!SeleniumGlobals.isDebug())
+                {
+                    attempts--;
+                }
+
+                if (attempts <= 0)
                 {
                     throw e;
                 }
