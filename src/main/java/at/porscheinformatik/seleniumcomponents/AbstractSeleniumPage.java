@@ -56,7 +56,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         }
         catch (Exception e)
         {
-            throw new NoSuchElementException(toString(), e);
+            throw new NoSuchElementException(selector.decribe(null), e);
         }
     }
 
@@ -131,6 +131,12 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     public final void waitUntilReady(double timeoutInSeconds)
     {
         SeleniumUtils.waitUntilReady(timeoutInSeconds, this);
+    }
+
+    @Override
+    public String describe()
+    {
+        return "";
     }
 
     @Override

@@ -169,7 +169,7 @@ public final class SeleniumUtils
      */
     public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> !isVisible(component));
+        SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !isVisible(component)));
     }
 
     /**
@@ -290,7 +290,7 @@ public final class SeleniumUtils
     {
         try
         {
-            Thread.sleep((long) (scaleTime(seconds) * 1000));
+            Thread.sleep((long) (scaleTime(seconds, false) * 1000));
         }
         catch (InterruptedException e)
         {
@@ -619,6 +619,16 @@ public final class SeleniumUtils
 
     private static double scaleTime(double timeout)
     {
+        return scaleTime(timeout, true);
+    }
+
+    private static double scaleTime(double timeout, boolean allowDebug)
+    {
+        if (allowDebug && SeleniumGlobals.isDebug())
+        {
+            return 0;
+        }
+
         return timeout * SeleniumGlobals.getTimeMultiplier();
     }
 
@@ -643,7 +653,7 @@ public final class SeleniumUtils
             }
             catch (StaleElementReferenceException e)
             {
-                if (attempts-- <= 0)
+                if (!SeleniumGlobals.isDebug() && attempts-- <= 0)
                 {
                     throw e;
                 }
@@ -678,7 +688,7 @@ public final class SeleniumUtils
             }
             catch (StaleElementReferenceException e)
             {
-                if (attempts-- <= 0)
+                if (!SeleniumGlobals.isDebug() && attempts-- <= 0)
                 {
                     throw e;
                 }

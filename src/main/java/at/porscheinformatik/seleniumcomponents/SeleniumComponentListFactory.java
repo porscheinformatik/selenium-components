@@ -1,6 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -97,14 +96,12 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      */
     public SeleniumComponentList<CHILD_TYPE> findAll()
     {
-        List<CHILD_TYPE> elements = childSelector
+        return new SeleniumComponentList<>(childSelector
             .findAll(parent.element())
             .stream()
             .map(element -> childFactory.create(parent,
                 WebElementSelector.selectElement(childSelector.toString(), element)))
-            .collect(Collectors.toList());
-
-        return new SeleniumComponentList<>(elements);
+            .collect(Collectors.toList()));
     }
 
 }

@@ -45,7 +45,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
         catch (Exception e)
         {
-            throw new NoSuchElementException(toString(), e);
+            throw new NoSuchElementException(selector.decribe(parent.describe()), e);
         }
     }
 
@@ -88,17 +88,15 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     }
 
     @Override
+    public String describe()
+    {
+        return selector.decribe(parent.describe());
+    }
+
+    @Override
     public String toString()
     {
-        String description = selector.toString();
-        SeleniumComponent parent = parent();
-
-        if (parent != null)
-        {
-            description = parent.toString() + " " + description;
-        }
-
-        return description;
+        return String.format("%s(%s)", Utils.toClassName(getClass()), describe());
     }
 
 }

@@ -43,9 +43,15 @@ public interface WebElementSelector
             }
 
             @Override
+            public String decribe(String contextDescription)
+            {
+                return "$" + description;
+            }
+
+            @Override
             public String toString()
             {
-                return element.toString();
+                return description;
             }
         };
     }
@@ -231,27 +237,30 @@ public interface WebElementSelector
     }
 
     /**
-     * Returns the element that represents the specified column. Looks at all direct children of the search context. If
-     * the element has a "colspan" attribute it is assumed, that the element spans over multiple indices.
+     * Returns the element that represents the specified column. The first column is 1. Looks at all direct children of
+     * the search context. If the element has a "colspan" attribute it is assumed, that the element spans over multiple
+     * indices.
      *
-     * @param index the index
+     * @param column the column (1-based)
      * @return the selector
      */
-    static WebElementSelector selectByColumn(int index)
+    static WebElementSelector selectByColumn(int column)
     {
         return new WebElementSelector()
         {
             @Override
             public WebElement find(SearchContext context)
             {
+                System.err.println("Searching for columns ...");
                 List<WebElement> elements = By.xpath("./*").findElements(context);
+                System.err.println("Found columns: " + elements.size());
                 int currentIndex = 1;
 
                 for (WebElement element : elements)
                 {
                     currentIndex += getColspan(element);
 
-                    if (currentIndex > index)
+                    if (currentIndex > column)
                     {
                         return element;
                     }
@@ -288,7 +297,7 @@ public interface WebElementSelector
             @Override
             public String toString()
             {
-                return String.format("*:nth-column(%d)", index);
+                return String.format("*:nth-column(%d)", column);
             }
         };
     }
@@ -330,6 +339,17 @@ public interface WebElementSelector
     List<WebElement> findAll(SearchContext context);
 
     /**
+     * Returns a description of the selector based on the context
+     *
+     * @param contextDescription the description of the context
+     * @return the description
+     */
+    default String decribe(String contextDescription)
+    {
+        return Utils.isEmpty(contextDescription) ? toString() : contextDescription + " " + toString();
+    }
+
+    /**
      * Describe the selector to simplify debugging.
      *
      * @return a string representation
@@ -363,9 +383,15 @@ public interface WebElementSelector
             }
 
             @Override
+            public String decribe(String contextDescription)
+            {
+                return selector.decribe(that.decribe(contextDescription));
+            }
+
+            @Override
             public String toString()
             {
-                return String.format("%s -> %s", that, selector);
+                return String.format("%s %s", that, selector);
             }
         };
     }
@@ -396,9 +422,15 @@ public interface WebElementSelector
             }
 
             @Override
+            public String decribe(String contextDescription)
+            {
+                return parent.decribe(that.decribe(contextDescription));
+            }
+
+            @Override
             public String toString()
             {
-                return String.format("%s -> %s", that, parent);
+                return String.format("%s %s", that, parent);
             }
         };
     }

@@ -3,6 +3,7 @@
 ## Enhancements
 
 * Added ListComponent 
+* Better debugging support (use -Dselenium-components.debug)
 
 # selenium-components-0.0.3
 

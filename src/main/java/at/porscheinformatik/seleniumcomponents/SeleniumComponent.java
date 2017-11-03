@@ -38,6 +38,13 @@ public interface SeleniumComponent extends WebElementContainer
     }
 
     /**
+     * Describes the element selector of this component
+     *
+     * @return the description of the selector
+     */
+    String describe();
+
+    /**
      * Returns true if a {@link WebElement} described by this component is ready and available (it must no be visible,
      * though). This method has no timeout, it does not wait for the component to become existent.
      *
@@ -45,4 +52,6 @@ public interface SeleniumComponent extends WebElementContainer
      */
     boolean isReady();
 
+    @Override
+    String toString();
 }
