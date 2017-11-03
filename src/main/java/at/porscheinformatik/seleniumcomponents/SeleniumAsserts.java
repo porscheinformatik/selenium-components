@@ -231,6 +231,72 @@ public final class SeleniumAsserts
     }
 
     /**
+     * An assertion using {@link SeleniumUtils#isEnabled(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
+    public static void assertIsEnabled(SeleniumComponent component)
+    {
+        MatcherAssert.assertThat("The component " + component + " is enabled", SeleniumUtils.isEnabled(component));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#isEnabled(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
+    public static void assertIsEnabled(double timeoutInSeconds, SeleniumComponent component)
+    {
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is enabled",
+            () -> SeleniumUtils.isEnabled(component), Matchers.is(true));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#isSelected(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
+    public static void assertIsSelected(SeleniumComponent component)
+    {
+        MatcherAssert.assertThat("The component " + component + " is selected", SeleniumUtils.isSelected(component));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#isSelected(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
+    public static void assertIsSelected(double timeoutInSeconds, SeleniumComponent component)
+    {
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is selected",
+            () -> SeleniumUtils.isSelected(component), Matchers.is(true));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#isEditable(SeleniumComponent)} and expecting true.
+     *
+     * @param component the component
+     */
+    public static void assertIsEditable(SeleniumComponent component)
+    {
+        MatcherAssert.assertThat("The component " + component + " is editable", SeleniumUtils.isEditable(component));
+    }
+
+    /**
+     * An assertion using {@link SeleniumUtils#isEditable(SeleniumComponent)} and expecting true.
+     *
+     * @param timeoutInSeconds the timeout
+     * @param component the component
+     */
+    public static void assertIsEditable(double timeoutInSeconds, SeleniumComponent component)
+    {
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is editable",
+            () -> SeleniumUtils.isEditable(component), Matchers.is(true));
+    }
+
+    /**
      * An assertion using {@link SeleniumUtils#getTagName(SeleniumComponent)} and expects the specified name.
      *
      * @param component the component
