@@ -1,13 +1,12 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -61,15 +60,9 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     }
 
     @Override
-    public final List<WebElement> findElements(By by)
+    public SearchContext searchContext()
     {
-        return context.getDriver().findElements(by);
-    }
-
-    @Override
-    public final WebElement findElement(By by)
-    {
-        return context.getDriver().findElement(by);
+        return context.getDriver();
     }
 
     @Override

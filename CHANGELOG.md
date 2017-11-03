@@ -1,40 +1,51 @@
-# selenium-components-0.0.4
+# selenium-components-0.0 (alpha)
 
-## Enhancements
+## selenium-components-0.0.4
+
+### Breaking Changes 
+
+* SeleniumComponent provides a searchContext() method instead of implementing the interface.
+
+### Enhancements
 
 * Added ListComponent 
 * Better debugging support (use -Dselenium-components.debug)
+* More SeleniumUtils and -Asserts
 
-# selenium-components-0.0.3
+### Fixes
 
-## Changes
+* Fixed endless-loop in retryOnStale
+
+## selenium-components-0.0.3
+
+### Breaking Changes
 
 * Moved SeleniumActions to SeleniumUtils
 * Moved some SeleniumUtils to Utils
 * Removed component classes named after HTML elements
 
-## Fixes
+### Fixes
 
 * Fix for WebElementSelector.selectByIndex(..)
 
-## Enhancements
+### Enhancements
 
 * WebElementSelector.selectByColumn(..) added
 * Better toString descriptions for components and selectors
 
-# selenium-components-0.0.2
+## selenium-components-0.0.2
 
-## Changes
+### Breaking Changes
 
 * Added some documentation
 * Some classnames changed to simplify understanding of the API.
 * SeleniumComponent does not provide elements() anymore, to simplify the API.
 
-## Enhancements
+### Enhancements
 
 * WebElementSelector got a selectByIndex(int)
 * new predefined components
 
-# selenium-components-0.0.1
+## selenium-components-0.0.1
 
 Initial release.

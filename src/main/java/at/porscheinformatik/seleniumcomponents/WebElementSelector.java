@@ -251,9 +251,7 @@ public interface WebElementSelector
             @Override
             public WebElement find(SearchContext context)
             {
-                System.err.println("Searching for columns ...");
                 List<WebElement> elements = By.xpath("./*").findElements(context);
-                System.err.println("Found columns: " + elements.size());
                 int currentIndex = 1;
 
                 for (WebElement element : elements)

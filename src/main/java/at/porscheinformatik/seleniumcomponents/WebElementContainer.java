@@ -1,8 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.util.List;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -12,7 +9,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface WebElementContainer extends SearchContext
+public interface WebElementContainer
 {
 
     /**
@@ -26,16 +23,21 @@ public interface WebElementContainer extends SearchContext
      */
     WebElement element() throws NoSuchElementException;
 
-    @Override
-    default WebElement findElement(By by)
+    /**
+     * Returns the search context for this component. By default, this is the {@link #element()} itself.
+     *
+     * @return the search context, never null
+     */
+    default SearchContext searchContext()
     {
-        return element().findElement(by);
+        return element();
     }
 
-    @Override
-    default List<WebElement> findElements(By by)
-    {
-        return element().findElements(by);
-    }
+    /**
+     * Describes the element selector of this component
+     *
+     * @return the description of the selector
+     */
+    String describe();
 
 }

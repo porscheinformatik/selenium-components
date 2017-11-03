@@ -56,7 +56,7 @@ public class TagsInputComponent extends HtmlComponent
     {
         try
         {
-            List<WebElement> removeButtons = findElements(By.className("remove-button"));
+            List<WebElement> removeButtons = searchContext().findElements(By.className("remove-button"));
 
             for (WebElement removeButton : removeButtons)
             {

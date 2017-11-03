@@ -41,7 +41,8 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> selector.find(parent));
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(),
+                () -> selector.find(parent.searchContext()));
         }
         catch (Exception e)
         {
@@ -54,7 +55,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.retryOnStale(() -> !selector.findAll(parent).isEmpty());
+            return SeleniumUtils.retryOnStale(() -> !selector.findAll(parent.searchContext()).isEmpty());
         }
         catch (NoSuchElementException e)
         {
@@ -84,7 +85,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
 
     public final void waitUntilVisible(double timeoutInSeconds)
     {
-        SeleniumUtils.waitUntilVisible(timeoutInSeconds, this);
+        SeleniumAsserts.assertIsVisible(timeoutInSeconds, this);
     }
 
     @Override
