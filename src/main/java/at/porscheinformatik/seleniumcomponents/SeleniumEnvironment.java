@@ -5,11 +5,11 @@ import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 
 /**
- * Context for Selenium tests
+ * Environment for Selenium tests.
  *
  * @author HAM
  */
-public interface SeleniumContext
+public interface SeleniumEnvironment
 {
 
     /**

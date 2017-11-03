@@ -5,6 +5,7 @@
 ### Breaking Changes 
 
 * SeleniumComponent provides a searchContext() method instead of implementing the interface.
+* Renamed SeleniumContext to SeleniumEnvironment, otherwise it's too confusing with the SearchContext.
 
 ### Enhancements
 

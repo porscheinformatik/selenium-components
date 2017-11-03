@@ -21,20 +21,20 @@ public interface SeleniumComponent extends WebElementContainer
     SeleniumComponent parent();
 
     /**
-     * Returns the {@link SeleniumContext} of this component, which is, by default, the context of the parent. If this
-     * component is root, it must implement this method and return a valid context.
+     * Returns the {@link SeleniumEnvironment} of this component, which is, by default, the environment of the parent.
+     * If this component is root, it must implement this method and return a valid environment.
      *
-     * @return the context, never null
+     * @return the environment, never null
      */
-    default SeleniumContext context()
+    default SeleniumEnvironment environment()
     {
         SeleniumComponent parent = parent();
 
         Objects.requireNonNull(parent, () -> String.format(
-            "The parent is null which means, that this component is root. Implement this method by supplying a valid context"));
+            "The parent is null which means, that this component is root. Implement this method by supplying a valid environment"));
 
-        return Objects.requireNonNull(parent.context(),
-            () -> String.format("The context of the component defined by %s is null", parent.getClass()));
+        return Objects.requireNonNull(parent.environment(),
+            () -> String.format("The environment of the component defined by %s is null", parent.getClass()));
     }
 
     /**

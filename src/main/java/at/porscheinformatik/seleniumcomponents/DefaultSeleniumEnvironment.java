@@ -5,11 +5,11 @@ import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 
 /**
- * Default implementation of a {@link SeleniumContext}
+ * Default implementation of a {@link SeleniumEnvironment}
  *
  * @author HAM
  */
-public class DefaultSeleniumContext implements SeleniumContext
+public class DefaultSeleniumEnvironment implements SeleniumEnvironment
 {
 
     private final WebDriverFactory driverFactory;
@@ -17,7 +17,7 @@ public class DefaultSeleniumContext implements SeleniumContext
 
     private WebDriver driver;
 
-    public DefaultSeleniumContext(WebDriverFactory driverFactory, String sessionName)
+    public DefaultSeleniumEnvironment(WebDriverFactory driverFactory, String sessionName)
     {
         super();
 

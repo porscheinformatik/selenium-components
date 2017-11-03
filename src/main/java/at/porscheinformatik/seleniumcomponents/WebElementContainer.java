@@ -24,9 +24,9 @@ public interface WebElementContainer
     WebElement element() throws NoSuchElementException;
 
     /**
-     * Returns the search context for this component. By default, this is the {@link #element()} itself.
+     * Returns the {@link SearchContext} for this component. By default, this is the {@link #element()} itself.
      *
-     * @return the search context, never null
+     * @return the {@link SearchContext}, never null
      */
     default SearchContext searchContext()
     {

@@ -1,7 +1,7 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumPage;
-import at.porscheinformatik.seleniumcomponents.SeleniumContext;
+import at.porscheinformatik.seleniumcomponents.SeleniumEnvironment;
 
 /**
  * A basic HTML page.
@@ -13,9 +13,9 @@ public class HtmlPage extends AbstractSeleniumPage
 
     private final String url;
 
-    public HtmlPage(SeleniumContext context, String url)
+    public HtmlPage(SeleniumEnvironment environment, String url)
     {
-        super(context);
+        super(environment);
         this.url = url;
     }
 

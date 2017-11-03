@@ -5,17 +5,17 @@ import java.util.Locale;
 import org.openqa.selenium.WebDriver;
 
 /**
- * Implementation of a {@link SeleniumContext}, that extends an existing context but uses a different driver.
+ * Implementation of a {@link SeleniumEnvironment}, that extends an existing environment but uses a different driver.
  *
  * @author HAM
  */
-public class DerivedSeleniumContext implements SeleniumContext
+public class DerivedSeleniumEnvironment implements SeleniumEnvironment
 {
 
-    private final SeleniumContext parent;
+    private final SeleniumEnvironment parent;
     private final WebDriver driver;
 
-    public DerivedSeleniumContext(SeleniumContext parent, WebDriver driver)
+    public DerivedSeleniumEnvironment(SeleniumEnvironment parent, WebDriver driver)
     {
         super();
 
@@ -23,7 +23,7 @@ public class DerivedSeleniumContext implements SeleniumContext
         this.driver = driver;
     }
 
-    public SeleniumContext getParent()
+    public SeleniumEnvironment getParent()
     {
         return parent;
     }

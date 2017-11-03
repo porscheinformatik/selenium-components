@@ -20,17 +20,17 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final SeleniumContext context;
+    private final SeleniumEnvironment environment;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
     private final int defaultTimeoutInSeconds = 1;
 
-    public AbstractSeleniumPage(SeleniumContext context)
+    public AbstractSeleniumPage(SeleniumEnvironment environment)
     {
         super();
 
-        this.context = Objects.requireNonNull(context, "Context is null");
+        this.environment = Objects.requireNonNull(environment, "Context is null");
 
-        context.getDriver().manage().timeouts().implicitlyWait(defaultTimeoutInSeconds, TimeUnit.SECONDS);
+        environment.getDriver().manage().timeouts().implicitlyWait(defaultTimeoutInSeconds, TimeUnit.SECONDS);
     }
 
     @Override
@@ -40,9 +40,9 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     }
 
     @Override
-    public final SeleniumContext context()
+    public final SeleniumEnvironment environment()
     {
-        return context;
+        return environment;
     }
 
     @Override
@@ -51,7 +51,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         try
         {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(),
-                () -> selector.find(context.getDriver()));
+                () -> selector.find(environment.getDriver()));
         }
         catch (Exception e)
         {
@@ -62,13 +62,13 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     @Override
     public SearchContext searchContext()
     {
-        return context.getDriver();
+        return environment.getDriver();
     }
 
     @Override
     public boolean isReady()
     {
-        JavascriptExecutor e = (JavascriptExecutor) context.getDriver();
+        JavascriptExecutor e = (JavascriptExecutor) environment.getDriver();
         Object readyState = e.executeScript("return document.readyState");
 
         return readyState.equals("complete");
@@ -94,19 +94,19 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         logger.info(String.format("\n\n%s\n%s\n%s\n\n", Utils.repeat("-", navigate.length()), navigate,
             Utils.repeat("-", navigate.length())));
 
-        context.getDriver().get(url);
+        environment.getDriver().get(url);
 
         waitUntilReady();
     }
 
     public void close()
     {
-        context.quit();
+        environment.quit();
     }
 
     public String getScreenshot()
     {
-        WebDriver driver = context.getDriver();
+        WebDriver driver = environment.getDriver();
 
         if (driver instanceof TakesScreenshot)
         {
