@@ -1,5 +1,11 @@
 # selenium-components-0.0 (alpha)
 
+## selenium-components-0.0.5
+
+### Enhancements
+
+* SelectFirst and SelectLast for WebElementSelector
+
 ## selenium-components-0.0.4
 
 ### Breaking Changes 
