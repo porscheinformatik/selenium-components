@@ -19,7 +19,7 @@ public interface WebElementSelector
 {
 
     /**
-     * Creates a selector that always uses the specified element. This selector ignores the search context.
+     * Creates a selector that always uses the specified element. This selector ignores the {@link SearchContext}.
      *
      * @param description a description for toString, to make it easier to find the specified element. Most-often the
      *            description looks like a CSS selector.
