@@ -237,6 +237,100 @@ public interface WebElementSelector
     }
 
     /**
+     * Returns the last element of all direct siblings.
+     *
+     * @return the selector
+     */
+    static WebElementSelector selectLast()
+    {
+        return selectLast(selectChildren());
+    }
+
+    /**
+     * Returns the last element selected by the specified selector
+     *
+     * @param selector the selector for the child elements
+     * @return the selector
+     */
+    static WebElementSelector selectLast(WebElementSelector selector)
+    {
+        return new WebElementSelector()
+        {
+            @Override
+            public WebElement find(SearchContext context)
+            {
+                List<WebElement> elements = selector.findAll(context);
+
+                if (elements.size()==0)
+                {
+                    return null;
+                }
+
+                return elements.get(elements.size()-1);
+            }
+
+            @Override
+            public List<WebElement> findAll(SearchContext context)
+            {
+                return Arrays.asList(find(context));
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("%s:last-child", selector);
+            }
+        };
+    }
+    
+    /**
+     * Returns the first element of all direct siblings.
+     *
+     * @return the selector
+     */
+    static WebElementSelector selectFirst()
+    {
+        return selectFirst(selectChildren());
+    }
+
+    /**
+     * Returns the first element selected by the specified selector
+     *
+     * @param selector the selector for the child elements
+     * @return the selector
+     */
+    static WebElementSelector selectFirst(WebElementSelector selector)
+    {
+        return new WebElementSelector()
+        {
+            @Override
+            public WebElement find(SearchContext context)
+            {
+                List<WebElement> elements = selector.findAll(context);
+
+                if (elements.size()==0)
+                {
+                    return null;
+                }
+
+                return elements.get(0);
+            }
+
+            @Override
+            public List<WebElement> findAll(SearchContext context)
+            {
+                return Arrays.asList(find(context));
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("%s:first-child", selector);
+            }
+        };
+    }
+
+    /**
      * Returns the element that represents the specified column. The first column is 1. Looks at all direct children of
      * the search context. If the element has a "colspan" attribute it is assumed, that the element spans over multiple
      * indices.
