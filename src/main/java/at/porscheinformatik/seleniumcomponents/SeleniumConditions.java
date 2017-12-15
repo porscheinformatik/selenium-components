@@ -46,7 +46,7 @@ public final class SeleniumConditions
             @Override
             public Boolean get()
             {
-                return SeleniumUtils.isVisible(component);
+                return component.isVisible();
             }
 
             @Override

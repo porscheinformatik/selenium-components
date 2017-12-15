@@ -4,11 +4,11 @@
 
 It encourages you to describe web pages as component tree. This component tree simplifies access to the underlying elements.
 
-The framework was extracted from a proprietary project and is currently still work in progress.
+The framework was extracted from a proprietary project and is currently still in progress.
 
 ## Basic Concept
 
-When writing tests with Selenium the basic workflow is to call a web page, wait until it's loaded and check the elements of the page. If the page contains scripts, it get's a bit more complicated: call a web page, wait until it's loaded, do something, wait until the script has completed and check the elements of the page. If the page is a single-page-application with a lot of async calls, things get awfully complicated. Your tests then consist of do-wait-check passages, they are hard to write, even harder to read and a pain to maintain. 
+When writing tests with Selenium the basic workflow is to call a web page, wait until it's loaded and check the elements of the page. If the page contains scripts, it get's a bit more complicated: call a web page, wait until it's loaded, do something, wait until the script has completed and check the elements of the page. If the page is a single-page-application with a lot of async calls, things get awfully complicated. Your tests then consist of do-wait-check passages, that are hard to write, even harder to read and a pain to maintain. 
 
 **Selenium Components** tries to simplify this. It let's you define the complete layout of the page as component tree (before the page is even loaded). Afterwards you can use the tree to implement your tests. 
 

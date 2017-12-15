@@ -2,6 +2,11 @@
 
 ## selenium-components-0.0.5
 
+### Breaking Changes
+
+* Clarified usage of isVisible by adding it to SeleniumComponent.
+* Removed isReady and isVisible from SeleniumUtils for consistency.
+
 ### Enhancements
 
 * SelectFirst and SelectLast for WebElementSelector

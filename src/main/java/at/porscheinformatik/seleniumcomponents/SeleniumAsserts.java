@@ -170,7 +170,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsReady(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is ready", SeleniumUtils.isReady(component));
+        MatcherAssert.assertThat("The component " + component + " is ready", component.isReady());
     }
 
     /**
@@ -181,8 +181,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "There exists " + component, () -> SeleniumUtils.isReady(component),
-            Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "There exists " + component, () -> component.isReady(), Matchers.is(true));
     }
 
     /**
@@ -215,7 +214,7 @@ public final class SeleniumAsserts
      */
     public static void assertIsVisible(SeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is visible", SeleniumUtils.isVisible(component));
+        MatcherAssert.assertThat("The component " + component + " is visible", component.isVisible());
     }
 
     /**
@@ -226,8 +225,8 @@ public final class SeleniumAsserts
      */
     public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component + " is visible",
-            () -> SeleniumUtils.isVisible(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is visible", () -> component.isVisible(),
+            Matchers.is(true));
     }
 
     /**

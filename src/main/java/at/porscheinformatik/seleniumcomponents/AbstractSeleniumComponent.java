@@ -78,11 +78,6 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         return SeleniumUtils.getAttribute(this, name);
     }
 
-    public boolean isVisible()
-    {
-        return SeleniumUtils.isVisible(this);
-    }
-
     public final void waitUntilVisible(double timeoutInSeconds)
     {
         SeleniumAsserts.assertIsVisible(timeoutInSeconds, this);

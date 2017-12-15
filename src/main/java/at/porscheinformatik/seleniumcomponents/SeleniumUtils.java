@@ -62,17 +62,6 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns true if the method {@link SeleniumComponent#isReady()} returns true.
-     *
-     * @param component the component
-     * @return true if ready
-     */
-    public static boolean isReady(SeleniumComponent component)
-    {
-        return component.isReady();
-    }
-
-    /**
      * Waits until the component becomes ready.
      *
      * @param timeoutInSeconds the timeout in seconds
@@ -80,7 +69,7 @@ public final class SeleniumUtils
      */
     public static void waitUntilReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isReady(component));
+        waitUntil(timeoutInSeconds, () -> component.isReady());
     }
 
     /**
@@ -130,29 +119,6 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns true if the component is visible. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @return true if visible
-     */
-    public static boolean isVisible(SeleniumComponent component)
-    {
-        try
-        {
-            return retryOnStale(() -> {
-                WebElement element = component.element();
-
-                return element.isDisplayed();
-            });
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-    }
-
-    /**
      * Waits for the specified amount of seconds for the component to become visible.
      *
      * @param timeoutInSeconds the timeout in seconds
@@ -160,7 +126,7 @@ public final class SeleniumUtils
      */
     public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isVisible(component));
+        waitUntil(timeoutInSeconds, () -> component.isVisible());
     }
 
     /**
@@ -171,7 +137,7 @@ public final class SeleniumUtils
      */
     public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !isVisible(component)));
+        SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !component.isVisible()));
     }
 
     /**
