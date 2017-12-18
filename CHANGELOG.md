@@ -11,6 +11,7 @@
 ### Enhancements
 
 * Moved isVisible to own VisibleSeleniumComponent interface.
+* Added an AnimatedSeleniumComponent with an animation check.
 
 ## selenium-components-0.0.5
 
