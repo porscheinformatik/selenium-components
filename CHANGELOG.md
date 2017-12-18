@@ -8,6 +8,10 @@
 * Moved isEditable, clear, sendKeys, isEnabled to EditableSelenumComponent interface.
 * Moved isSelected to SelectableSeleniumComonent interface.
 
+### Enhancements
+
+* Moved isVisible to own VisibleSeleniumComponent interface.
+
 ## selenium-components-0.0.5
 
 ### Breaking Changes

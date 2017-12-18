@@ -85,7 +85,7 @@ public final class SeleniumUtils
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilVisible(double timeoutInSeconds, VisibleSeleniumComponent component)
     {
         waitUntil(timeoutInSeconds, () -> component.isVisible());
     }
@@ -96,7 +96,7 @@ public final class SeleniumUtils
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilInvisible(double timeoutInSeconds, VisibleSeleniumComponent component)
     {
         SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !component.isVisible()));
     }

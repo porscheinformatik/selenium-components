@@ -211,7 +211,7 @@ public final class SeleniumAsserts
      *
      * @param component the component
      */
-    public static void assertIsVisible(SeleniumComponent component)
+    public static void assertIsVisible(VisibleSeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is visible", component.isVisible());
     }
@@ -222,7 +222,7 @@ public final class SeleniumAsserts
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
-    public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
+    public static void assertIsVisible(double timeoutInSeconds, VisibleSeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is visible", () -> component.isVisible(),
             Matchers.is(true));

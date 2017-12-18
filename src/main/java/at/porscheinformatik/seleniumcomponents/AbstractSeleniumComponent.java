@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public abstract class AbstractSeleniumComponent implements SeleniumComponent
+public abstract class AbstractSeleniumComponent implements VisibleSeleniumComponent
 {
 
     private final SeleniumComponent parent;
@@ -76,11 +76,6 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     protected String getAttribute(String name)
     {
         return SeleniumUtils.getAttribute(this, name);
-    }
-
-    public final void waitUntilVisible(double timeoutInSeconds)
-    {
-        SeleniumAsserts.assertIsVisible(timeoutInSeconds, this);
     }
 
     @Override

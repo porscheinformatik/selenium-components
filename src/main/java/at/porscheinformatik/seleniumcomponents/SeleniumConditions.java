@@ -39,7 +39,7 @@ public final class SeleniumConditions
         };
     }
 
-    public static Supplier<Boolean> visible(SeleniumComponent component)
+    public static Supplier<Boolean> visible(VisibleSeleniumComponent component)
     {
         return new Supplier<Boolean>()
         {

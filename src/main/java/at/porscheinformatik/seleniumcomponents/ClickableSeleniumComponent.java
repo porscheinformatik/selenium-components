@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface ClickableSeleniumComponent extends SeleniumComponent
+public interface ClickableSeleniumComponent extends VisibleSeleniumComponent
 {
 
     /**
