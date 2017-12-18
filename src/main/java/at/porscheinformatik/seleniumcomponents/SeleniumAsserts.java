@@ -185,7 +185,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isClickable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link ClickableSeleniumComponent#isClickable()} and expecting true.
      *
      * @param component the component
      */
@@ -195,7 +195,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isClickable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link ClickableSeleniumComponent#isClickable()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -207,7 +207,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
+     * An assertion using {@link VisibleSeleniumComponent#isVisible()} and expecting true.
      *
      * @param component the component
      */
@@ -217,7 +217,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
+     * An assertion using {@link VisibleSeleniumComponent#isVisible()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -229,7 +229,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isEnabled(SeleniumComponent)} and expecting true.
+     * An assertion using {@link EditableSeleniumComponent#isEnabled()} and expecting true.
      *
      * @param component the component
      */
@@ -239,7 +239,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isEnabled(SeleniumComponent)} and expecting true.
+     * An assertion using {@link EditableSeleniumComponent#isEnabled()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -251,7 +251,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isSelected(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SelectableSeleniumComponent#isSelected()} and expecting true.
      *
      * @param component the component
      */
@@ -261,7 +261,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isSelected(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SelectableSeleniumComponent#isSelected()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -273,7 +273,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isEditable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link EditableSeleniumComponent#isEditable()} and expecting true.
      *
      * @param component the component
      */
@@ -283,7 +283,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isEditable(SeleniumComponent)} and expecting true.
+     * An assertion using {@link EditableSeleniumComponent#isEditable()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
