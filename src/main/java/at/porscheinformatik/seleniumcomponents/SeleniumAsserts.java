@@ -164,7 +164,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isReady(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumComponent#isReady()} and expecting true.
      *
      * @param component the component
      */
@@ -174,7 +174,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isReady(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumComponent#isReady()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
@@ -208,7 +208,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isVisible(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
      *
      * @param component the component
      */
@@ -218,7 +218,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion using {@link SeleniumUtils#isVisible(SeleniumComponent)} and expecting true.
+     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
