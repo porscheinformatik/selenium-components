@@ -55,9 +55,9 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.retryOnStale(() -> !selector.findAll(parent.searchContext()).isEmpty());
+            return SeleniumUtils.retryOnStale(() -> selector.find(parent.searchContext())!=null);
         }
-        catch (NoSuchElementException e)
+        catch (Exception e)
         {
             return false;
         }

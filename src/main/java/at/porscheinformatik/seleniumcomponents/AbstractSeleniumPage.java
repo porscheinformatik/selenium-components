@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -22,15 +21,12 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
 
     private final SeleniumEnvironment environment;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
-    private final int defaultTimeoutInSeconds = 1;
 
     public AbstractSeleniumPage(SeleniumEnvironment environment)
     {
         super();
 
         this.environment = Objects.requireNonNull(environment, "Context is null");
-
-        environment.getDriver().manage().timeouts().implicitlyWait(defaultTimeoutInSeconds, TimeUnit.SECONDS);
     }
 
     @Override
