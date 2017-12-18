@@ -1,6 +1,7 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -10,7 +11,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author ham
  */
-public class HtmlComponent extends AbstractSeleniumComponent
+public class HtmlComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
 
     /**
@@ -28,11 +29,6 @@ public class HtmlComponent extends AbstractSeleniumComponent
     public String getTagName()
     {
         return super.getTagName();
-    }
-
-    public void click()
-    {
-        SeleniumUtils.click(this);
     }
 
     public String getText()

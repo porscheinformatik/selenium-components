@@ -189,10 +189,9 @@ public final class SeleniumAsserts
      *
      * @param component the component
      */
-    public static void assertIsClickable(SeleniumComponent component)
+    public static void assertIsClickable(ClickableSeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component.toString() + " is clickable",
-            SeleniumUtils.isClickable(component));
+        MatcherAssert.assertThat("The component " + component.toString() + " is clickable", component.isClickable());
     }
 
     /**
@@ -201,10 +200,10 @@ public final class SeleniumAsserts
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
-    public static void assertIsClickable(double timeoutInSeconds, SeleniumComponent component)
+    public static void assertIsClickable(double timeoutInSeconds, ClickableSeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component + " is clickable",
-            () -> SeleniumUtils.isClickable(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is clickable", component::isClickable,
+            Matchers.is(true));
     }
 
     /**
@@ -234,9 +233,9 @@ public final class SeleniumAsserts
      *
      * @param component the component
      */
-    public static void assertIsEnabled(SeleniumComponent component)
+    public static void assertIsEnabled(EditableSeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is enabled", SeleniumUtils.isEnabled(component));
+        MatcherAssert.assertThat("The component " + component + " is enabled", component.isEnabled());
     }
 
     /**
@@ -245,10 +244,10 @@ public final class SeleniumAsserts
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
-    public static void assertIsEnabled(double timeoutInSeconds, SeleniumComponent component)
+    public static void assertIsEnabled(double timeoutInSeconds, EditableSeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component + " is enabled",
-            () -> SeleniumUtils.isEnabled(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is enabled", component::isEnabled,
+            Matchers.is(true));
     }
 
     /**
@@ -256,9 +255,9 @@ public final class SeleniumAsserts
      *
      * @param component the component
      */
-    public static void assertIsSelected(SeleniumComponent component)
+    public static void assertIsSelected(SelectableSeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is selected", SeleniumUtils.isSelected(component));
+        MatcherAssert.assertThat("The component " + component + " is selected", component.isSelected());
     }
 
     /**
@@ -267,10 +266,10 @@ public final class SeleniumAsserts
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
-    public static void assertIsSelected(double timeoutInSeconds, SeleniumComponent component)
+    public static void assertIsSelected(double timeoutInSeconds, SelectableSeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component + " is selected",
-            () -> SeleniumUtils.isSelected(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is selected", component::isSelected,
+            Matchers.is(true));
     }
 
     /**
@@ -278,9 +277,9 @@ public final class SeleniumAsserts
      *
      * @param component the component
      */
-    public static void assertIsEditable(SeleniumComponent component)
+    public static void assertIsEditable(EditableSeleniumComponent component)
     {
-        MatcherAssert.assertThat("The component " + component + " is editable", SeleniumUtils.isEditable(component));
+        MatcherAssert.assertThat("The component " + component + " is editable", component.isEditable());
     }
 
     /**
@@ -289,10 +288,10 @@ public final class SeleniumAsserts
      * @param timeoutInSeconds the timeout
      * @param component the component
      */
-    public static void assertIsEditable(double timeoutInSeconds, SeleniumComponent component)
+    public static void assertIsEditable(double timeoutInSeconds, EditableSeleniumComponent component)
     {
-        assertThatSoon(timeoutInSeconds, "The component " + component + " is editable",
-            () -> SeleniumUtils.isEditable(component), Matchers.is(true));
+        assertThatSoon(timeoutInSeconds, "The component " + component + " is editable", component::isEditable,
+            Matchers.is(true));
     }
 
     /**

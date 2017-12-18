@@ -21,14 +21,14 @@ public final class SeleniumConditions
     {
     }
 
-    public static Supplier<Boolean> clickable(SeleniumComponent component)
+    public static Supplier<Boolean> clickable(ClickableSeleniumComponent component)
     {
         return new Supplier<Boolean>()
         {
             @Override
             public Boolean get()
             {
-                return SeleniumUtils.isClickable(component);
+                return component.isClickable();
             }
 
             @Override

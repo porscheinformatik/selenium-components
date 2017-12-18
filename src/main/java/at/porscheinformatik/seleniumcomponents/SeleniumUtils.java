@@ -1,7 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebElement;
 
 /**
  * Some utilities for testing.
@@ -73,49 +69,14 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns true if the component is clickable. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @return true if clickable
-     */
-    public static boolean isClickable(SeleniumComponent component)
-    {
-        try
-        {
-            return retryOnStale(() -> {
-                WebElement element = component.element();
-
-                return element.isDisplayed() && element.isEnabled();
-            });
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-    }
-
-    /**
      * Waits for the specified amount of seconds for the component to become clickable.
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilClickable(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilClickable(double timeoutInSeconds, ClickableSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isClickable(component));
-    }
-
-    /**
-     * Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the component to become clickable and clicks
-     * it.
-     *
-     * @param component the component
-     */
-    public static void click(SeleniumComponent component)
-    {
-        assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), component);
-        retryOnStale(() -> component.element().click());
+        waitUntil(timeoutInSeconds, () -> component.isClickable());
     }
 
     /**
@@ -141,60 +102,14 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns true if the component is enabled. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @return true if enabled
-     */
-    public static boolean isEnabled(SeleniumComponent component)
-    {
-        try
-        {
-            return retryOnStale(() -> {
-                WebElement element = component.element();
-
-                return element.isEnabled();
-            });
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-    }
-
-    /**
      * Waits for the specified amount of seconds for the component to become enabled.
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilEnabled(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilEnabled(double timeoutInSeconds, EditableSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isEnabled(component));
-    }
-
-    /**
-     * Returns true if the component is selected. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @return true if selected
-     */
-    public static boolean isSelected(SeleniumComponent component)
-    {
-        try
-        {
-            return retryOnStale(() -> {
-                WebElement element = component.element();
-
-                return element.isSelected();
-            });
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
+        waitUntil(timeoutInSeconds, component::isEnabled);
     }
 
     /**
@@ -203,32 +118,9 @@ public final class SeleniumUtils
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilSelected(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilSelected(double timeoutInSeconds, SelectableSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isSelected(component));
-    }
-
-    /**
-     * Returns true if the component is editable. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @return true if editable
-     */
-    public static boolean isEditable(SeleniumComponent component)
-    {
-        try
-        {
-            return retryOnStale(() -> {
-                WebElement element = component.element();
-
-                return element.isDisplayed() && element.isEnabled();
-            });
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
+        waitUntil(timeoutInSeconds, component::isSelected);
     }
 
     /**
@@ -237,9 +129,9 @@ public final class SeleniumUtils
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
      */
-    public static void waitUntilEditable(double timeoutInSeconds, SeleniumComponent component)
+    public static void waitUntilEditable(double timeoutInSeconds, EditableSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> isEditable(component));
+        waitUntil(timeoutInSeconds, component::isEditable);
     }
 
     /**
@@ -277,38 +169,6 @@ public final class SeleniumUtils
     public static String getText(SeleniumComponent component)
     {
         return retryOnStale(() -> component.element().getText().trim());
-    }
-
-    /**
-     * Clears the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for the component to
-     * become available.
-     *
-     * @param component the component
-     */
-    public static void clear(SeleniumComponent component)
-    {
-        assertIsEditable(SeleniumGlobals.getShortTimeoutInSeconds(), component);
-        retryOnStale(() -> component.element().clear());
-    }
-
-    /**
-     * Sends the key sequences to the component. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds for
-     * the component to become available.
-     *
-     * @param component the component
-     * @param keysToSend the keys to send (multiple)
-     */
-    public static void sendKeys(SeleniumComponent component, CharSequence... keysToSend)
-    {
-        assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), component);
-        retryOnStale(() -> {
-            WebElement element = component.element();
-
-            for (CharSequence current : keysToSend)
-            {
-                element.sendKeys(current);
-            }
-        });
     }
 
     /**
@@ -757,7 +617,7 @@ public final class SeleniumUtils
             try
             {
                 runnable.run();
-                
+
                 return;
             }
             catch (StaleElementReferenceException e)

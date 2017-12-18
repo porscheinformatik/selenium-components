@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
-import org.openqa.selenium.WebElement;
-
+import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
@@ -10,7 +9,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author cet
  */
-public class InputComponent extends HtmlComponent
+public class InputComponent extends HtmlComponent implements EditableSeleniumComponent
 {
 
     public static InputComponent byName(SeleniumComponent parent, String name)
@@ -40,17 +39,8 @@ public class InputComponent extends HtmlComponent
      */
     public void enter(CharSequence... values)
     {
-        WebElement element = element();
-
-        element.clear();
-
-        for (CharSequence value : values)
-        {
-            if (value != null)
-            {
-                element.sendKeys(value);
-            }
-        }
+        clear();
+        sendKeys(values);
     }
 
     public String getValue()

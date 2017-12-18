@@ -1,5 +1,13 @@
 # selenium-components-0.0 (alpha)
 
+## selenium-components-0.0.6
+
+### Breaking Changes
+
+* Moved isClickable, click to ClickableSelenumComponent interface.
+* Moved isEditable, clear, sendKeys, isEnabled to EditableSelenumComponent interface.
+* Moved isSelected to SelectableSeleniumComonent interface.
+
 ## selenium-components-0.0.5
 
 ### Breaking Changes
