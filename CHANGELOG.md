@@ -1,5 +1,12 @@
 # selenium-components-0.0 (alpha)
 
+## selenium-components-0.0.7
+
+### Enhancements
+
+* Default WebDriverFactories for Chrome, Firefox, Edge and BrowserStack.
+* assertThatSoon accepts supplier methods with exceptions.
+
 ## selenium-components-0.0.6
 
 ### Breaking Changes
