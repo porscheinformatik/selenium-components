@@ -1,7 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
 /**
- * An abstract implementation of a {@link WebDriverFactory
+ * An abstract implementation of a {@link WebDriverFactory}.
  *
  * @author ham
  */
