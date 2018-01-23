@@ -152,7 +152,7 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
         }
         finally
         {

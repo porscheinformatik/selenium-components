@@ -209,7 +209,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
         }
     }
 
@@ -296,7 +296,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
+                throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
             }
 
             if (result instanceof Optional)
@@ -311,7 +311,7 @@ public final class SeleniumUtils
                 return result;
             }
 
-            throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()));
+            throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()));
         }
 
         try
@@ -332,7 +332,7 @@ public final class SeleniumUtils
                         if (System.currentTimeMillis() > endMillis)
                         {
                             throw new SeleniumFailException(
-                                String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
+                                String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
                         }
                     }
 
@@ -352,7 +352,7 @@ public final class SeleniumUtils
 
                     if (currentMillis > endMillis)
                     {
-                        throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds): %s",
+                        throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds) at %s",
                             scaledTimeoutInSeconds, Utils.describeCallLine()));
                     }
 
@@ -366,7 +366,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumFailException(String.format("Keep trying failed: %s", Utils.describeCallLine()), e);
+            throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
         }
     }
 
@@ -407,16 +407,16 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), cause);
+            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), cause);
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumInterruptedException(String.format("Call interrupted: %s", Utils.describeCallLine()), e);
+            throw new SeleniumInterruptedException(String.format("Call interrupted at %s", Utils.describeCallLine()), e);
         }
         catch (TimeoutException e)
         {
             throw new SeleniumTimeoutException(
-                String.format("Call timed out (%,.1f seconds): %s", scaledTimeoutInSeconds, Utils.describeCallLine()),
+                String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds, Utils.describeCallLine()),
                 e);
         }
     }
@@ -596,7 +596,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+                throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
             }
         }
     }
@@ -636,7 +636,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumException(String.format("Call failed: %s", Utils.describeCallLine()), e);
+                throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
             }
         }
     }

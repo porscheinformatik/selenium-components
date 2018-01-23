@@ -6,6 +6,7 @@
 
 * Default WebDriverFactories for Chrome, Firefox, Edge and BrowserStack.
 * assertThatSoon accepts supplier methods with exceptions.
+* Better code line hints on exceptions.
 
 ## selenium-components-0.0.6
 

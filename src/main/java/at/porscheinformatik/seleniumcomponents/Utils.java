@@ -123,7 +123,14 @@ public final class Utils
 
     static String toCallLine(StackTraceElement element)
     {
-        return element != null ? "(" + element.getFileName() + ":" + element.getLineNumber() + ")" : "(?:?)";
+        return element != null ? element.getClassName()
+            + "."
+            + element.getMethodName()
+            + "("
+            + element.getFileName()
+            + ":"
+            + element.getLineNumber()
+            + ")" : "(?:?)";
     }
 
     public static String describeCallLine()
