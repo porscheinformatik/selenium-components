@@ -1,7 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.util.function.Supplier;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
@@ -64,7 +62,7 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(Supplier<Any> supplier, Matcher<? super Any> matcher)
+    public static <Any> Any assertThatSoon(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
     {
         return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), "", supplier, matcher);
     }
@@ -79,7 +77,7 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(double timeoutInSeconds, Supplier<Any> supplier,
+    public static <Any> Any assertThatSoon(double timeoutInSeconds, FailableSupplier<Any> supplier,
         Matcher<? super Any> matcher)
     {
         return assertThatSoon(timeoutInSeconds, "", supplier, matcher);
@@ -96,7 +94,7 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(String reason, Supplier<Any> supplier, Matcher<? super Any> matcher)
+    public static <Any> Any assertThatSoon(String reason, FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
     {
         return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), reason, supplier, matcher);
     }
@@ -112,7 +110,7 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(double timeoutInSeconds, String reason, Supplier<Any> supplier,
+    public static <Any> Any assertThatSoon(double timeoutInSeconds, String reason, FailableSupplier<Any> supplier,
         Matcher<? super Any> matcher)
     {
         Result<Any> result = new Result<>();
