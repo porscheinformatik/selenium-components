@@ -61,6 +61,6 @@ public class DefaultSeleniumEnvironment implements SeleniumEnvironment
          *  When running on the server with browserstack it happens from time to time that browserstack is not reachable and a exception is thrown.
          *  Wait some time and try it again. Hopefully it works then.
          */
-        return SeleniumUtils.keepTrying(5, () -> driverFactory.createWebDriver(sessionName));
+        return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> driverFactory.createWebDriver(sessionName));
     }
 }
