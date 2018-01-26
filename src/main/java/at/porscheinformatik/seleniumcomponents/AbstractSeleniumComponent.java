@@ -55,7 +55,7 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
     {
         try
         {
-            return SeleniumUtils.retryOnStale(() -> selector.find(parent.searchContext())!=null);
+            return SeleniumUtils.retryOnStale(() -> selector.find(parent.searchContext()) != null);
         }
         catch (Exception e)
         {
@@ -76,6 +76,18 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
     protected String getAttribute(String name)
     {
         return SeleniumUtils.getAttribute(this, name);
+    }
+
+    protected String getText()
+    {
+        return SeleniumUtils.getText(this);
+    }
+
+    protected boolean containsClassName(String className)
+    {
+        String attribute = getAttribute("class");
+
+        return attribute != null && attribute.contains(className);
     }
 
     @Override

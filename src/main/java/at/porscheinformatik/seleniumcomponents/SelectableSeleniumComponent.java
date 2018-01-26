@@ -33,4 +33,26 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
         }
     }
 
+    /**
+     * Sets the selected state for this component if not already selected.
+     */
+    default void select()
+    {
+        if (!isSelected())
+        {
+            element().click();
+        }
+    }
+
+    /**
+     * Unsets the selected state of this component if currently selected.
+     */
+    default void unselect()
+    {
+        if (isSelected())
+        {
+            element().click();
+        }
+    }
+
 }

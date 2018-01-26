@@ -5,6 +5,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -12,7 +13,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 /**
  * @author Daniel Furtlehner
  */
-public class CheckboxComponent extends HtmlComponent implements SelectableSeleniumComponent
+public class CheckboxComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
 {
 
     /**
@@ -29,22 +30,6 @@ public class CheckboxComponent extends HtmlComponent implements SelectableSeleni
     public CheckboxComponent(SeleniumComponent parent)
     {
         this(parent, selectByCss("input[type=\"checkbox\"]"));
-    }
-
-    public void select()
-    {
-        if (!isSelected())
-        {
-            element().click();
-        }
-    }
-
-    public void unselect()
-    {
-        if (isSelected())
-        {
-            element().click();
-        }
     }
 
     public void setSelected(boolean selected)

@@ -2,13 +2,15 @@ package at.porscheinformatik.seleniumcomponents.component;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
  * @author cet
  */
-public class LinkComponent extends HtmlComponent
+public class LinkComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
 
     public LinkComponent(SeleniumComponent parent)
@@ -29,6 +31,12 @@ public class LinkComponent extends HtmlComponent
     public String getHref()
     {
         return getAttribute("href");
+    }
+
+    @Override
+    public String getText()
+    {
+        return super.getText();
     }
 
 }

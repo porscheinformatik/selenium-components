@@ -7,11 +7,13 @@ import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
- * Represents an HTML tag.
+ * A generic HTML Component that can be used for simple tags like &lt;p&gt; , &lt;span&gt;, &lt;div&gt; Should only be
+ * used if a more specific component is not available.
  *
  * @author ham
+ * @author Daniel Furtlehner
  */
-public class HtmlComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
+public final class HtmlComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
 
     /**
@@ -31,9 +33,10 @@ public class HtmlComponent extends AbstractSeleniumComponent implements Clickabl
         return super.getTagName();
     }
 
+    @Override
     public String getText()
     {
-        return SeleniumUtils.getText(this);
+        return super.getText();
     }
 
     @Override
@@ -42,11 +45,10 @@ public class HtmlComponent extends AbstractSeleniumComponent implements Clickabl
         return SeleniumUtils.getAttribute(this, name);
     }
 
+    @Override
     public boolean containsClassName(String className)
     {
-        String attribute = getAttribute("class");
-
-        return attribute != null && attribute.contains(className);
+        return super.containsClassName(className);
     }
 
 }

@@ -1,5 +1,6 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
+import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -9,7 +10,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author cet
  */
-public class InputComponent extends HtmlComponent implements EditableSeleniumComponent
+public class InputComponent extends AbstractSeleniumComponent implements EditableSeleniumComponent
 {
 
     public static InputComponent byName(SeleniumComponent parent, String name)

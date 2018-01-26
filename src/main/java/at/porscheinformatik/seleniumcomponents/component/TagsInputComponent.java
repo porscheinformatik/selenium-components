@@ -19,7 +19,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author cet
  */
-public class TagsInputComponent extends HtmlComponent
+public class TagsInputComponent extends AbstractSeleniumComponent
 {
 
     private final SuggestionList suggestionList = new SuggestionList(this);
