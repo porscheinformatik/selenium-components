@@ -64,7 +64,7 @@ public final class SeleniumAsserts
      */
     public static <Any> Any assertThatSoon(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
     {
-        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), "", supplier, matcher);
+        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds() + 1, "", supplier, matcher);
     }
 
     /**
@@ -96,7 +96,7 @@ public final class SeleniumAsserts
      */
     public static <Any> Any assertThatSoon(String reason, FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
     {
-        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds(), reason, supplier, matcher);
+        return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds() + 1, reason, supplier, matcher);
     }
 
     /**
@@ -124,7 +124,8 @@ public final class SeleniumAsserts
 
                     result.setValue(value);
 
-                    return matcher.matches(value) ? true : null;
+                    Boolean r = matcher.matches(value) ? true : null;
+                    return r;
                 }
                 catch (Exception e)
                 {
@@ -132,6 +133,7 @@ public final class SeleniumAsserts
 
                     return null;
                 }
+
             });
 
             return result.getValue();
