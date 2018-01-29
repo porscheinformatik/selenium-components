@@ -49,4 +49,9 @@ public class InputComponent extends AbstractSeleniumComponent implements Editabl
         return getAttribute("value");
     }
 
+    public String getPlaceholder()
+    {
+        return getAttribute("placeholder");
+    }
+
 }
