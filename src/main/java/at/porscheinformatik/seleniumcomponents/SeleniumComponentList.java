@@ -100,4 +100,19 @@ public class SeleniumComponentList<COMPONENT_TYPE extends SeleniumComponent> imp
         return new ArrayList<>(components);
     }
 
+    /**
+     * @param mapping mapping to apply to each entry
+     * @return list of transformed types
+     * @param <ResultT> type of transformed object
+     */
+    public <ResultT> List<ResultT> toList(Function<COMPONENT_TYPE, ResultT> mapping)
+    {
+        return stream().map(mapping).collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "SeleniumComponentList [components=" + components + "]";
+    }
 }

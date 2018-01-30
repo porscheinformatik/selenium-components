@@ -63,7 +63,8 @@ public class SelectComponent extends AbstractSeleniumComponent
             throw new AssertionError(String.format("Options with value \"%s\" not found", value));
         }
 
-        selectByLabel(option.getLabel());
+        element().click();
+        option.click();
     }
 
     /**

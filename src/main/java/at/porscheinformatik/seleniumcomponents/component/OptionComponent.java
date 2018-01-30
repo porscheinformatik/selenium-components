@@ -1,13 +1,14 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
  * @author cet
  */
-public class OptionComponent extends AbstractSeleniumComponent
+public class OptionComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
 
     public OptionComponent(SeleniumComponent parent, WebElementSelector selector)
