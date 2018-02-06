@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents;
 
@@ -27,7 +27,7 @@ public final class SeleniumMatchers
      */
     public static <ComponentT extends SeleniumComponent> Matcher<SeleniumComponentList<ComponentT>> hasItems()
     {
-        return new ComponentListHasItemsMatcher<ComponentT>();
+        return new ComponentListHasItemsMatcher<>();
     }
 
     /**
@@ -97,7 +97,7 @@ public final class SeleniumMatchers
 
         private List<AssertionT> actualValues;
 
-        public ComponentListContainsItemsMatcher(Function<ComponentT, AssertionT> mapping, AssertionT[] expectedValues,
+        ComponentListContainsItemsMatcher(Function<ComponentT, AssertionT> mapping, AssertionT[] expectedValues,
             boolean exactMatch)
         {
             super();
@@ -154,7 +154,7 @@ public final class SeleniumMatchers
     {
         private final boolean shouldBeVisible;
 
-        public VisibilityMatcher(boolean shouldBeVisible)
+        VisibilityMatcher(boolean shouldBeVisible)
         {
             super();
             this.shouldBeVisible = shouldBeVisible;

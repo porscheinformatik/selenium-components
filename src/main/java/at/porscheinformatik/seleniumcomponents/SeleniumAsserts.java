@@ -68,29 +68,19 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion that keeps calling the supplier for {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds until
-     * the matcher succeeds. The assertion fails after the specified {@link SeleniumGlobals#getShortTimeoutInSeconds()}
+     * An assertion that checks the component for {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds until the
+     * matcher succeeds. The assertion fails after the specified {@link SeleniumGlobals#getShortTimeoutInSeconds()}
      * seconds.
-     * 
+     *
      * @param <ComponentT> the type of the tested component
      * @param component the component to test
      * @param matcher the matcher for the tested value
      * @return the component itself
      */
-    public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(ComponentT component,
+    public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(ComponentT component,
         Matcher<? super ComponentT> matcher)
     {
-        // Can't use a lambda here. Maven compiler plugin does not like it :(
-        return assertThatSoon(new FailableSupplier<ComponentT>()
-        {
-
-            @Override
-            public ComponentT get() throws Exception
-            {
-                return component;
-            }
-
-        }, matcher);
+        return assertThatSoon(() -> component, matcher);
     }
 
     /**
@@ -110,7 +100,7 @@ public final class SeleniumAsserts
     }
 
     /**
-     * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
+     * An assertion that checks the component for the specified amount of seconds until the matcher succeeds. The
      * assertion fails after the specified timeout.
      *
      * @param <ComponentT> the type of the tested component
@@ -119,19 +109,10 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(double timeoutInSeconds,
+    public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(double timeoutInSeconds,
         ComponentT component, Matcher<? super ComponentT> matcher)
     {
-        // Can't use a lambda here. Maven compiler plugin does not like it :(
-        return assertThatSoon(timeoutInSeconds, new FailableSupplier<ComponentT>()
-        {
-            @Override
-            public ComponentT get() throws Exception
-            {
-                return component;
-            }
-
-        }, matcher);
+        return assertThatSoon(timeoutInSeconds, (FailableSupplier<ComponentT>) () -> component, matcher);
     }
 
     /**

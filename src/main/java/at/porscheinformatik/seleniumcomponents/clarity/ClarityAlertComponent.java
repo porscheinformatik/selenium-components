@@ -49,6 +49,9 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
         return ClarityAlertType.forClassName(attributeValue);
     }
 
+    /**
+     * Alert types for clarity
+     */
     public enum ClarityAlertType
     {
         DANGER("alert-danger"),
@@ -58,7 +61,7 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
 
         private final String className;
 
-        private ClarityAlertType(String className)
+        ClarityAlertType(String className)
         {
             this.className = className;
         }
@@ -77,6 +80,9 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
         }
     }
 
+    /**
+     * Alert items for Clarity
+     */
     public static class ClarityAlertItem extends AbstractSeleniumComponent
     {
         private final HtmlComponent alertText = new HtmlComponent(this, selectByClassName("alert-text"));
