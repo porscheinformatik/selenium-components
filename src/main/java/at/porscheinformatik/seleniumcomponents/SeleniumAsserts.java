@@ -80,7 +80,17 @@ public final class SeleniumAsserts
     public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(ComponentT component,
         Matcher<? super ComponentT> matcher)
     {
-        return assertThatSoon(() -> component, matcher);
+        // Can't use a lambda here. Maven compiler plugin does not like it :(
+        return assertThatSoon(new FailableSupplier<ComponentT>()
+        {
+
+            @Override
+            public ComponentT get() throws Exception
+            {
+                return component;
+            }
+
+        }, matcher);
     }
 
     /**
@@ -112,7 +122,16 @@ public final class SeleniumAsserts
     public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(double timeoutInSeconds,
         ComponentT component, Matcher<? super ComponentT> matcher)
     {
-        return assertThatSoon(timeoutInSeconds, () -> component, matcher);
+        // Can't use a lambda here. Maven compiler plugin does not like it :(
+        return assertThatSoon(timeoutInSeconds, new FailableSupplier<ComponentT>()
+        {
+            @Override
+            public ComponentT get() throws Exception
+            {
+                return component;
+            }
+
+        }, matcher);
     }
 
     /**
