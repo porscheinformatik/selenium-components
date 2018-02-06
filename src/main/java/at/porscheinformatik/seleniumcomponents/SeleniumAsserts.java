@@ -68,6 +68,22 @@ public final class SeleniumAsserts
     }
 
     /**
+     * An assertion that keeps calling the supplier for {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds until
+     * the matcher succeeds. The assertion fails after the specified {@link SeleniumGlobals#getShortTimeoutInSeconds()}
+     * seconds.
+     * 
+     * @param <ComponentT> the type of the tested component
+     * @param component the component to test
+     * @param matcher the matcher for the tested value
+     * @return the component itself
+     */
+    public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(ComponentT component,
+        Matcher<? super ComponentT> matcher)
+    {
+        return assertThatSoon(() -> component, matcher);
+    }
+
+    /**
      * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
      * assertion fails after the specified timeout.
      *
@@ -81,6 +97,22 @@ public final class SeleniumAsserts
         Matcher<? super Any> matcher)
     {
         return assertThatSoon(timeoutInSeconds, "", supplier, matcher);
+    }
+
+    /**
+     * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
+     * assertion fails after the specified timeout.
+     *
+     * @param <ComponentT> the type of the tested component
+     * @param timeoutInSeconds the timeout in seconds
+     * @param component the component to test
+     * @param matcher the matcher for the tested value
+     * @return the result of the supplier
+     */
+    public static <ComponentT extends SeleniumComponent> ComponentT assertThatSoon(double timeoutInSeconds,
+        ComponentT component, Matcher<? super ComponentT> matcher)
+    {
+        return assertThatSoon(timeoutInSeconds, () -> component, matcher);
     }
 
     /**

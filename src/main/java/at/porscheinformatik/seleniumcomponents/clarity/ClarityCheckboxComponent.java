@@ -16,16 +16,16 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  * 
  * @author Daniel Furtlehner
  */
-public class ClarityCheckbox extends AbstractSeleniumComponent implements SelectableSeleniumComponent
+public class ClarityCheckboxComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
 {
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
 
-    public ClarityCheckbox(SeleniumComponent parent)
+    public ClarityCheckboxComponent(SeleniumComponent parent)
     {
         this(parent, selectByTagName("clr-checkbox"));
     }
 
-    public ClarityCheckbox(SeleniumComponent parent, WebElementSelector selector)
+    public ClarityCheckboxComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
     }

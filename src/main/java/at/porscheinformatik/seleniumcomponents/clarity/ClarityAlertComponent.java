@@ -1,0 +1,94 @@
+/**
+ * 
+ */
+package at.porscheinformatik.seleniumcomponents.clarity;
+
+import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
+
+import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
+import at.porscheinformatik.seleniumcomponents.WebElementSelector;
+import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
+
+/**
+ * Compnent for https://vmware.github.io/clarity/documentation/v0.11/alerts
+ * 
+ * @author Daniel Furtlehner
+ */
+public class ClarityAlertComponent extends AbstractSeleniumComponent
+{
+    private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory =
+        new SeleniumComponentListFactory<>(this, selectByClassName("alert-item"), ClarityAlertItem::new);
+
+    public ClarityAlertComponent(SeleniumComponent parent)
+    {
+        this(parent, WebElementSelector.selectByTagName("clr-alert"));
+    }
+
+    public ClarityAlertComponent(SeleniumComponent parent, WebElementSelector selector)
+    {
+        super(parent, selector);
+    }
+
+    public SeleniumComponentList<ClarityAlertItem> getItems()
+    {
+        return entryFactory.findAll();
+    }
+
+    public ClarityAlertType getType()
+    {
+        String attributeValue = getAttribute("clralerttype");
+
+        if (attributeValue == null)
+        {
+            attributeValue = getAttribute("ng-reflect-alert-type");
+        }
+
+        return ClarityAlertType.forClassName(attributeValue);
+    }
+
+    public enum ClarityAlertType
+    {
+        DANGER("alert-danger"),
+        WARNING("alert-warning"),
+        INFO("alert-info"),
+        SUCCESS("alert-success");
+
+        private final String className;
+
+        private ClarityAlertType(String className)
+        {
+            this.className = className;
+        }
+
+        public static ClarityAlertType forClassName(String className)
+        {
+            for (ClarityAlertType type : values())
+            {
+                if (type.className.equals(className))
+                {
+                    return type;
+                }
+            }
+
+            throw new IllegalArgumentException(String.format("Unknown alert class %s", className));
+        }
+    }
+
+    public static class ClarityAlertItem extends AbstractSeleniumComponent
+    {
+        private final HtmlComponent alertText = new HtmlComponent(this, selectByClassName("alert-text"));
+
+        public ClarityAlertItem(SeleniumComponent parent, WebElementSelector selector)
+        {
+            super(parent, selector);
+        }
+
+        public String getAlertText()
+        {
+            return alertText.getText();
+        }
+    }
+}
