@@ -4,6 +4,12 @@
 
 ### Enhancements
 
+* Components for Clarity
+
+## selenium-components-0.0.7
+
+### Enhancements
+
 * Default WebDriverFactories for Chrome, Firefox, Edge and BrowserStack.
 * assertThatSoon accepts supplier methods with exceptions.
 * Better code line hints on exceptions.
