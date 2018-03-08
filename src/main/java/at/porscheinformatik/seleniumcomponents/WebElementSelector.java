@@ -6,6 +6,8 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -146,6 +148,36 @@ public interface WebElementSelector
     }
 
     /**
+     * Select an element by the value of the given attribute
+     * 
+     * @param attributeName the name of the attribute
+     * @param attributeValue the value of the attribute
+     * @return the selector
+     */
+    static WebElementSelector selectByAttribute(String attributeName, String attributeValue)
+    {
+        return selectByAttribute("*", attributeName, attributeValue);
+    }
+
+    /**
+     * Select an element by the value of the given attribute
+     * 
+     * @param tagName the html tag to select
+     * @param attributeName the name of the attribute
+     * @param attributeValue the value of the attribute. When null only the attribute name must match
+     * @return the selector
+     */
+    static WebElementSelector selectByAttribute(String tagName, String attributeName, @Nullable String attributeValue)
+    {
+        if (attributeValue == null)
+        {
+            return selectByCss(String.format("%s[%s]", tagName, attributeName));
+        }
+
+        return selectByCss(String.format("%s[%s='%s']", tagName, attributeName, attributeValue));
+    }
+
+    /**
      * A selector that uses the value of the "selenium-key" attribute of an element. This selector respects the
      * hierarchy of components. The implementation is bases on a CSS selector query.
      *
@@ -167,7 +199,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectBySeleniumKey(String tagName, String key)
     {
-        return selectByCss(String.format("%s[selenium-key='%s']", tagName, key));
+        return selectByAttribute(tagName, "selenium-key", key);
     }
 
     /**
@@ -261,12 +293,12 @@ public interface WebElementSelector
             {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.size()==0)
+                if (elements.size() == 0)
                 {
                     return null;
                 }
 
-                return elements.get(elements.size()-1);
+                return elements.get(elements.size() - 1);
             }
 
             @Override
@@ -282,7 +314,7 @@ public interface WebElementSelector
             }
         };
     }
-    
+
     /**
      * Returns the first element of all direct siblings.
      *
@@ -308,7 +340,7 @@ public interface WebElementSelector
             {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.size()==0)
+                if (elements.size() == 0)
                 {
                     return null;
                 }

@@ -4,6 +4,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.hamcrest.BaseMatcher;
@@ -42,7 +43,26 @@ public final class SeleniumMatchers
     public static <ComponentT extends SeleniumComponent, AssertionT> Matcher<SeleniumComponentList<ComponentT>> containsExactly(
         Function<ComponentT, AssertionT> itemMapper, AssertionT... expectedEntries)
     {
-        return new ComponentListContainsItemsMatcher<>(itemMapper, expectedEntries, true);
+        return new ComponentListContainsItemsMatcher<>(itemMapper, expectedEntries, true,
+            (actualValues, expected) -> actualValues.contains(expected));
+    }
+
+    /**
+     * @param <ComponentT> type of components in the list
+     * @param <AssertionT> type of objects to compare
+     * @param itemMapper mapping function that is called for each item in the list and the return value is compared to
+     *            the expected entries
+     * @param contains a function that is called with the actual list of entries for each expected entry. It must return
+     *            true when the expected entry is in the list. False otherwise.
+     * @param expectedEntries entries we expect
+     * @return A Matcher that checks if exactly the provided entries are in the list. Not more and not less.
+     */
+    @SafeVarargs
+    public static <ComponentT extends SeleniumComponent, AssertionT> Matcher<SeleniumComponentList<ComponentT>> containsExactlyWithValidation(
+        Function<ComponentT, AssertionT> itemMapper, BiFunction<List<AssertionT>, AssertionT, Boolean> contains,
+        AssertionT... expectedEntries)
+    {
+        return new ComponentListContainsItemsMatcher<>(itemMapper, expectedEntries, true, contains);
     }
 
     /**
@@ -94,16 +114,19 @@ public final class SeleniumMatchers
         private final Function<ComponentT, AssertionT> mapping;
         private final AssertionT[] expectedValues;
         private final boolean exactMatch;
+        private final BiFunction<List<AssertionT>, AssertionT, Boolean> contains;
 
         private List<AssertionT> actualValues;
 
         ComponentListContainsItemsMatcher(Function<ComponentT, AssertionT> mapping, AssertionT[] expectedValues,
-            boolean exactMatch)
+            boolean exactMatch, BiFunction<List<AssertionT>, AssertionT, Boolean> contains)
         {
             super();
+
             this.mapping = mapping;
             this.expectedValues = expectedValues;
             this.exactMatch = exactMatch;
+            this.contains = contains;
         }
 
         @Override
@@ -126,7 +149,7 @@ public final class SeleniumMatchers
 
             for (AssertionT expected : expectedValues)
             {
-                if (!actualValues.contains(expected))
+                if (!contains.apply(actualValues, expected))
                 {
                     return false;
                 }

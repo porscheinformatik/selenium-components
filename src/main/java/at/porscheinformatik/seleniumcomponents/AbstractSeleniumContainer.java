@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import java.util.function.Predicate;
+
 /**
  * An abstract base implementation of a {@link SeleniumContainer}.
  *
@@ -32,4 +34,8 @@ public abstract class AbstractSeleniumContainer<AnyChildComponent extends Seleni
         return childListFactory.findAll();
     }
 
+    protected AnyChildComponent findChild(Predicate<AnyChildComponent> predicate)
+    {
+        return childListFactory.find(predicate);
+    }
 }
