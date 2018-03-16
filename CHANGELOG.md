@@ -1,10 +1,13 @@
 # selenium-components-0.0 (alpha)
 
-## selenium-components-0.0.7
+## selenium-components-0.0.8
 
 ### Enhancements
 
 * Components for Clarity
+* Utilities for simplifying strings and computing the Levenshtein Distance.
+* The SeleniumComponent now offers a LOG variable. Debug log messages were added
+  at various locations.
 
 ## selenium-components-0.0.7
 
