@@ -8,6 +8,7 @@
 * Utilities for simplifying strings and computing the Levenshtein Distance.
 * The SeleniumComponent now offers a LOG variable. Debug log messages were added
   at various locations.
+* The InputComponent now checks the input on enter.
 
 ## selenium-components-0.0.7
 
