@@ -61,6 +61,8 @@ public interface EditableSeleniumComponent extends ClickableSeleniumComponent
      */
     default void clear()
     {
+        LOG.info(String.format("[S] Clearing %s", describe()));
+
         SeleniumAsserts.assertIsEditable(SeleniumGlobals.getShortTimeoutInSeconds(), this);
         SeleniumUtils.retryOnStale(() -> element().clear());
     }
@@ -73,6 +75,8 @@ public interface EditableSeleniumComponent extends ClickableSeleniumComponent
      */
     default void sendKeys(CharSequence... keysToSend)
     {
+        LOG.info(String.format("[S] Sending \"%s\" to %s", String.join("", keysToSend), describe()));
+
         SeleniumAsserts.assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), this);
         SeleniumUtils.retryOnStale(() -> {
             WebElement element = element();

@@ -6,6 +6,9 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Global settings for Selenium. The settings can be set by System properties.
  * <table>
@@ -25,6 +28,8 @@ import java.util.regex.Pattern;
 public final class SeleniumGlobals
 {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SeleniumGlobals.class);
+
     public static final String DEBUG_KEY = "selenium-components.debug";
     public static final String TIME_MULTIPLIER_KEY = "selenium-components.timeMultiplier";
     public static final String SHORT_TIMEOUT_IN_SECONDS_KEY = "selenium-components.shortTimeoutInSeconds";
@@ -41,7 +46,11 @@ public final class SeleniumGlobals
     {
         String debug = System.getProperty(DEBUG_KEY);
 
-        if ("".equals(debug) || "true".equals(debug))
+        if ("false".equals(debug))
+        {
+            setDebug(false);
+        }
+        else if ("".equals(debug) || "true".equals(debug) || Utils.isDebugging())
         {
             setDebug(true);
         }
@@ -103,6 +112,8 @@ public final class SeleniumGlobals
      */
     public static void setDebug(boolean debug)
     {
+        LOG.info("[S] Setting debug mode to: " + debug);
+
         SeleniumGlobals.debug = debug;
     }
 
@@ -118,13 +129,28 @@ public final class SeleniumGlobals
 
         try
         {
-            setDebug(false);
+            SeleniumGlobals.debug = false;
 
             runnable.run();
         }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            String message = String.format("Call failed in ignoreDebug() at %s", Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumException(message, e);
+        }
         finally
         {
-            setDebug(debug);
+            SeleniumGlobals.debug = debug;
         }
     }
 
@@ -142,7 +168,7 @@ public final class SeleniumGlobals
 
         try
         {
-            setDebug(false);
+            SeleniumGlobals.debug = false;
 
             return callable.call();
         }
@@ -152,11 +178,18 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
+            String message = String.format("Call failed in ignoreDebug() at %s", Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumException(message, e);
         }
         finally
         {
-            setDebug(debug);
+            SeleniumGlobals.debug = debug;
         }
     }
 
@@ -178,6 +211,8 @@ public final class SeleniumGlobals
      */
     public static void setTimeMultiplier(double timeMultiplier)
     {
+        LOG.info(String.format("[S] Settings time multiplier to %,.1f.", timeMultiplier));
+
         SeleniumGlobals.timeMultiplier = timeMultiplier;
     }
 
@@ -200,6 +235,8 @@ public final class SeleniumGlobals
      */
     public static void setShortTimeoutInSeconds(double shortTimeoutInSeconds)
     {
+        LOG.info(String.format("[S] Settings short timeout to %,.1f seconds.", timeMultiplier));
+
         SeleniumGlobals.shortTimeoutInSeconds = shortTimeoutInSeconds;
     }
 
@@ -221,6 +258,8 @@ public final class SeleniumGlobals
      */
     public static void setLongTimeoutInSeconds(double longTimeoutInSeconds)
     {
+        LOG.info(String.format("[S] Settings long timeout to %,.1f seconds.", timeMultiplier));
+
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
     }
 
@@ -237,6 +276,8 @@ public final class SeleniumGlobals
         {
             return;
         }
+
+        LOG.info(String.format("[S] Adding ignorable call element pattern: %s", pattern));
 
         IGNORABLE_CALL_ELEMENTS.add(Objects.requireNonNull(pattern));
     }

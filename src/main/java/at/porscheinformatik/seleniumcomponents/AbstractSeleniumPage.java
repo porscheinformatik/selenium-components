@@ -9,16 +9,12 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Furtlehner
  */
 public abstract class AbstractSeleniumPage implements SeleniumComponent
 {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
     private final SeleniumEnvironment environment;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
 
@@ -87,7 +83,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         String url = getUrl();
         String navigate = "Calling URL: " + url;
 
-        logger.info(String.format("\n\n%s\n%s\n%s\n\n", Utils.repeat("-", navigate.length()), navigate,
+        LOG.info(String.format("\n\n%s\n%s\n%s\n\n", Utils.repeat("-", navigate.length()), navigate,
             Utils.repeat("-", navigate.length())));
 
         environment.getDriver().get(url);

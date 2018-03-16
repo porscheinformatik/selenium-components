@@ -16,6 +16,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.openqa.selenium.StaleElementReferenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Some utilities for testing.
@@ -24,6 +26,10 @@ import org.openqa.selenium.StaleElementReferenceException;
  */
 public final class SeleniumUtils
 {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SeleniumUtils.class);
+
+    private static final ThreadLocal<Integer> ALREADY_TRYING = new ThreadLocal<>();
 
     private static final AtomicInteger POOL_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService POOL_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
@@ -209,7 +215,14 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
+            String message = String.format("Call failed at %s", Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumException(message, e);
         }
     }
 
@@ -222,7 +235,14 @@ public final class SeleniumUtils
     {
         try
         {
-            Thread.sleep((long) (scaleTime(seconds, false) * 1000));
+            double scaledSeconds = scaleTime(seconds);
+
+            if (LOG.isTraceEnabled())
+            {
+                LOG.trace(String.format("[S] Waiting for %,.3f seconds ...", scaledSeconds));
+            }
+
+            Thread.sleep((long) (scaledSeconds * 1000));
         }
         catch (InterruptedException e)
         {
@@ -284,90 +304,145 @@ public final class SeleniumUtils
     public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
         throws SeleniumFailException
     {
-        double scaledTimeoutInSeconds = scaleTime(timeoutInSeconds);
+        Integer alreadyTrying = ALREADY_TRYING.get();
 
-        if (Double.isNaN(scaledTimeoutInSeconds) || (long) (scaledTimeoutInSeconds * 1000) <= 0)
+        if (alreadyTrying != null)
         {
-            Any result;
-
-            try
-            {
-                result = callWithTimeout(timeoutInSeconds, callable);
-            }
-            catch (Exception e)
-            {
-                throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
-            }
-
-            if (result instanceof Optional)
-            {
-                if (((Optional<?>) result).isPresent())
-                {
-                    return result;
-                }
-            }
-            else if (result != null)
-            {
-                return result;
-            }
-
-            throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()));
+            return tryOnce(callable);
         }
+
+        ALREADY_TRYING.set(alreadyTrying != null ? alreadyTrying.intValue() + 1 : 1);
 
         try
         {
-            return callWithTimeout(timeoutInSeconds, () -> {
-                Any result = null;
-                long startMillis = System.currentTimeMillis();
-                long endMillis = (long) (startMillis + scaledTimeoutInSeconds * 1000);
+            double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
 
-                while (true)
-                {
-                    try
+            if ((long) (scaledTimeoutInSeconds * 1000) <= 0)
+            {
+                return tryOnce(callable);
+            }
+
+            try
+            {
+                return callWithTimeout(timeoutInSeconds, () -> {
+                    Any result = null;
+                    long startMillis = System.currentTimeMillis();
+                    long endMillis = (long) (startMillis + scaledTimeoutInSeconds * 1000);
+
+                    while (true)
                     {
-                        result = callable.call();
-                    }
-                    catch (Exception e)
-                    {
-                        if (System.currentTimeMillis() > endMillis)
+                        try
                         {
-                            throw new SeleniumFailException(
-                                String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
+                            result = callable.call();
                         }
-                    }
+                        catch (Exception e)
+                        {
+                            if (System.currentTimeMillis() > endMillis)
+                            {
+                                String message = String.format("Keep trying failed at %s", Utils.describeCallLine());
 
-                    if (result instanceof Optional)
-                    {
-                        if (((Optional<?>) result).isPresent())
+                                if (LOG.isDebugEnabled())
+                                {
+                                    LOG.debug("[S] " + message);
+                                }
+
+                                throw new SeleniumFailException(message, e);
+                            }
+                        }
+
+                        if (result instanceof Optional)
+                        {
+                            if (((Optional<?>) result).isPresent())
+                            {
+                                return result;
+                            }
+                        }
+                        else if (result != null)
                         {
                             return result;
                         }
-                    }
-                    else if (result != null)
-                    {
-                        return result;
-                    }
 
-                    long currentMillis = System.currentTimeMillis();
+                        long currentMillis = System.currentTimeMillis();
 
-                    if (currentMillis > endMillis)
-                    {
-                        throw new SeleniumFailException(String.format("Keep trying timed out (%,.1f seconds) at %s",
-                            scaledTimeoutInSeconds, Utils.describeCallLine()));
+                        if (currentMillis > endMillis)
+                        {
+                            String message = String.format("Keep trying timed out (%,.1f seconds) at %s",
+                                scaledTimeoutInSeconds, Utils.describeCallLine());
+
+                            if (LOG.isDebugEnabled())
+                            {
+                                LOG.debug("[S] " + message);
+                            }
+
+                            throw new SeleniumFailException(message);
+                        }
+
+                        waitForSeconds(delayInSeconds);
                     }
+                });
+            }
+            catch (SeleniumFailException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                String message = String.format("Keep trying failed at %s", Utils.describeCallLine());
 
-                    waitForSeconds(delayInSeconds);
+                if (LOG.isDebugEnabled())
+                {
+                    LOG.debug("[S] " + message);
                 }
-            });
+
+                throw new SeleniumFailException(message, e);
+            }
         }
-        catch (SeleniumFailException e)
+        finally
         {
-            throw e;
+            ALREADY_TRYING.set(alreadyTrying);
+        }
+    }
+
+    private static <Any> Any tryOnce(Callable<Any> callable)
+    {
+        Any result;
+
+        try
+        {
+            result = callable.call();
         }
         catch (Exception e)
         {
-            throw new SeleniumFailException(String.format("Keep trying failed at %s", Utils.describeCallLine()), e);
+            String message = String.format("Try once failed at %s", Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumFailException(message, e);
         }
+
+        if (result instanceof Optional)
+        {
+            if (((Optional<?>) result).isPresent())
+            {
+                return result;
+            }
+        }
+        else if (result != null)
+        {
+            return result;
+        }
+
+        String message = String.format("Try once failed at %s", Utils.describeCallLine());
+
+        if (LOG.isDebugEnabled())
+        {
+            LOG.debug("[S] " + message);
+        }
+
+        throw new SeleniumFailException(message);
     }
 
     /**
@@ -385,13 +460,15 @@ public final class SeleniumUtils
     public static <Any> Any callWithTimeout(double timeoutInSeconds, Callable<Any> callable)
         throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException
     {
-        double scaledTimeoutInSeconds = scaleTime(timeoutInSeconds);
+        double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
 
         Future<Any> future = POOL_THREAD_POOL.submit(callable);
 
         try
         {
-            if (Double.isNaN(scaledTimeoutInSeconds) || (long) (scaledTimeoutInSeconds * 1000) <= 0)
+            if (Double.isNaN(scaledTimeoutInSeconds)
+                || Double.isInfinite(scaledTimeoutInSeconds)
+                || (long) (scaledTimeoutInSeconds * 1000) <= 0)
             {
                 return future.get();
             }
@@ -407,17 +484,31 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), cause);
+            String message = String.format("Call failed in callWithTimeout() at %s", Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumException(message, cause);
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumInterruptedException(String.format("Call interrupted at %s", Utils.describeCallLine()), e);
+            throw new SeleniumInterruptedException(String.format("Call interrupted at %s", Utils.describeCallLine()),
+                e);
         }
         catch (TimeoutException e)
         {
-            throw new SeleniumTimeoutException(
-                String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds, Utils.describeCallLine()),
-                e);
+            String message =
+                String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds, Utils.describeCallLine());
+
+            if (LOG.isDebugEnabled())
+            {
+                LOG.debug("[S] " + message);
+            }
+
+            throw new SeleniumTimeoutException(message, e);
         }
     }
 
@@ -549,16 +640,16 @@ public final class SeleniumUtils
         });
     }
 
-    private static double scaleTime(double timeout)
+    private static double scaleTime(double time)
     {
-        return scaleTime(timeout, true);
+        return time * SeleniumGlobals.getTimeMultiplier();
     }
 
-    private static double scaleTime(double timeout, boolean allowDebug)
+    private static double scaleTimeout(double timeout)
     {
-        if (allowDebug && SeleniumGlobals.isDebug())
+        if (SeleniumGlobals.isDebug())
         {
-            return 0;
+            return Double.POSITIVE_INFINITY;
         }
 
         return timeout * SeleniumGlobals.getTimeMultiplier();
@@ -585,10 +676,19 @@ public final class SeleniumUtils
             }
             catch (StaleElementReferenceException e)
             {
-                if (!SeleniumGlobals.isDebug() && attempts-- <= 0)
+                if (!SeleniumGlobals.isDebug())
+                {
+                    attempts--;
+                }
+
+                if (attempts <= 0)
                 {
                     throw e;
                 }
+
+                LOG.trace("Element is stale, retrying ...");
+
+                waitForSeconds(0.1);
             }
             catch (RuntimeException e)
             {
@@ -596,7 +696,14 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
+                String message = String.format("Call failed in retryOnStale() at %s", Utils.describeCallLine());
+
+                if (LOG.isDebugEnabled())
+                {
+                    LOG.debug("[S] " + message);
+                }
+
+                throw new SeleniumException(message, e);
             }
         }
     }
@@ -632,11 +739,24 @@ public final class SeleniumUtils
                     throw e;
                 }
 
+                LOG.trace("Element is stale, retrying ...");
+
                 waitForSeconds(0.1);
+            }
+            catch (RuntimeException e)
+            {
+                throw e;
             }
             catch (Exception e)
             {
-                throw new SeleniumException(String.format("Call failed at %s", Utils.describeCallLine()), e);
+                String message = String.format("Call failed in retryOnStale() at %s", Utils.describeCallLine());
+
+                if (LOG.isDebugEnabled())
+                {
+                    LOG.debug("[S] " + message);
+                }
+
+                throw new SeleniumException(message, e);
             }
         }
     }

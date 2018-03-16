@@ -38,6 +38,8 @@ public interface ClickableSeleniumComponent extends VisibleSeleniumComponent
      */
     default void click()
     {
+        LOG.info(String.format("[S] Clicking on %s", describe()));
+
         SeleniumAsserts.assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), this);
         SeleniumUtils.retryOnStale(() -> element().click());
     }

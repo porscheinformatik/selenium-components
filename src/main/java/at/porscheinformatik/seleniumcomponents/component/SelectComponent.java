@@ -47,6 +47,8 @@ public class SelectComponent extends AbstractSeleniumComponent
 
     public void selectByLabel(String label)
     {
+        LOG.info(String.format("[S] Selecting \"%s\" of %s by label", label, describe()));
+
         WebElement element = element();
 
         element.click();
@@ -56,6 +58,8 @@ public class SelectComponent extends AbstractSeleniumComponent
 
     public void selectByValue(String value)
     {
+        LOG.info(String.format("[S] Selecting \"%s\" of %s by value", value, describe()));
+
         OptionComponent option = optionsFactory.find($ -> Objects.equals(value, $.getValue()));
 
         if (option == null)

@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 public final class Utils
 {
 
+    private static final boolean IS_DEBUGGING =
+        java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0;
+
     private Utils()
     {
         super();
@@ -230,5 +233,15 @@ public final class Utils
 
         // the distance is the cost for transforming all letters in both strings
         return (double) (cost[len0 - 1]) / Math.max(len0, len1);
+    }
+
+    /**
+     * Returns true if the JVM runs in debug mode
+     *
+     * @return true if in debug mode
+     */
+    public static boolean isDebugging()
+    {
+        return IS_DEBUGGING;
     }
 }

@@ -9,6 +9,7 @@
 * The SeleniumComponent now offers a LOG variable. Debug log messages were added
   at various locations.
 * The InputComponent now checks the input on enter.
+* keepTrying() now does not stack itself anymore.
 
 ## selenium-components-0.0.7
 

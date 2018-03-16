@@ -40,6 +40,8 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
     {
         if (!isSelected())
         {
+            LOG.info(String.format("[S] Selecting %s", describe()));
+
             element().click();
         }
     }
@@ -51,6 +53,8 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
     {
         if (isSelected())
         {
+            LOG.info(String.format("[S] Deselecting %s", describe()));
+            
             element().click();
         }
     }
