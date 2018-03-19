@@ -1,15 +1,35 @@
 # selenium-components-0.0 (alpha)
 
-## selenium-components-0.0.8
+## selenium-components-0.0.10
+
+### Breaking Changes
+
+* Call-Line logging moved to ThreadUtils.
+
+## selenium-components-0.0.9
 
 ### Enhancements
 
 * Components for Clarity
+* The SeleniumComponent now offers a LOG variable.
 * Utilities for simplifying strings and computing the Levenshtein Distance.
 * The SeleniumComponent now offers a LOG variable. Debug log messages were added
   at various locations.
 * The InputComponent now checks the input on enter.
 * keepTrying() now does not stack itself anymore.
+
+## selenium-components-0.0.8
+
+### Breaking Changes
+
+* Remaning assertThatSoon methods
+* HtmlComponent is final
+
+### Enhancements
+
+* Additional Components and Assertions
+* Improves API for SeleniumListComponent
+* Clarity checkbox
 
 ## selenium-components-0.0.7
 

@@ -215,7 +215,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed at %s", Utils.describeCallLine());
+            String message = String.format("Call failed at %s", ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -339,7 +339,8 @@ public final class SeleniumUtils
                         {
                             if (System.currentTimeMillis() > endMillis)
                             {
-                                String message = String.format("Keep trying failed at %s", Utils.describeCallLine());
+                                String message =
+                                    String.format("Keep trying failed at %s", ThreadUtils.describeCallLine());
 
                                 if (LOG.isDebugEnabled())
                                 {
@@ -367,7 +368,7 @@ public final class SeleniumUtils
                         if (currentMillis > endMillis)
                         {
                             String message = String.format("Keep trying timed out (%,.1f seconds) at %s",
-                                scaledTimeoutInSeconds, Utils.describeCallLine());
+                                scaledTimeoutInSeconds, ThreadUtils.describeCallLine());
 
                             if (LOG.isDebugEnabled())
                             {
@@ -387,7 +388,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Keep trying failed at %s", Utils.describeCallLine());
+                String message = String.format("Keep trying failed at %s", ThreadUtils.describeCallLine());
 
                 if (LOG.isDebugEnabled())
                 {
@@ -413,7 +414,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            String message = String.format("Try once failed at %s", Utils.describeCallLine());
+            String message = String.format("Try once failed at %s", ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -435,7 +436,7 @@ public final class SeleniumUtils
             return result;
         }
 
-        String message = String.format("Try once failed at %s", Utils.describeCallLine());
+        String message = String.format("Try once failed at %s", ThreadUtils.describeCallLine());
 
         if (LOG.isDebugEnabled())
         {
@@ -462,9 +463,10 @@ public final class SeleniumUtils
     {
         double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
 
-        Future<Any> future = POOL_THREAD_POOL.submit(callable);
+        Future<Any> future = POOL_THREAD_POOL.submit(ThreadUtils.persistCallLine(callable));
 
         try
+
         {
             if (Double.isNaN(scaledTimeoutInSeconds)
                 || Double.isInfinite(scaledTimeoutInSeconds)
@@ -484,7 +486,7 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            String message = String.format("Call failed in callWithTimeout() at %s", Utils.describeCallLine());
+            String message = String.format("Call failed in callWithTimeout() at %s", ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -495,13 +497,13 @@ public final class SeleniumUtils
         }
         catch (InterruptedException e)
         {
-            throw new SeleniumInterruptedException(String.format("Call interrupted at %s", Utils.describeCallLine()),
-                e);
+            throw new SeleniumInterruptedException(
+                String.format("Call interrupted at %s", ThreadUtils.describeCallLine()), e);
         }
         catch (TimeoutException e)
         {
-            String message =
-                String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds, Utils.describeCallLine());
+            String message = String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds,
+                ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -549,12 +551,14 @@ public final class SeleniumUtils
     public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback,
         Consumer<Exception> errorCallback)
     {
+        Callable<Any> parallelTask = ThreadUtils.persistCallLine(callable);
+
         return POOL_THREAD_POOL.submit(() -> {
             Any result = null;
 
             try
             {
-                result = callable.call();
+                result = parallelTask.call();
             }
             catch (Exception e)
             {
@@ -696,7 +700,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Call failed in retryOnStale() at %s", Utils.describeCallLine());
+                String message = String.format("Call failed in retryOnStale() at %s", ThreadUtils.describeCallLine());
 
                 if (LOG.isDebugEnabled())
                 {
@@ -749,7 +753,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Call failed in retryOnStale() at %s", Utils.describeCallLine());
+                String message = String.format("Call failed in retryOnStale() at %s", ThreadUtils.describeCallLine());
 
                 if (LOG.isDebugEnabled())
                 {

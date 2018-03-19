@@ -1,8 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -34,8 +31,6 @@ public final class SeleniumGlobals
     public static final String TIME_MULTIPLIER_KEY = "selenium-components.timeMultiplier";
     public static final String SHORT_TIMEOUT_IN_SECONDS_KEY = "selenium-components.shortTimeoutInSeconds";
     public static final String LONG_TIMEOUT_IN_SECONDS_KEY = "selenium-components.longTimeoutInSeconds";
-
-    private static final List<Pattern> IGNORABLE_CALL_ELEMENTS = new ArrayList<>();
 
     private static boolean debug = false;
     private static double timeMultiplier = 1;
@@ -83,8 +78,11 @@ public final class SeleniumGlobals
             }
         }
 
-        addIgnorableCallElement(Pattern.compile("^java\\.lang\\..*"));
-        addIgnorableCallElement(Pattern.compile("^"
+        ThreadUtils.excludeCallElement(Pattern.compile("^java\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^javax\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^com\\.sun\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^sun\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^"
             + SeleniumUtils.class.getName().substring(0, SeleniumUtils.class.getName().lastIndexOf(".")).replace(".",
                 "\\.")
             + ".*"));
@@ -139,7 +137,7 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed in ignoreDebug() at %s", Utils.describeCallLine());
+            String message = String.format("Call failed in ignoreDebug() at %s", ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -178,7 +176,7 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed in ignoreDebug() at %s", Utils.describeCallLine());
+            String message = String.format("Call failed in ignoreDebug() at %s", ThreadUtils.describeCallLine());
 
             if (LOG.isDebugEnabled())
             {
@@ -261,36 +259,6 @@ public final class SeleniumGlobals
         LOG.info(String.format("[S] Settings long timeout to %,.1f seconds.", timeMultiplier));
 
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
-    }
-
-    /**
-     * Adds an item to the list of {@link Pattern}s for method names, that should be ignored in call stacks. This
-     * patterns are used in the {@link Utils#describeCallLine()} methods to find the caller excluding the framework
-     * itself.
-     *
-     * @param pattern the pattern
-     */
-    public static void addIgnorableCallElement(Pattern pattern)
-    {
-        if (IGNORABLE_CALL_ELEMENTS.contains(pattern))
-        {
-            return;
-        }
-
-        LOG.info(String.format("[S] Adding ignorable call element pattern: %s", pattern));
-
-        IGNORABLE_CALL_ELEMENTS.add(Objects.requireNonNull(pattern));
-    }
-
-    /**
-     * Returns a list of {@link Pattern}s for method names, that should be ignored in call stacks. This patterns are
-     * used in the {@link Utils#describeCallLine()} methods to find the caller excluding the framework itself.
-     *
-     * @return the patterns
-     */
-    public static List<Pattern> getIgnorableCallElements()
-    {
-        return IGNORABLE_CALL_ELEMENTS;
     }
 
 }

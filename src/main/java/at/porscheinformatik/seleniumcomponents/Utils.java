@@ -2,9 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Common utilities for the library.
@@ -122,51 +120,6 @@ public final class Utils
         }
 
         return currentName;
-    }
-
-    static String toCallLine(StackTraceElement element)
-    {
-        return element != null ? element.getClassName()
-            + "."
-            + element.getMethodName()
-            + "("
-            + element.getFileName()
-            + ":"
-            + element.getLineNumber()
-            + ")" : "(?:?)";
-    }
-
-    public static String describeCallLine()
-    {
-        return toCallLine(findCallElement(SeleniumGlobals.getIgnorableCallElements()));
-    }
-
-    private static StackTraceElement findCallElement(List<Pattern> ignorableCallElements)
-    {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-        outerLoop: for (StackTraceElement element : stackTrace)
-        {
-            String methodName = element.getClassName() + "." + element.getMethodName();
-
-            if (methodName.startsWith(SeleniumUtils.class.getName()))
-            {
-                // skip myself
-                continue;
-            }
-
-            for (Pattern pattern : ignorableCallElements)
-            {
-                if (pattern.matcher(methodName).matches())
-                {
-                    continue outerLoop;
-                }
-            }
-
-            return element;
-        }
-
-        return null;
     }
 
     public static String simplify(String s)
