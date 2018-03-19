@@ -5,6 +5,7 @@
 ### Breaking Changes
 
 * Call-Line logging moved to ThreadUtils.
+* Using SeleniumLogger as Logger instead of SLF directly.
 
 ## selenium-components-0.0.9
 

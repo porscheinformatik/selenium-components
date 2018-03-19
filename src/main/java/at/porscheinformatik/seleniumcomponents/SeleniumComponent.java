@@ -3,8 +3,6 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Objects;
 
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The base class for components accessible by the Selenium tests. A {@link SeleniumComponent} usually describes a node
@@ -15,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public interface SeleniumComponent extends WebElementContainer
 {
 
-    Logger LOG = LoggerFactory.getLogger(SeleniumComponent.class);
+    SeleniumLogger LOG = new SeleniumLogger(SeleniumComponent.class);
 
     /**
      * Returns the parent of this component.

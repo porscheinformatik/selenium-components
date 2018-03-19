@@ -3,9 +3,6 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Global settings for Selenium. The settings can be set by System properties.
  * <table>
@@ -25,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public final class SeleniumGlobals
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SeleniumGlobals.class);
+    private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumGlobals.class);
 
     public static final String DEBUG_KEY = "selenium-components.debug";
     public static final String TIME_MULTIPLIER_KEY = "selenium-components.timeMultiplier";
@@ -110,7 +107,7 @@ public final class SeleniumGlobals
      */
     public static void setDebug(boolean debug)
     {
-        LOG.info("[S] Setting debug mode to: " + debug);
+        LOG.info("Setting debug mode to: " + debug);
 
         SeleniumGlobals.debug = debug;
     }
@@ -137,14 +134,7 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed in ignoreDebug() at %s", ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumException(message, e);
+            throw new SeleniumException(LOG.hintAt("Call failed in ignoreDebug()"), e);
         }
         finally
         {
@@ -176,14 +166,7 @@ public final class SeleniumGlobals
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed in ignoreDebug() at %s", ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumException(message, e);
+            throw new SeleniumException(LOG.hintAt("Call failed in ignoreDebug()"), e);
         }
         finally
         {
@@ -209,7 +192,7 @@ public final class SeleniumGlobals
      */
     public static void setTimeMultiplier(double timeMultiplier)
     {
-        LOG.info(String.format("[S] Settings time multiplier to %,.1f.", timeMultiplier));
+        LOG.info("Settings time multiplier to %,.1f.", timeMultiplier);
 
         SeleniumGlobals.timeMultiplier = timeMultiplier;
     }
@@ -233,7 +216,7 @@ public final class SeleniumGlobals
      */
     public static void setShortTimeoutInSeconds(double shortTimeoutInSeconds)
     {
-        LOG.info(String.format("[S] Settings short timeout to %,.1f seconds.", timeMultiplier));
+        LOG.info("Settings short timeout to %,.1f seconds.", timeMultiplier);
 
         SeleniumGlobals.shortTimeoutInSeconds = shortTimeoutInSeconds;
     }
@@ -256,7 +239,7 @@ public final class SeleniumGlobals
      */
     public static void setLongTimeoutInSeconds(double longTimeoutInSeconds)
     {
-        LOG.info(String.format("[S] Settings long timeout to %,.1f seconds.", timeMultiplier));
+        LOG.info("Settings long timeout to %,.1f seconds.", timeMultiplier);
 
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
     }

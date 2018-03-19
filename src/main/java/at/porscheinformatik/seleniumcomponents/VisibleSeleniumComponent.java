@@ -28,9 +28,9 @@ public interface VisibleSeleniumComponent extends SeleniumComponent
                 WebElement element = element();
                 boolean visible = element.isDisplayed();
 
-                if (!visible && LOG.isDebugEnabled())
+                if (!visible)
                 {
-                    LOG.debug(String.format("[S] Element not visible: %s", describe()));
+                    LOG.hintAt("Element not visible: %s", describe());
                 }
 
                 return visible;
@@ -38,10 +38,7 @@ public interface VisibleSeleniumComponent extends SeleniumComponent
         }
         catch (NoSuchElementException e)
         {
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug(String.format("[S] Element not found: %s", describe()));
-            }
+            LOG.hintAt("Element not found: %s", describe());
 
             return false;
         }

@@ -16,8 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.openqa.selenium.StaleElementReferenceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Some utilities for testing.
@@ -27,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public final class SeleniumUtils
 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SeleniumUtils.class);
+    private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumUtils.class);
 
     private static final ThreadLocal<Integer> ALREADY_TRYING = new ThreadLocal<>();
 
@@ -215,14 +213,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            String message = String.format("Call failed at %s", ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumException(message, e);
+            throw new SeleniumException(LOG.hintAt("Call failed"), e);
         }
     }
 
@@ -237,10 +228,7 @@ public final class SeleniumUtils
         {
             double scaledSeconds = scaleTime(seconds);
 
-            if (LOG.isTraceEnabled())
-            {
-                LOG.trace(String.format("[S] Waiting for %,.3f seconds ...", scaledSeconds));
-            }
+            LOG.trace("Waiting for %,.3f seconds ...", scaledSeconds);
 
             Thread.sleep((long) (scaledSeconds * 1000));
         }
@@ -339,15 +327,7 @@ public final class SeleniumUtils
                         {
                             if (System.currentTimeMillis() > endMillis)
                             {
-                                String message =
-                                    String.format("Keep trying failed at %s", ThreadUtils.describeCallLine());
-
-                                if (LOG.isDebugEnabled())
-                                {
-                                    LOG.debug("[S] " + message);
-                                }
-
-                                throw new SeleniumFailException(message, e);
+                                throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
                             }
                         }
 
@@ -367,15 +347,8 @@ public final class SeleniumUtils
 
                         if (currentMillis > endMillis)
                         {
-                            String message = String.format("Keep trying timed out (%,.1f seconds) at %s",
-                                scaledTimeoutInSeconds, ThreadUtils.describeCallLine());
-
-                            if (LOG.isDebugEnabled())
-                            {
-                                LOG.debug("[S] " + message);
-                            }
-
-                            throw new SeleniumFailException(message);
+                            throw new SeleniumFailException(
+                                LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
                         }
 
                         waitForSeconds(delayInSeconds);
@@ -388,14 +361,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Keep trying failed at %s", ThreadUtils.describeCallLine());
-
-                if (LOG.isDebugEnabled())
-                {
-                    LOG.debug("[S] " + message);
-                }
-
-                throw new SeleniumFailException(message, e);
+                throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
             }
         }
         finally
@@ -414,14 +380,7 @@ public final class SeleniumUtils
         }
         catch (Exception e)
         {
-            String message = String.format("Try once failed at %s", ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumFailException(message, e);
+            throw new SeleniumFailException(LOG.hintAt("Try once failed"), e);
         }
 
         if (result instanceof Optional)
@@ -436,14 +395,7 @@ public final class SeleniumUtils
             return result;
         }
 
-        String message = String.format("Try once failed at %s", ThreadUtils.describeCallLine());
-
-        if (LOG.isDebugEnabled())
-        {
-            LOG.debug("[S] " + message);
-        }
-
-        throw new SeleniumFailException(message);
+        throw new SeleniumFailException(LOG.hintAt("Try once failed"));
     }
 
     /**
@@ -486,14 +438,7 @@ public final class SeleniumUtils
                 throw (SeleniumException) cause;
             }
 
-            String message = String.format("Call failed in callWithTimeout() at %s", ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumException(message, cause);
+            throw new SeleniumException(LOG.hintAt("Call failed in callWithTimeout()"), cause);
         }
         catch (InterruptedException e)
         {
@@ -502,15 +447,7 @@ public final class SeleniumUtils
         }
         catch (TimeoutException e)
         {
-            String message = String.format("Call timed out (%,.1f seconds) at %s", scaledTimeoutInSeconds,
-                ThreadUtils.describeCallLine());
-
-            if (LOG.isDebugEnabled())
-            {
-                LOG.debug("[S] " + message);
-            }
-
-            throw new SeleniumTimeoutException(message, e);
+            throw new SeleniumTimeoutException(LOG.hintAt("Call timed out (%,.1f seconds)", scaledTimeoutInSeconds), e);
         }
     }
 
@@ -700,14 +637,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Call failed in retryOnStale() at %s", ThreadUtils.describeCallLine());
-
-                if (LOG.isDebugEnabled())
-                {
-                    LOG.debug("[S] " + message);
-                }
-
-                throw new SeleniumException(message, e);
+                throw new SeleniumException(LOG.hintAt("Call failed in retryOnStale()"), e);
             }
         }
     }
@@ -753,14 +683,7 @@ public final class SeleniumUtils
             }
             catch (Exception e)
             {
-                String message = String.format("Call failed in retryOnStale() at %s", ThreadUtils.describeCallLine());
-
-                if (LOG.isDebugEnabled())
-                {
-                    LOG.debug("[S] " + message);
-                }
-
-                throw new SeleniumException(message, e);
+                throw new SeleniumException(LOG.hintAt("Call failed in retryOnStale()"), e);
             }
         }
     }

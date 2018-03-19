@@ -81,10 +81,8 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     public void open()
     {
         String url = getUrl();
-        String navigate = "Calling URL: " + url;
 
-        LOG.info(String.format("\n\n%s\n%s\n%s\n\n", Utils.repeat("-", navigate.length()), navigate,
-            Utils.repeat("-", navigate.length())));
+        LOG.callUrl(url);
 
         environment.getDriver().get(url);
 
