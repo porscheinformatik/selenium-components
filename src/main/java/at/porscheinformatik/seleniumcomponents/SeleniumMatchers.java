@@ -83,6 +83,15 @@ public final class SeleniumMatchers
         return new VisibilityMatcher<>(false);
     }
 
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is clickable
+     */
+    public static <ComponentT extends ClickableSeleniumComponent> Matcher<ComponentT> isClickable()
+    {
+        return new ClickabilityMatcher<>();
+    }
+
     private static class ComponentListHasItemsMatcher<ComponentT extends SeleniumComponent>
         extends BaseMatcher<SeleniumComponentList<ComponentT>>
     {
@@ -202,6 +211,31 @@ public final class SeleniumMatchers
         public void describeTo(Description description)
         {
             description.appendText("A component that is visible");
+        }
+    }
+
+    private static class ClickabilityMatcher<ComponentT extends ClickableSeleniumComponent>
+        extends BaseMatcher<ComponentT>
+    {
+        @Override
+        public boolean matches(Object item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            ClickableSeleniumComponent component = (ClickableSeleniumComponent) item;
+
+            boolean actual = component.isClickable();
+
+            return actual;
+        }
+
+        @Override
+        public void describeTo(Description description)
+        {
+            description.appendText("A component that is clickable");
         }
     }
 }
