@@ -1,6 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 /**
@@ -47,33 +48,9 @@ public final class SeleniumGlobals
             setDebug(true);
         }
 
-        String timeMultiplier = System.getProperty(TIME_MULTIPLIER_KEY);
-
-        if (timeMultiplier != null)
-        {
-            setTimeMultiplier(Double.parseDouble(timeMultiplier));
-        }
-
-        String shortTimeoutInSeconds = System.getProperty(SHORT_TIMEOUT_IN_SECONDS_KEY);
-
-        if (timeMultiplier != null)
-        {
-            setTimeMultiplier(Double.parseDouble(shortTimeoutInSeconds));
-        }
-
-        String longTimeoutInSeconds = System.getProperty(LONG_TIMEOUT_IN_SECONDS_KEY);
-
-        if (timeMultiplier != null)
-        {
-            try
-            {
-                setTimeMultiplier(Double.parseDouble(longTimeoutInSeconds));
-            }
-            catch (NumberFormatException e)
-            {
-                throw new IllegalArgumentException("Failed to parse property", e);
-            }
-        }
+        setDoubleFromProperty(TIME_MULTIPLIER_KEY, SeleniumGlobals::setTimeMultiplier);
+        setDoubleFromProperty(SHORT_TIMEOUT_IN_SECONDS_KEY, SeleniumGlobals::setShortTimeoutInSeconds);
+        setDoubleFromProperty(LONG_TIMEOUT_IN_SECONDS_KEY, SeleniumGlobals::setLongTimeoutInSeconds);
 
         ThreadUtils.excludeCallElement(Pattern.compile("^java\\..*"));
         ThreadUtils.excludeCallElement(Pattern.compile("^javax\\..*"));
@@ -242,6 +219,23 @@ public final class SeleniumGlobals
         LOG.info("Settings long timeout to %,.1f seconds.", timeMultiplier);
 
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
+    }
+
+    private static void setDoubleFromProperty(String key, Consumer<Double> setter)
+    {
+        String value = System.getProperty(key);
+
+        if (value != null)
+        {
+            try
+            {
+                setter.accept(Double.parseDouble(value));
+            }
+            catch (NumberFormatException e)
+            {
+                throw new IllegalArgumentException("Failed to parse " + key, e);
+            }
+        }
     }
 
 }
