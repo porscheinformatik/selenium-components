@@ -20,6 +20,11 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Clicka
         super(parent, selectByTagName("button"));
     }
 
+    public ButtonComponent(SeleniumComponent parent, String seleniumKey)
+    {
+        this(parent, selectBySeleniumKey("button", seleniumKey));
+    }
+
     public ButtonComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
