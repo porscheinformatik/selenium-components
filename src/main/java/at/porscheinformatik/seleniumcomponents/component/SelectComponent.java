@@ -8,6 +8,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
@@ -19,7 +20,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author HAM
  * @author Daniel Furtlehner
  */
-public class SelectComponent extends AbstractSeleniumComponent
+public class SelectComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
 
     private final SeleniumComponentListFactory<OptionComponent> optionsFactory =
@@ -60,14 +61,16 @@ public class SelectComponent extends AbstractSeleniumComponent
     {
         LOG.interaction("Selecting \"%s\" of %s by value", value, describe());
 
-        OptionComponent option = optionsFactory.find($ -> Objects.equals(value, $.getValue()));
+        OptionComponent option = optionsFactory
+            .find($ -> Objects.equals(value, $.getValue()) || Objects.equals(value, $.getNgSelectValue()));
 
         if (option == null)
         {
             throw new AssertionError(String.format("Options with value \"%s\" not found", value));
         }
 
-        element().click();
+        click();
+
         option.click();
     }
 

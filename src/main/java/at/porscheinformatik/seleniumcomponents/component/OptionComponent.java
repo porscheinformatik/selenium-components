@@ -21,6 +21,11 @@ public class OptionComponent extends AbstractSeleniumComponent implements Clicka
         return getAttribute("value");
     }
 
+    public String getNgSelectValue()
+    {
+        return getAttribute("ng-reflect-ng-value");
+    }
+
     public String getLabel()
     {
         return getText();
