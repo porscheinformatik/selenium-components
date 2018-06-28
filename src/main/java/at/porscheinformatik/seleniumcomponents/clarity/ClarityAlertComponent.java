@@ -21,6 +21,7 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
 {
     private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory =
         new SeleniumComponentListFactory<>(this, selectByClassName("alert-item"), ClarityAlertItem::new);
+    private final HtmlComponent alertContainer = new HtmlComponent(this, selectByClassName("alert"));
 
     public ClarityAlertComponent(SeleniumComponent parent)
     {
@@ -44,6 +45,20 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
         if (attributeValue == null)
         {
             attributeValue = getAttribute("ng-reflect-alert-type");
+        }
+
+        if (attributeValue == null)
+        {
+            String containerClasses = alertContainer.getAttribute("class");
+            String[] classNames = containerClasses.split(" ");
+
+            for (String className : classNames)
+            {
+                if (className.startsWith("alert-"))
+                {
+                    attributeValue = className;
+                }
+            }
         }
 
         return ClarityAlertType.forClassName(attributeValue);

@@ -9,6 +9,7 @@ import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
+import at.porscheinformatik.seleniumcomponents.component.CheckboxComponent;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
 /**
@@ -19,6 +20,7 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 public class ClarityCheckboxComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
 {
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
+    private final CheckboxComponent checkbox = new CheckboxComponent(this);
 
     public ClarityCheckboxComponent(SeleniumComponent parent)
     {
@@ -38,7 +40,7 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
     @Override
     public boolean isSelected()
     {
-        return "true".equals(getAttribute("ng-reflect-checked"));
+        return checkbox.isSelected();
     }
 
     @Override
