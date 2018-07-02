@@ -40,24 +40,15 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
 
     public ClarityAlertType getType()
     {
-        String attributeValue = getAttribute("clralerttype");
+        String containerClasses = alertContainer.getAttribute("class");
+        String[] classNames = containerClasses.split(" ");
+        String attributeValue = null;
 
-        if (attributeValue == null)
+        for (String className : classNames)
         {
-            attributeValue = getAttribute("ng-reflect-alert-type");
-        }
-
-        if (attributeValue == null)
-        {
-            String containerClasses = alertContainer.getAttribute("class");
-            String[] classNames = containerClasses.split(" ");
-
-            for (String className : classNames)
+            if (className.startsWith("alert-"))
             {
-                if (className.startsWith("alert-"))
-                {
-                    attributeValue = className;
-                }
+                attributeValue = className;
             }
         }
 
