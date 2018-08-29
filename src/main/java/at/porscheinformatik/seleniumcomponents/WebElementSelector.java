@@ -6,6 +6,7 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.openqa.selenium.By;
@@ -98,7 +99,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectById(String id)
     {
-        return selectBy("#" + id, By.id(id));
+        return selectByCss("#" + id);
     }
 
     /**
@@ -121,7 +122,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByTagName(String tagName)
     {
-        return selectBy(tagName, By.tagName(tagName));
+        return selectByCss(tagName);
     }
 
     /**
@@ -133,7 +134,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByClassName(String className)
     {
-        return selectBy("." + className, By.className(className));
+        return selectByCss("." + className);
     }
 
     /**
@@ -144,7 +145,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByCss(String css)
     {
-        return selectBy(css.contains(" ") ? String.format("(%s)", css) : css, By.cssSelector(css));
+        return new CombinableWebElementSelector(css);
     }
 
     /**
@@ -557,5 +558,15 @@ public interface WebElementSelector
                 return String.format("%s %s", that, parent);
             }
         };
+    }
+
+    /**
+     * @param selector
+     * @return the combined selector or null if one of the selectors is not combinable
+     */
+    @Nullable
+    default WebElementSelector combine(@Nonnull WebElementSelector selector)
+    {
+        return null;
     }
 }

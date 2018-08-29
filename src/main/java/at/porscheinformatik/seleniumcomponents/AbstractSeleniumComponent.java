@@ -41,13 +41,29 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
     {
         try
         {
-            return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(),
-                () -> selector.find(parent.searchContext()));
+            return element(selector);
         }
         catch (Exception e)
         {
             throw new NoSuchElementException(selector.decribe(parent.describe()), e);
         }
+    }
+
+    protected WebElement element(WebElementSelector selector)
+    {
+        if (parent instanceof AbstractSeleniumComponent)
+        {
+            AbstractSeleniumComponent seleniumP = (AbstractSeleniumComponent) parent;
+            WebElementSelector combinedSelector = seleniumP.getSelector().combine(selector);
+
+            if (combinedSelector != null)
+            {
+                return seleniumP.element(combinedSelector);
+            }
+        }
+
+        return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(),
+            () -> selector.find(parent.searchContext()));
     }
 
     @Override
