@@ -25,6 +25,9 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
 
     private final SeleniumComponentListFactory<OptionComponent> optionsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);
+    private final SeleniumComponentListFactory<OptionGroupComponent> optionGroupsFactory =
+        new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("optgroup"),
+            OptionGroupComponent::new);
 
     public SelectComponent(SeleniumComponent parent, WebElementSelector selector)
     {
@@ -61,6 +64,8 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
     {
         LOG.interaction("Selecting \"%s\" of %s by value", value, describe());
 
+        click();
+
         OptionComponent option = optionsFactory
             .find($ -> Objects.equals(value, $.getValue()) || Objects.equals(value, $.getNgSelectValue()));
 
@@ -68,8 +73,6 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         {
             throw new AssertionError(String.format("Options with value \"%s\" not found", value));
         }
-
-        click();
 
         option.click();
     }
@@ -80,6 +83,11 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
     public SeleniumComponentList<OptionComponent> getOptions()
     {
         return optionsFactory.findAll();
+    }
+
+    public SeleniumComponentList<OptionGroupComponent> getOptionGroups()
+    {
+        return optionGroupsFactory.findAll();
     }
 
 }
