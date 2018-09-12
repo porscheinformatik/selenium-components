@@ -169,7 +169,7 @@ public final class SeleniumMatchers
 
             actualValues = parseActualValues(list);
 
-            if (exactMatch && actualValues.size() < expectedValues.length)
+            if (exactMatch && actualValues.size() != expectedValues.length)
             {
                 return false;
             }
