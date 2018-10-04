@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static at.porscheinformatik.seleniumcomponents.SeleniumUtils.*;
+
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -86,7 +88,7 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      */
     public CHILD_TYPE find(Predicate<CHILD_TYPE> predicate)
     {
-        return findAll().find(predicate);
+        return retryOnStale(() -> findAll().find(predicate));
     }
 
     /**
