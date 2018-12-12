@@ -50,7 +50,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     {
         public DataGridHeadComponent(SeleniumComponent parent)
         {
-            super(parent, selectByClassName("datagrid-head"), selectByClassName("datagrid-row"),
+            super(parent, selectByClassName("datagrid-header"), selectByClassName("datagrid-row"),
                 DataGridRowComponent::new);
         }
 
@@ -65,7 +65,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     {
         public DataGridBodyComponent(SeleniumComponent parent, SeleniumComponentFactory<RowT> rowFactory)
         {
-            super(parent, selectByClassName("datagrid-body"), selectByClassName("datagrid-row"), rowFactory);
+            super(parent, selectByClassName("datagrid"), selectByCss(".datagrid-table > .datagrid-row"), rowFactory);
         }
     }
 

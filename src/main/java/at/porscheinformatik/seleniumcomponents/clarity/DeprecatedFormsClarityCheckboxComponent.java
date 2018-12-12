@@ -13,21 +13,21 @@ import at.porscheinformatik.seleniumcomponents.component.CheckboxComponent;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
 /**
- * Component for https://vmware.github.io/clarity/documentation/v1.0/checkboxes
+ * Component for https://vmware.github.io/clarity/documentation/v0.11/checkboxes
  * 
  * @author Daniel Furtlehner
  */
-public class ClarityCheckboxComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
+public class DeprecatedFormsClarityCheckboxComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
 {
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
     private final CheckboxComponent checkbox = new CheckboxComponent(this);
 
-    public ClarityCheckboxComponent(SeleniumComponent parent)
+    public DeprecatedFormsClarityCheckboxComponent(SeleniumComponent parent)
     {
-        this(parent, selectByTagName("clr-checkbox-wrapper"));
+        this(parent, selectByTagName("clr-checkbox"));
     }
 
-    public ClarityCheckboxComponent(SeleniumComponent parent, WebElementSelector selector)
+    public DeprecatedFormsClarityCheckboxComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
     }
