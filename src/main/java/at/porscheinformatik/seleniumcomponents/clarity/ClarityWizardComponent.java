@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -16,7 +16,7 @@ import at.porscheinformatik.seleniumcomponents.component.OrderedListComponent;
 /**
  * Implementation of the clarity wizard component. This class is abstract because you create a subclass of it and define
  * the concrete implementations of the pages in your subclass.
- * 
+ *
  * @author Daniel Furtlehner
  */
 public abstract class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent
@@ -70,6 +70,21 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     public void finish()
     {
         finishButton.click();
+    }
+
+    public boolean isNextClickable()
+    {
+        return nextButton.isClickable();
+    }
+
+    public boolean isPreviousClickable()
+    {
+        return prevButton.isClickable();
+    }
+
+    public boolean isFinishClickable()
+    {
+        return finishButton.isClickable();
     }
 
     private String getPageTitle()
