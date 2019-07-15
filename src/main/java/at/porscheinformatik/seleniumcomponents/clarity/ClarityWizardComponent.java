@@ -8,10 +8,11 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.AnimatedSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
+import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.ButtonComponent;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
-import at.porscheinformatik.seleniumcomponents.component.OrderedListComponent;
 
 /**
  * Implementation of the clarity wizard component. This class is abstract because you create a subclass of it and define
@@ -23,8 +24,10 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
 {
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
     private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("modal-title-text"));
-    private final OrderedListComponent<ClarityWizardStepnavEntry> stepNav =
-        new OrderedListComponent<>(this, selectByClassName("clr-wizard-stepnav-list"), ClarityWizardStepnavEntry::new);
+
+    private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav = new SeleniumComponentListFactory<>(
+        this, WebElementSelector.selectByClassName("clr-wizard-stepnav-item"), ClarityWizardStepnavEntry::new);
+
     private final HtmlComponent wizardContent = new HtmlComponent(this, selectByClassName("clr-wizard-content"));
     private final HtmlComponent buttonWrapper =
         new HtmlComponent(this, selectByClassName("clr-wizard-footer-buttons-wrapper"));
@@ -52,9 +55,9 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * @return the list of navigation steps for this component
      */
-    public OrderedListComponent<ClarityWizardStepnavEntry> getStepNav()
+    public SeleniumComponentList<ClarityWizardStepnavEntry> getStepNavItems()
     {
-        return stepNav;
+        return stepNav.findAll();
     }
 
     public void next()

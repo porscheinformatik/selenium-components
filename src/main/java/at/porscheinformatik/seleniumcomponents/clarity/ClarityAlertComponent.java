@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -14,13 +14,13 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
 /**
  * Compnent for https://vmware.github.io/clarity/documentation/v0.11/alerts
- * 
+ *
  * @author Daniel Furtlehner
  */
 public class ClarityAlertComponent extends AbstractSeleniumComponent
 {
     private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory =
-        new SeleniumComponentListFactory<>(this, selectByClassName("alert-item"), ClarityAlertItem::new);
+        new SeleniumComponentListFactory<>(this, selectByTagName("clr-alert-item"), ClarityAlertItem::new);
     private final HtmlComponent alertContainer = new HtmlComponent(this, selectByClassName("alert"));
 
     public ClarityAlertComponent(SeleniumComponent parent)
