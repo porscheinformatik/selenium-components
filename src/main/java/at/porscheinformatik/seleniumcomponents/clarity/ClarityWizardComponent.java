@@ -37,7 +37,12 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
 
     public ClarityWizardComponent(SeleniumComponent parent)
     {
-        super(parent, selectByTagName("clr-wizard"));
+        this(parent, selectByTagName("clr-wizard"));
+    }
+
+    public ClarityWizardComponent(SeleniumComponent parent, WebElementSelector selector)
+    {
+        super(parent, selector);
     }
 
     public String getTitle()
