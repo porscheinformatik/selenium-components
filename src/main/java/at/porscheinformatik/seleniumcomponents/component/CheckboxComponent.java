@@ -44,4 +44,14 @@ public class CheckboxComponent extends AbstractSeleniumComponent implements Sele
         }
     }
 
+    public String getId()
+    {
+        return getAttribute("id");
+    }
+
+    public String getName()
+    {
+        return getAttribute("name");
+    }
+
 }

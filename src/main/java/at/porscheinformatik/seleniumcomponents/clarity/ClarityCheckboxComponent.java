@@ -8,6 +8,7 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.CheckboxComponent;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
@@ -61,4 +62,20 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
         }
     }
 
+    public String getId()
+    {
+        return checkbox.getId();
+    }
+
+    public String getName()
+    {
+        String name = checkbox.getName();
+
+        if (name == null)
+        {
+            name = SeleniumUtils.getAttribute(checkbox, "ng-reflect-name");
+        }
+
+        return name;
+    }
 }
