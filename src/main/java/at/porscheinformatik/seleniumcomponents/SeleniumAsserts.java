@@ -13,6 +13,7 @@ import org.hamcrest.StringDescription;
  */
 public final class SeleniumAsserts
 {
+    //    private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumAsserts.class);
 
     /**
      * A derived value.
@@ -173,7 +174,8 @@ public final class SeleniumAsserts
         catch (Exception e)
         {
             Object actual;
-            Exception exception = null;
+            // We set the exception here. When the result has stored an exception, it is overriden later on
+            Exception exception = e;
 
             try
             {
@@ -187,8 +189,11 @@ public final class SeleniumAsserts
 
             Description description = new StringDescription();
 
-            description.appendText(reason).appendText("\nExpected: ").appendDescriptionOf(matcher).appendText(
-                "\n     but: ");
+            description
+                .appendText(reason)
+                .appendText("\nExpected: ")
+                .appendDescriptionOf(matcher)
+                .appendText("\n     but: ");
             matcher.describeMismatch(actual, description);
 
             throw new AssertionError(description.toString(), exception);
@@ -334,8 +339,9 @@ public final class SeleniumAsserts
      */
     public static void assertTagName(SeleniumComponent component, String tagName)
     {
-        MatcherAssert.assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, tagName),
-            SeleniumUtils.getTagName(component), Matchers.is(tagName));
+        MatcherAssert
+            .assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, tagName),
+                SeleniumUtils.getTagName(component), Matchers.is(tagName));
     }
 
     /**
@@ -361,8 +367,10 @@ public final class SeleniumAsserts
      */
     public static void assertAttribute(SeleniumComponent component, String name, String value)
     {
-        MatcherAssert.assertThat(String.format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"",
-            component, name, value), SeleniumUtils.getAttribute(component, name), Matchers.is(value));
+        MatcherAssert
+            .assertThat(String
+                .format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"", component, name, value),
+                SeleniumUtils.getAttribute(component, name), Matchers.is(value));
     }
 
     /**
@@ -375,8 +383,9 @@ public final class SeleniumAsserts
      */
     public static void assertAttribute(double timeoutInSeconds, SeleniumComponent component, String name, String value)
     {
-        assertThatSoon(timeoutInSeconds, String
-            .format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"", component, name, value),
+        assertThatSoon(timeoutInSeconds,
+            String
+                .format("The component \"%s\" has the attribute \"%s\" with the value \"%s\"", component, name, value),
             () -> SeleniumUtils.getAttribute(component, name), Matchers.is(value));
     }
 
@@ -388,8 +397,9 @@ public final class SeleniumAsserts
      */
     public static void assertText(SeleniumComponent component, String text)
     {
-        MatcherAssert.assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, text),
-            SeleniumUtils.getText(component), Matchers.is(text));
+        MatcherAssert
+            .assertThat(String.format("The component \"%s\" has the tag name \"%s\"", component, text),
+                SeleniumUtils.getText(component), Matchers.is(text));
     }
 
     /**
@@ -407,7 +417,8 @@ public final class SeleniumAsserts
 
     public static void assertContainsDescendant(SeleniumComponent component, WebElementSelector selector)
     {
-        MatcherAssert.assertThat("The component \"" + component + "\" has a descendant: " + selector,
-            SeleniumUtils.containsDescendant(component, selector));
+        MatcherAssert
+            .assertThat("The component \"" + component + "\" has a descendant: " + selector,
+                SeleniumUtils.containsDescendant(component, selector));
     }
 }
