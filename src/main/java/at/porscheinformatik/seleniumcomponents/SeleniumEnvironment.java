@@ -93,7 +93,7 @@ public interface SeleniumEnvironment
     {
         Locale language = getLanguage();
 
-        return DateTimeFormatter.ofLocalizedDate(style).localizedBy(language);
+        return DateTimeFormatter.ofLocalizedDate(style).withLocale(language);
     }
 
     /**
