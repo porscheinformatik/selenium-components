@@ -239,6 +239,32 @@ public final class SeleniumUtils
     }
 
     /**
+     * Waits until the specified time millis are reached. This wait is not influenced by time scaling!
+     *
+     * @param timeMillis the time millis
+     */
+    protected static void waitUntil(long timeMillis)
+    {
+        long waitForMillis = timeMillis - System.currentTimeMillis();
+
+        if (waitForMillis <= 0)
+        {
+            return;
+        }
+
+        try
+        {
+            LOG.trace("Waiting for %,.3f seconds ...", waitForMillis / 1000d);
+
+            Thread.sleep(waitForMillis);
+        }
+        catch (InterruptedException e)
+        {
+            throw new SeleniumException("WaitUntil got interrupted", e);
+        }
+    }
+
+    /**
      * Waits until the check function does not throw an exception and returns true. If the timeout is &lt;= 0 or NaN, it
      * checks it at least once. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. The check
      * function will be called four times a second. If the check throws an exception at the end the exception will be
@@ -272,7 +298,7 @@ public final class SeleniumUtils
      */
     public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable) throws SeleniumException
     {
-        return keepTrying(timeoutInSeconds, callable, 0.25);
+        return keepTrying(timeoutInSeconds, callable, 0.1);
     }
 
     /**
@@ -299,7 +325,7 @@ public final class SeleniumUtils
             return tryOnce(callable);
         }
 
-        ALREADY_TRYING.set(alreadyTrying != null ? alreadyTrying.intValue() + 1 : 1);
+        ALREADY_TRYING.set(1);
 
         try
         {
@@ -314,11 +340,12 @@ public final class SeleniumUtils
             {
                 return callWithTimeout(timeoutInSeconds, () -> {
                     Any result = null;
-                    long startMillis = System.currentTimeMillis();
-                    long endMillis = (long) (startMillis + scaledTimeoutInSeconds * 1000);
+                    long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
 
                     while (true)
                     {
+                        long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
+
                         try
                         {
                             result = callable.call();
@@ -357,7 +384,7 @@ public final class SeleniumUtils
                                 LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
                         }
 
-                        waitForSeconds(delayInSeconds);
+                        waitUntil(nextTickMillis);
                     }
                 });
             }
@@ -617,6 +644,8 @@ public final class SeleniumUtils
 
         while (true)
         {
+            long nextTickMillis = System.currentTimeMillis() + 100;
+
             try
             {
                 return callable.call();
@@ -635,7 +664,7 @@ public final class SeleniumUtils
 
                 LOG.trace("Element is stale, retrying ...");
 
-                waitForSeconds(0.1);
+                waitUntil(nextTickMillis);
             }
             catch (RuntimeException e)
             {
@@ -661,6 +690,8 @@ public final class SeleniumUtils
 
         while (true)
         {
+            long nextTickMillis = System.currentTimeMillis() + 100;
+
             try
             {
                 runnable.run();
@@ -681,7 +712,7 @@ public final class SeleniumUtils
 
                 LOG.trace("Element is stale, retrying ...");
 
-                waitForSeconds(0.1);
+                waitUntil(nextTickMillis);
             }
             catch (RuntimeException e)
             {
