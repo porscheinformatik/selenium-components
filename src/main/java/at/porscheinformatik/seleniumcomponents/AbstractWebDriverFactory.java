@@ -8,4 +8,6 @@ package at.porscheinformatik.seleniumcomponents;
 public abstract class AbstractWebDriverFactory implements WebDriverFactory
 {
 
+    // intentionally left blank
+
 }

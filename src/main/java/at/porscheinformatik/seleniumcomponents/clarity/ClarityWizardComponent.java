@@ -100,7 +100,10 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
         return pageTitle.getText();
     }
 
-    public static abstract class AbstractClarityWizardPageComponent extends AbstractSeleniumComponent
+    /**
+     * page component
+     */
+    public abstract static class AbstractClarityWizardPageComponent extends AbstractSeleniumComponent
     {
         private final ClarityWizardComponent wizard;
 
@@ -117,6 +120,9 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
         }
     }
 
+    /**
+     * stepnav entry
+     */
     public static class ClarityWizardStepnavEntry extends AbstractSeleniumComponent
     {
         private final ButtonComponent button = new ButtonComponent(this);

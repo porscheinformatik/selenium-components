@@ -39,6 +39,7 @@ public class TableCellComponent extends AbstractSeleniumComponent
         }
     }
 
+    @Override
     public String getText()
     {
         return SeleniumUtils.getText(this);

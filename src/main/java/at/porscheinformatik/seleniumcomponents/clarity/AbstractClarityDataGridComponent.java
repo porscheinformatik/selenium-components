@@ -48,7 +48,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
 
     private static class DataGridHeadComponent extends AbstractSeleniumContainer<DataGridRowComponent>
     {
-        public DataGridHeadComponent(SeleniumComponent parent)
+        DataGridHeadComponent(SeleniumComponent parent)
         {
             super(parent, selectByClassName("datagrid-header"), selectByClassName("datagrid-row"),
                 DataGridRowComponent::new);
@@ -63,7 +63,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     private static class DataGridBodyComponent<RowT extends AbstractSeleniumComponent>
         extends AbstractSeleniumContainer<RowT>
     {
-        public DataGridBodyComponent(SeleniumComponent parent, SeleniumComponentFactory<RowT> rowFactory)
+        DataGridBodyComponent(SeleniumComponent parent, SeleniumComponentFactory<RowT> rowFactory)
         {
             super(parent, selectByClassName("datagrid"), selectByCss(".datagrid-table > .datagrid-row"), rowFactory);
         }
@@ -82,7 +82,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
         private final HtmlComponent filterContainer = new HtmlComponent(this, selectByTagName("clr-dg-filter"));
         private final InputComponent stringFilter = new InputComponent(filterContainer);
 
-        public DataGridColumnComponent(SeleniumComponent parent, WebElementSelector selector)
+        DataGridColumnComponent(SeleniumComponent parent, WebElementSelector selector)
         {
             super(parent, selector);
         }

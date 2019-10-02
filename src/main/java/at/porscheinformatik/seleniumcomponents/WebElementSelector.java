@@ -150,7 +150,7 @@ public interface WebElementSelector
 
     /**
      * Select an element by the value of the given attribute
-     * 
+     *
      * @param attributeName the name of the attribute
      * @param attributeValue the value of the attribute
      * @return the selector
@@ -162,7 +162,7 @@ public interface WebElementSelector
 
     /**
      * Select an element by the value of the given attribute
-     * 
+     *
      * @param tagName the html tag to select
      * @param attributeName the name of the attribute
      * @param attributeValue the value of the attribute. When null only the attribute name must match
@@ -561,7 +561,7 @@ public interface WebElementSelector
     }
 
     /**
-     * @param selector
+     * @param selector the selector, that should be combined with this selector
      * @return the combined selector or null if one of the selectors is not combinable
      */
     @Nullable
