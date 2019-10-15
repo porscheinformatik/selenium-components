@@ -5,6 +5,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
+import org.slf4j.LoggerFactory;
 
 /**
  * Asserts for {@link SeleniumComponent}s.
@@ -25,12 +26,18 @@ public final class SeleniumAsserts
     {
         private Any value = null;
         private Exception exception = null;
+        private AssertionError assertionError = null;
 
-        public Any getValue() throws Exception
+        public Any getValue() throws Exception, AssertionError
         {
             if (exception != null)
             {
                 throw exception;
+            }
+
+            if (assertionError != null)
+            {
+                throw assertionError;
             }
 
             return value;
@@ -40,11 +47,19 @@ public final class SeleniumAsserts
         {
             this.value = value;
             this.exception = null;
+            this.assertionError = null;
         }
 
         public void setException(Exception exception)
         {
             this.exception = exception;
+            this.assertionError = null;
+        }
+
+        public void setAssertionError(AssertionError error)
+        {
+            this.assertionError = error;
+            this.exception = null;
         }
     }
 
@@ -66,6 +81,21 @@ public final class SeleniumAsserts
     public static <Any> Any assertThatSoon(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
     {
         return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds() + 1, "", supplier, matcher);
+    }
+
+    /**
+     * Same as {@link #assertThatSoon(FailableSupplier, Matcher)} but keeps trying for
+     * {@link SeleniumGlobals#getLongTimeoutInSeconds()}
+     * 
+     * @param <Any> the type of the tested value
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @see #assertThatSoon(FailableSupplier, Matcher)
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatLater(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
+    {
+        return assertThatSoon(SeleniumGlobals.getLongTimeoutInSeconds(), "", supplier, matcher);
     }
 
     /**
@@ -133,6 +163,22 @@ public final class SeleniumAsserts
     }
 
     /**
+     * Same as {@link #assertThatSoon(String, FailableSupplier, Matcher)} but keeps trying for
+     * {@link SeleniumGlobals#getLongTimeoutInSeconds()}
+     * 
+     * @param <Any> the type of the tested value
+     * @param reason the reason for the assertion
+     * @param supplier the supplier of the tested value
+     * @param matcher the matcher for the tested value
+     * @see #assertThatSoon(String, FailableSupplier, Matcher)
+     * @return the result of the supplier
+     */
+    public static <Any> Any assertThatLater(String reason, FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
+    {
+        return assertThatSoon(SeleniumGlobals.getLongTimeoutInSeconds(), reason, supplier, matcher);
+    }
+
+    /**
      * An assertion that keeps calling the supplier for the specified amount of seconds until the matcher succeeds. The
      * assertion fails after the specified timeout.
      *
@@ -155,37 +201,51 @@ public final class SeleniumAsserts
                 {
                     Any value = supplier.get();
 
+                    Boolean r = matcher.matches(value) ? true : null;
+
                     result.setValue(value);
 
-                    Boolean r = matcher.matches(value) ? true : null;
                     return r;
                 }
                 catch (Exception e)
                 {
+                    LoggerFactory.getLogger(SeleniumAsserts.class).error("Exception ", e);
+
                     result.setException(e);
 
                     return null;
                 }
+                catch (AssertionError e)
+                {
+                    LoggerFactory.getLogger(SeleniumAsserts.class).error("Assertionerror", e);
 
+                    result.setAssertionError(e);
+
+                    return null;
+                }
             });
 
             return result.getValue();
         }
         catch (Exception e)
         {
+            LoggerFactory.getLogger(SeleniumAsserts.class).error("Catched ", e);
+
             Object actual;
             // We set the exception here. When the result has stored an exception, it is overriden later on
-            Exception exception = e;
+            Throwable cause = e;
 
             try
             {
                 actual = result.getValue();
             }
-            catch (Exception e1)
+            catch (Exception | AssertionError e1)
             {
                 actual = e1.getMessage();
-                exception = e1;
+                cause = e1;
             }
+
+            LoggerFactory.getLogger(SeleniumAsserts.class).error("Wrapped ", cause);
 
             Description description = new StringDescription();
 
@@ -196,7 +256,7 @@ public final class SeleniumAsserts
                 .appendText("\n     but: ");
             matcher.describeMismatch(actual, description);
 
-            throw new AssertionError(description.toString(), exception);
+            throw new AssertionError(description.toString(), cause);
         }
     }
 

@@ -350,14 +350,8 @@ public final class SeleniumUtils
                         {
                             result = callable.call();
                         }
-                        catch (Exception | AssertionError e)
+                        catch (Exception e)
                         {
-                            /*
-                             * We also catch AssertionErrors here. This are Errors and not Exceptions but they can happen
-                             * when e.g. A assertThatSoon is called in another assertThatSoon.
-                             * In such a case we sould not catch this here and the outher assertThatSoon cycle will be
-                             * killed and is not able to try again, even when the timeout was not exceeded.
-                             */
                             if (System.currentTimeMillis() > endMillis)
                             {
                                 throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
