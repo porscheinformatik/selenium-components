@@ -41,12 +41,16 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
 
     public String getValue()
     {
-        return getAttribute("value");
+        OptionComponent option = getFirstSelectedOption();
+
+        return option != null ? option.getValue() : null;
     }
 
     public String getSelectedLabel()
     {
-        return getText();
+        OptionComponent option = getFirstSelectedOption();
+
+        return option != null ? option.getLabel() : null;
     }
 
     public void selectByLabel(String label)
@@ -90,4 +94,8 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         return optionGroupsFactory.findAll();
     }
 
+    private OptionComponent getFirstSelectedOption()
+    {
+        return optionsFactory.find(OptionComponent::isSelected);
+    }
 }

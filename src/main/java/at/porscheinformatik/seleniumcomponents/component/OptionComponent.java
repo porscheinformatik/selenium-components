@@ -16,6 +16,11 @@ public class OptionComponent extends AbstractSeleniumComponent implements Clicka
         super(parent, selector);
     }
 
+    public boolean isSelected()
+    {
+        return element().isSelected();
+    }
+
     public String getValue()
     {
         return getAttribute("value");
