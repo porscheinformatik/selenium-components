@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static org.hamcrest.Matchers.*;
+
 import org.openqa.selenium.WebElement;
 
 /**
@@ -40,8 +42,16 @@ public interface ClickableSeleniumComponent extends VisibleSeleniumComponent
     {
         LOG.interaction("Clicking on %s", describe());
 
-        SeleniumAsserts.assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), this);
-        SeleniumUtils.retryOnStale(() -> element().click());
+        SeleniumAsserts.assertThatSoon(() -> {
+            if (this.isClickable())
+            {
+                element().click();
+
+                return true;
+            }
+
+            return false;
+        }, is(true));
     }
 
 }
