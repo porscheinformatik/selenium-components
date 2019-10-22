@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static org.hamcrest.Matchers.*;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -77,15 +79,22 @@ public interface EditableSeleniumComponent extends ClickableSeleniumComponent
     {
         LOG.interaction("Sending \"%s\" to %s", String.join("", keysToSend), describe());
 
-        SeleniumAsserts.assertIsClickable(SeleniumGlobals.getShortTimeoutInSeconds(), this);
-        SeleniumUtils.retryOnStale(() -> {
-            WebElement element = element();
-
-            for (CharSequence current : keysToSend)
+        // It could take some time to input the data. So we should wait longer than the short timeout
+        SeleniumAsserts.assertThatLater(() -> {
+            if (isClickable())
             {
-                element.sendKeys(current);
+                WebElement element = element();
+
+                for (CharSequence current : keysToSend)
+                {
+                    element.sendKeys(current);
+                }
+
+                return true;
             }
-        });
+
+            return false;
+        }, is(true));
     }
 
 }
