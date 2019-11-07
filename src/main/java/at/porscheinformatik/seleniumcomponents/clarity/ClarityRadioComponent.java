@@ -8,6 +8,7 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 import at.porscheinformatik.seleniumcomponents.component.RadioComponent;
 
@@ -21,7 +22,12 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
 
     public ClarityRadioComponent(SeleniumComponent parent)
     {
-        super(parent, selectByClassName("radio"));
+        this(parent, selectByClassName("clr-radio-wrapper"));
+    }
+
+    public ClarityRadioComponent(SeleniumComponent parent, WebElementSelector selector)
+    {
+        super(parent, selector);
     }
 
     public String getLabel()
