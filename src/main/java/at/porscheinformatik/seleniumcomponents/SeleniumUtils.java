@@ -338,49 +338,47 @@ public final class SeleniumUtils
 
             try
             {
-                return callWithTimeout(timeoutInSeconds, () -> {
-                    Any result = null;
-                    long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
+                Any result = null;
+                long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
 
-                    while (true)
+                while (true)
+                {
+                    long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
+
+                    try
                     {
-                        long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
+                        result = callable.call();
+                    }
+                    catch (Exception e)
+                    {
+                        if (System.currentTimeMillis() > endMillis)
+                        {
+                            throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
+                        }
+                    }
 
-                        try
-                        {
-                            result = callable.call();
-                        }
-                        catch (Exception e)
-                        {
-                            if (System.currentTimeMillis() > endMillis)
-                            {
-                                throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
-                            }
-                        }
-
-                        if (result instanceof Optional)
-                        {
-                            if (((Optional<?>) result).isPresent())
-                            {
-                                return result;
-                            }
-                        }
-                        else if (result != null)
+                    if (result instanceof Optional)
+                    {
+                        if (((Optional<?>) result).isPresent())
                         {
                             return result;
                         }
-
-                        long currentMillis = System.currentTimeMillis();
-
-                        if (currentMillis > endMillis)
-                        {
-                            throw new SeleniumFailException(
-                                LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
-                        }
-
-                        waitUntil(nextTickMillis);
                     }
-                });
+                    else if (result != null)
+                    {
+                        return result;
+                    }
+
+                    long currentMillis = System.currentTimeMillis();
+
+                    if (currentMillis > endMillis)
+                    {
+                        throw new SeleniumFailException(
+                            LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
+                    }
+
+                    waitUntil(nextTickMillis);
+                }
             }
             catch (SeleniumFailException e)
             {
