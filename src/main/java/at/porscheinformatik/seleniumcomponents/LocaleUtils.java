@@ -25,7 +25,7 @@ public final class LocaleUtils
      */
     public static Locale toLocale(String value)
     {
-        if (value == null || value.isBlank())
+        if (value == null || value.trim().length() == 0)
         {
             return Locale.ROOT;
         }
