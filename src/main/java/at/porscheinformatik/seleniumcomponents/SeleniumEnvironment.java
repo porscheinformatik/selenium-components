@@ -1,11 +1,17 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
+import static org.hamcrest.Matchers.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * Environment for Selenium tests.
@@ -27,7 +33,21 @@ public interface SeleniumEnvironment
      *
      * @return the locale
      */
-    Locale getLanguage();
+    default Locale getLanguage()
+    {
+        try
+        {
+            WebElement htmlElement = getDriver().findElement(By.tagName("html"));
+
+            String languageTag = assertThatSoon(() -> htmlElement.getAttribute("lang"), not(emptyString()));
+
+            return LocaleUtils.toLocale(languageTag);
+        }
+        catch (NoSuchElementException e)
+        {
+            throw new NoSuchElementException("No html tag found. Maybe the page was not loaded yet?", e);
+        }
+    }
 
     /**
      * Parses the given date string in the locale returned by {@link #getLanguage()} with {@link FormatStyle#MEDIUM}
