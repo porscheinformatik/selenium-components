@@ -46,6 +46,19 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         return option != null ? option.getValue() : null;
     }
 
+    /**
+     * In Angular, when we use a "ngValue" directive, the real value is prefixed with a number followed by a ":". So we
+     * should strip that off.
+     * 
+     * @return the value
+     */
+    public String getNgValue()
+    {
+        OptionComponent option = getFirstSelectedOption();
+
+        return option != null ? option.getNgSelectValue() : null;
+    }
+
     public String getSelectedLabel()
     {
         OptionComponent option = getFirstSelectedOption();

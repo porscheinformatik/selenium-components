@@ -126,6 +126,8 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     public static class ClarityWizardStepnavEntry extends AbstractSeleniumComponent
     {
         private final ButtonComponent button = new ButtonComponent(this);
+        private final HtmlComponent label =
+            new HtmlComponent(button, selectByClassName("clr-wizard-stepnav-link-title"));
 
         public ClarityWizardStepnavEntry(SeleniumComponent parent, WebElementSelector selector)
         {
@@ -134,7 +136,7 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
 
         public String getLabel()
         {
-            return button.getLabel();
+            return label.getText();
         }
 
         public void click()

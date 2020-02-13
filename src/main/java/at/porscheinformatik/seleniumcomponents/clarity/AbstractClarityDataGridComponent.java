@@ -3,10 +3,7 @@
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.SeleniumUtils.*;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
-
-import org.openqa.selenium.Keys;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumContainer;
@@ -15,7 +12,6 @@ import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
-import at.porscheinformatik.seleniumcomponents.component.InputComponent;
 
 /**
  * @author Daniel Furtlehner
@@ -39,7 +35,7 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     {
         DataGridColumnComponent column = head.getColumn(columnIndex);
 
-        column.stringFilter(filterQuery);
+        column.stringFilter.filter(filterQuery);
     }
 
     public SeleniumComponentList<RowT> getEntries()
@@ -81,23 +77,11 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     private static class DataGridColumnComponent extends AbstractSeleniumComponent
     {
         // With newer Clarity versions the datagrid filters are in the body and not in the column anymore
-        private final HtmlComponent filterContainer = new HtmlComponent(this, selectByTagName("clr-dg-filter"));
-        private final InputComponent stringFilter =
-            new InputComponent(root(this), selectByCss(".datagrid-filter input"));
+        public final ClarityDataGridStringFilterComponent stringFilter = new ClarityDataGridStringFilterComponent(this);
 
         DataGridColumnComponent(SeleniumComponent parent, WebElementSelector selector)
         {
             super(parent, selector);
-        }
-
-        public void stringFilter(String filterQuery)
-        {
-            filterContainer.click();
-
-            stringFilter.clear();
-            stringFilter.sendKeys(filterQuery);
-
-            stringFilter.sendKeys(Keys.ENTER);
         }
     }
 }
