@@ -103,20 +103,36 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * page component
      */
-    public abstract static class AbstractClarityWizardPageComponent extends AbstractSeleniumComponent
+    public static class ClarityWizardPageComponent extends AbstractSeleniumComponent
     {
         private final ClarityWizardComponent wizard;
 
-        public AbstractClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector)
+        public ClarityWizardPageComponent(ClarityWizardComponent wizard, String seleniumKey)
+        {
+            this(wizard, WebElementSelector.selectBySeleniumKey(seleniumKey));
+        }
+
+        public ClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector)
         {
             super(wizard.wizardContent, selector);
 
             this.wizard = wizard;
         }
 
+        /**
+         * @return the title of the page
+         * @deprecated This method may return the wrong result. It does not return the title of this page, but the title
+         *             of the currently active page of the wizard! Use wizard.getPageTitle() instead.
+         */
+        @Deprecated
         public String getTitle()
         {
             return wizard.getPageTitle();
+        }
+
+        public boolean isActive()
+        {
+            return containsClassName("active");
         }
     }
 

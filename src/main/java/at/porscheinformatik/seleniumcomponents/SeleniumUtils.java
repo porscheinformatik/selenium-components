@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.openqa.selenium.StaleElementReferenceException;
@@ -59,6 +60,28 @@ public final class SeleniumUtils
         }
 
         return component;
+    }
+
+    /**
+     * Sets all parents using the specified predicate
+     * 
+     * @param component the component to start at
+     * @param predicate the predicate
+     * @return the component, null if not found
+     */
+    public static SeleniumComponent findParent(SeleniumComponent component, Predicate<SeleniumComponent> predicate)
+    {
+        while (component != null)
+        {
+            if (predicate.test(component))
+            {
+                return component;
+            }
+
+            component = component.parent();
+        }
+
+        return null;
     }
 
     /**
