@@ -95,7 +95,7 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
         return finishButton.isClickable();
     }
 
-    private String getPageTitle()
+    public String getPageTitle()
     {
         return pageTitle.getText();
     }
