@@ -3,6 +3,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.Objects;
+import java.util.function.BiPredicate;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -22,6 +23,8 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class SelectComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
+    private static final BiPredicate<String, OptionComponent> DEFAULT_VALUE_COMPARATOR =
+        (value, option) -> Objects.equals(value, option.getValue()) || Objects.equals(value, option.getNgSelectValue());
 
     private final SeleniumComponentListFactory<OptionComponent> optionsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);
@@ -29,14 +32,29 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("optgroup"),
             OptionGroupComponent::new);
 
+    private final BiPredicate<String, OptionComponent> valueComparator;
+
     public SelectComponent(SeleniumComponent parent, WebElementSelector selector)
     {
-        super(parent, selector);
+        this(parent, selector, DEFAULT_VALUE_COMPARATOR);
     }
 
     public SelectComponent(SeleniumComponent parent)
     {
-        this(parent, selectByTagName("select"));
+        this(parent, DEFAULT_VALUE_COMPARATOR);
+    }
+
+    public SelectComponent(SeleniumComponent parent, WebElementSelector selector,
+        BiPredicate<String, OptionComponent> valueComparator)
+    {
+        super(parent, selector);
+
+        this.valueComparator = valueComparator;
+    }
+
+    public SelectComponent(SeleniumComponent parent, BiPredicate<String, OptionComponent> valueComparator)
+    {
+        this(parent, selectByTagName("select"), valueComparator);
     }
 
     public String getValue()
@@ -83,8 +101,7 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
 
         click();
 
-        OptionComponent option = optionsFactory
-            .find($ -> Objects.equals(value, $.getValue()) || Objects.equals(value, $.getNgSelectValue()));
+        OptionComponent option = optionsFactory.find($ -> valueComparator.test(value, $));
 
         if (option == null)
         {
