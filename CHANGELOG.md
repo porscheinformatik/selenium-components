@@ -3,10 +3,11 @@
 ## selenium-components-0.1.0
 
 * Upgraded all dependencies
+* Some WebElementSelectors now support multiple parameters as or-concatination.
 
 ## selenium-components-0.0.34
 
-* Fix for newese clarity version
+* Fix for newest clarity version
 
 ## selenium-components-0.0.33
 

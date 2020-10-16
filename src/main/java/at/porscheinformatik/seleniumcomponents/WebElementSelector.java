@@ -115,37 +115,41 @@ public interface WebElementSelector
     }
 
     /**
-     * A selector that uses the tag name of an element. This selector respects the hierarchy of components.
+     * A selector that uses the tag name of an element. This selector respects the hierarchy of components. If multiple
+     * tag names are specified one of the tag names must match.
      *
-     * @param tagName the tag name of the element
+     * @param tagNames the tag name of the element
      * @return the selector
      */
-    static WebElementSelector selectByTagName(String tagName)
+    static WebElementSelector selectByTagName(String... tagNames)
     {
-        return selectByCss(tagName);
+        return selectByCss(tagNames);
     }
 
     /**
      * A selector that uses the value of the "class" attribute of an element. If the "class" attribute contains multiple
-     * classes, the selector will test each. This selector respects the hierarchy of components.
+     * classes, the selector will test each. This selector respects the hierarchy of components. If multiple class names
+     * are specified, one of the class names must match.
      *
-     * @param className the tag class of the element
+     * @param classNames the tag class of the element
      * @return the selector
      */
-    static WebElementSelector selectByClassName(String className)
+    static WebElementSelector selectByClassName(String... classNames)
     {
-        return selectByCss("." + className);
+        return selectByCss(
+            Arrays.stream(classNames).map(className -> "." + className).toArray(size -> new String[size]));
     }
 
     /**
-     * A selector that uses a CSS selector query. This selector respects the hierarchy of components.
+     * A selector that uses a CSS selector query. This selector respects the hierarchy of components. Multiple css
+     * stings will be combined using a comma (or concatenation), but it depends on the browser to support this.
      *
-     * @param css the CSS selector query
+     * @param queries the CSS selector query
      * @return the selector
      */
-    static WebElementSelector selectByCss(String css)
+    static WebElementSelector selectByCss(String... queries)
     {
-        return new CombinableWebElementSelector(css);
+        return new CombinableWebElementSelector(queries);
     }
 
     /**

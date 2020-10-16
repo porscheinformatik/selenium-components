@@ -1,11 +1,14 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents;
 
 import static java.lang.String.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -16,15 +19,15 @@ import org.openqa.selenium.WebElement;
  */
 public class CombinableWebElementSelector implements WebElementSelector
 {
-    private final String cssSelector;
+    private final String[] cssSelectors;
 
     private By by;
 
-    public CombinableWebElementSelector(String cssSelector)
+    public CombinableWebElementSelector(String... cssSelectors)
     {
         super();
 
-        this.cssSelector = cssSelector;
+        this.cssSelectors = cssSelectors;
     }
 
     @Override
@@ -42,7 +45,12 @@ public class CombinableWebElementSelector implements WebElementSelector
     @Override
     public String toString()
     {
-        return cssSelector;
+        return toCssString();
+    }
+
+    public String toCssString()
+    {
+        return Arrays.stream(cssSelectors).collect(Collectors.joining(", "));
     }
 
     @Override
@@ -50,8 +58,17 @@ public class CombinableWebElementSelector implements WebElementSelector
     {
         if (child instanceof CombinableWebElementSelector)
         {
-            return new CombinableWebElementSelector(
-                format("%s %s", cssSelector, ((CombinableWebElementSelector) child).cssSelector));
+            List<String> combinedSelectors = new ArrayList<>();
+
+            for (String cssSelector : cssSelectors)
+            {
+                for (String childsCssSelector : ((CombinableWebElementSelector) child).cssSelectors)
+                {
+                    combinedSelectors.add(format("%s %s", cssSelector, childsCssSelector));
+                }
+            }
+
+            return new CombinableWebElementSelector(combinedSelectors.stream().toArray(size -> new String[size]));
         }
 
         return null;
@@ -61,7 +78,7 @@ public class CombinableWebElementSelector implements WebElementSelector
     {
         if (by == null)
         {
-            by = By.cssSelector(cssSelector);
+            by = By.cssSelector(toCssString());
         }
 
         return by;

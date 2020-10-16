@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -19,7 +19,8 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 public abstract class AbstractClarityModalComponent extends AbstractSeleniumComponent
     implements AnimatedSeleniumComponent
 {
-    protected final HtmlComponent modalHeader = new HtmlComponent(this, selectByClassName("modal-header"));
+    protected final HtmlComponent modalHeader =
+        new HtmlComponent(this, selectByClassName("modal-header", "modal-header--accessible"));
     protected final HtmlComponent modalBody = new HtmlComponent(this, selectByClassName("modal-body"));
 
     private final HtmlComponent closeButton = new HtmlComponent(modalHeader, selectByClassName("close"));
