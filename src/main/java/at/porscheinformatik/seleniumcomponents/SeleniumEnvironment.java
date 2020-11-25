@@ -3,6 +3,7 @@ package at.porscheinformatik.seleniumcomponents;
 import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
 import static org.hamcrest.Matchers.*;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -10,6 +11,8 @@ import java.util.Locale;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -27,6 +30,54 @@ public interface SeleniumEnvironment
      * @return the web driver
      */
     WebDriver getDriver();
+
+    default <T> T takeScreenshot(OutputType<T> outputType)
+    {
+        WebDriver driver = getDriver();
+
+        if (!(driver instanceof TakesScreenshot))
+        {
+            return null;
+        }
+
+        return ((TakesScreenshot) driver).getScreenshotAs(outputType);
+    }
+
+    default String takeScreenshot()
+    {
+        ScreenshotOutputType screenshotOutputType = SeleniumGlobals.getScreenshotOutputType();
+
+        return takeScreenshot(screenshotOutputType);
+    }
+
+    default String takeScreenshot(ScreenshotOutputType screenshotOutputType)
+    {
+        switch (screenshotOutputType)
+        {
+            case BASE64:
+                return takeScreenshotAsBase64();
+
+            case FILE:
+                File file = takeScreenshotAsFile();
+
+                return file != null ? file.toURI().toString() : null;
+
+            default:
+                throw new UnsupportedOperationException("ScreenshotOutputType not supported: " + screenshotOutputType);
+        }
+    }
+
+    default File takeScreenshotAsFile()
+    {
+        return takeScreenshot(SeleniumGlobals.PERSISTENT_FILE);
+    }
+
+    default String takeScreenshotAsBase64()
+    {
+        String screenshot = takeScreenshot(OutputType.BASE64);
+
+        return screenshot != null ? "data:image/png;base64," + screenshot : null;
+    }
 
     /**
      * The language used for the messages.
@@ -51,7 +102,7 @@ public interface SeleniumEnvironment
 
     /**
      * Parses the given date string in the locale returned by {@link #getLanguage()} with {@link FormatStyle#MEDIUM}
-     * 
+     *
      * @param dateAsString the date to parse
      * @return the parsed date
      */
@@ -62,7 +113,7 @@ public interface SeleniumEnvironment
 
     /**
      * Parses the given date string in the locale returned by {@link #getLanguage()}
-     * 
+     *
      * @param dateAsString the date to parse
      * @param style the date style
      * @return the parsed date
@@ -81,7 +132,7 @@ public interface SeleniumEnvironment
 
     /**
      * Formats the given date string in the locale returned by {@link #getLanguage()} with {@link FormatStyle#MEDIUM}
-     * 
+     *
      * @param date the date to format
      * @return the formatted date
      */
@@ -92,7 +143,7 @@ public interface SeleniumEnvironment
 
     /**
      * Formats the given date string in the locale returned by {@link #getLanguage()}
-     * 
+     *
      * @param date the date to format
      * @param style the date style
      * @return the formatted date

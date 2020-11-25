@@ -4,10 +4,7 @@ import java.util.Objects;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -42,8 +39,8 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(),
-                () -> selector.find(environment.getDriver()));
+            return SeleniumUtils
+                .keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> selector.find(environment.getDriver()));
         }
         catch (Exception e)
         {
@@ -94,16 +91,9 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         environment.quit();
     }
 
-    public String getScreenshot()
+    public String takeScreenshot()
     {
-        WebDriver driver = environment.getDriver();
-
-        if (driver instanceof TakesScreenshot)
-        {
-            return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-        }
-
-        return null;
+        return environment.takeScreenshot();
     }
 
     public final void waitUntilReady()

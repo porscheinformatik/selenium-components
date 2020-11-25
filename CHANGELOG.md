@@ -1,225 +1,259 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.4.0
+
+- The SeleniumEnvironment is reponsible for screenshots, now.
+
+## selenium-components-0.3.4
+
+- Some WebElementSelectors now support multiple parameters as or-concatination
+
+## selenium-components-0.3.3
+
+- Make value comparator configurable
+
+## selenium-components-0.3.2
+
+- PageTitle should be public
+
+## selenium-components-0.3.1
+
+- Remove abtract from ClarityWizardPage
+- Added a findParent method to the Selenium Utils
+- Added more selector options to ImageComponent
+
+## selenium-components-0.3.0
+
+- Adapt Components for Clarity 3
+
+## selenium-components-0.2.0
+
+- Fix usage of java 11 API
+
+## selenium-components-0.1.1
+
+- Read locale from html lang attribute
+
 ## selenium-components-0.1.0
 
-* Upgraded all dependencies
-* Some WebElementSelectors now support multiple parameters as or-concatination.
+- Upgraded all dependencies
+- Some WebElementSelectors now support multiple parameters as or-concatination.
 
 ## selenium-components-0.0.34
 
-* Fix for newest clarity version
+- Fix for newest clarity version
 
 ## selenium-components-0.0.33
 
-* Increase default timeout from 2 to 3 seconds
+- Increase default timeout from 2 to 3 seconds
 
 ## selenium-components-0.0.32
 
-* Removed callWithTimeout from SeleniumUtils.keepTrying
+- Removed callWithTimeout from SeleniumUtils.keepTrying
 
 ## selenium-components-0.0.31
 
-* Adapted Clarity radio component
+- Adapted Clarity radio component
 
 ## selenium-components-0.0.30
 
-* Make EditableSeleniumComponent more stable
+- Make EditableSeleniumComponent more stable
 
 ## selenium-components-0.0.29
 
-* Make ClickableSeleniumComponent more stable
+- Make ClickableSeleniumComponent more stable
 
 ## selenium-components-0.0.28
 
-* Fix wrong implementatin for SelectComponent
+- Fix wrong implementatin for SelectComponent
 
 ## selenium-components-0.0.27
 
-* Optimize assertion handling
+- Optimize assertion handling
 
 ## selenium-components-0.0.26
 
-* Speeding up keepTrying
-* Fixed some warnings
+- Speeding up keepTrying
+- Fixed some warnings
 
 ## selenium-components-0.0.25
 
-* Make date handling Java 8 compatible
+- Make date handling Java 8 compatible
 
 ## selenium-components-0.0.24
 
-* Add date handling to SeleniumEnvironment
+- Add date handling to SeleniumEnvironment
 
 ## selenium-components-0.0.23
 
-* Catch AssertionErrors in keepTrying
-* Improve exception reporting
+- Catch AssertionErrors in keepTrying
+- Improve exception reporting
 
 ## selenium-components-0.0.22
 
-* Add getName and getId to Checkbox components
+- Add getName and getId to Checkbox components
 
 ## selenium-components-0.0.21
 
-* Add second constructor to ClarityWizardComponent
+- Add second constructor to ClarityWizardComponent
 
 ## selenium-components-0.0.20
 
-* Adapt clarity components for V2.0
+- Adapt clarity components for V2.0
 
 ## selenium-components-0.0.19
 
-* Add some getters to the ClarityWizardComponent
-* Fix build for OpenJDK 11
+- Add some getters to the ClarityWizardComponent
+- Fix build for OpenJDK 11
 
 ## selenium-components-0.0.18
 
-* Update clarity components to version 1.0
+- Update clarity components to version 1.0
 
 ## selenium-components-0.0.17
 
-* Retry on stale element error
+- Retry on stale element error
 
 ## selenium-components-0.0.16
 
-* Improve the SelectComponent
-* Fix bug on exact comparison
+- Improve the SelectComponent
+- Fix bug on exact comparison
 
 ## selenium-components-0.0.15
 
-* Optimizes loading of elements
+- Optimizes loading of elements
 
 ## selenium-components-0.0.14
 
-* Adds some more components for clarity
+- Adds some more components for clarity
 
 ## selenium-components-0.0.13
 
-* Fixes Problem with ClarityAlertComponent in devmode
+- Fixes Problem with ClarityAlertComponent in devmode
 
 ## selenium-components-0.0.12
 
-* Fixes some problems with clarity in production mode
+- Fixes some problems with clarity in production mode
 
 ## selenium-components-0.0.11
 
-* Did some cleanup
-* Adds HeadingComponent
-* Adds PreComponent
-* Adds constructor for selenium-key to ButtonComponent
-* Fixes invalid system property handling
-* Adds isClickable Matcher
+- Did some cleanup
+- Adds HeadingComponent
+- Adds PreComponent
+- Adds constructor for selenium-key to ButtonComponent
+- Fixes invalid system property handling
+- Adds isClickable Matcher
 
 ## selenium-components-0.0.10
 
 ### Breaking Changes
 
-* Call-Line logging moved to ThreadUtils.
-* Using SeleniumLogger as Logger instead of SLF directly.
+- Call-Line logging moved to ThreadUtils.
+- Using SeleniumLogger as Logger instead of SLF directly.
 
 ## selenium-components-0.0.9
 
 ### Enhancements
 
-* Components for Clarity
-* The SeleniumComponent now offers a LOG variable.
-* Utilities for simplifying strings and computing the Levenshtein Distance.
-* The SeleniumComponent now offers a LOG variable. Debug log messages were added
+- Components for Clarity
+- The SeleniumComponent now offers a LOG variable.
+- Utilities for simplifying strings and computing the Levenshtein Distance.
+- The SeleniumComponent now offers a LOG variable. Debug log messages were added
   at various locations.
-* The InputComponent now checks the input on enter.
-* keepTrying() now does not stack itself anymore.
+- The InputComponent now checks the input on enter.
+- keepTrying() now does not stack itself anymore.
 
 ## selenium-components-0.0.8
 
 ### Breaking Changes
 
-* Remaning assertThatSoon methods
-* HtmlComponent is final
+- Remaning assertThatSoon methods
+- HtmlComponent is final
 
 ### Enhancements
 
-* Additional Components and Assertions
-* Improves API for SeleniumListComponent
-* Clarity checkbox
+- Additional Components and Assertions
+- Improves API for SeleniumListComponent
+- Clarity checkbox
 
 ## selenium-components-0.0.7
 
 ### Enhancements
 
-* Default WebDriverFactories for Chrome, Firefox, Edge and BrowserStack.
-* assertThatSoon accepts supplier methods with exceptions.
-* Better code line hints on exceptions.
+- Default WebDriverFactories for Chrome, Firefox, Edge and BrowserStack.
+- assertThatSoon accepts supplier methods with exceptions.
+- Better code line hints on exceptions.
 
 ## selenium-components-0.0.6
 
 ### Breaking Changes
 
-* Moved isClickable, click to ClickableSelenumComponent interface.
-* Moved isEditable, clear, sendKeys, isEnabled to EditableSelenumComponent interface.
-* Moved isSelected to SelectableSeleniumComonent interface.
+- Moved isClickable, click to ClickableSelenumComponent interface.
+- Moved isEditable, clear, sendKeys, isEnabled to EditableSelenumComponent interface.
+- Moved isSelected to SelectableSeleniumComonent interface.
 
 ### Enhancements
 
-* Moved isVisible to own VisibleSeleniumComponent interface.
-* Added an AnimatedSeleniumComponent with an animation check.
+- Moved isVisible to own VisibleSeleniumComponent interface.
+- Added an AnimatedSeleniumComponent with an animation check.
 
 ## selenium-components-0.0.5
 
 ### Breaking Changes
 
-* Clarified usage of isVisible by adding it to SeleniumComponent.
-* Removed isReady and isVisible from SeleniumUtils for consistency.
+- Clarified usage of isVisible by adding it to SeleniumComponent.
+- Removed isReady and isVisible from SeleniumUtils for consistency.
 
 ### Enhancements
 
-* SelectFirst and SelectLast for WebElementSelector
+- SelectFirst and SelectLast for WebElementSelector
 
 ## selenium-components-0.0.4
 
-### Breaking Changes 
+### Breaking Changes
 
-* SeleniumComponent provides a searchContext() method instead of implementing the interface.
-* Renamed SeleniumContext to SeleniumEnvironment, otherwise it's too confusing with the SearchContext.
+- SeleniumComponent provides a searchContext() method instead of implementing the interface.
+- Renamed SeleniumContext to SeleniumEnvironment, otherwise it's too confusing with the SearchContext.
 
 ### Enhancements
 
-* Added ListComponent 
-* Better debugging support (use -Dselenium-components.debug)
-* More SeleniumUtils and -Asserts
+- Added ListComponent
+- Better debugging support (use -Dselenium-components.debug)
+- More SeleniumUtils and -Asserts
 
 ### Fixes
 
-* Fixed endless-loop in retryOnStale
+- Fixed endless-loop in retryOnStale
 
 ## selenium-components-0.0.3
 
 ### Breaking Changes
 
-* Moved SeleniumActions to SeleniumUtils
-* Moved some SeleniumUtils to Utils
-* Removed component classes named after HTML elements
+- Moved SeleniumActions to SeleniumUtils
+- Moved some SeleniumUtils to Utils
+- Removed component classes named after HTML elements
 
 ### Fixes
 
-* Fix for WebElementSelector.selectByIndex(..)
+- Fix for WebElementSelector.selectByIndex(..)
 
 ### Enhancements
 
-* WebElementSelector.selectByColumn(..) added
-* Better toString descriptions for components and selectors
+- WebElementSelector.selectByColumn(..) added
+- Better toString descriptions for components and selectors
 
 ## selenium-components-0.0.2
 
 ### Breaking Changes
 
-* Added some documentation
-* Some classnames changed to simplify understanding of the API.
-* SeleniumComponent does not provide elements() anymore, to simplify the API.
+- Added some documentation
+- Some classnames changed to simplify understanding of the API.
+- SeleniumComponent does not provide elements() anymore, to simplify the API.
 
 ### Enhancements
 
-* WebElementSelector got a selectByIndex(int)
-* new predefined components
+- WebElementSelector got a selectByIndex(int)
+- new predefined components
 
 ## selenium-components-0.0.1
 

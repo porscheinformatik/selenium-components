@@ -1,8 +1,15 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriverException;
 
 /**
  * Global settings for Selenium. The settings can be set by System properties.
@@ -29,11 +36,70 @@ public final class SeleniumGlobals
     public static final String TIME_MULTIPLIER_KEY = "selenium-components.timeMultiplier";
     public static final String SHORT_TIMEOUT_IN_SECONDS_KEY = "selenium-components.shortTimeoutInSeconds";
     public static final String LONG_TIMEOUT_IN_SECONDS_KEY = "selenium-components.longTimeoutInSeconds";
+    public static final String SCREENSHOT_OUTPUT_TYPE = "selenium-components.screenshotOutputType";
 
     private static boolean debug = false;
     private static double timeMultiplier = 1;
     private static double shortTimeoutInSeconds = 1.0;
     private static double longTimeoutInSeconds = 10;
+    private static ScreenshotOutputType screenshotOutputType = ScreenshotOutputType.BASE64;
+
+    /**
+     * In contrast to the OutputType.FILE, this type does not delete the file on exit :rolling-eyes:
+     */
+    public static final OutputType<File> PERSISTENT_FILE = new OutputType<File>()
+    {
+        @Override
+        public File convertFromBase64Png(String base64Png)
+        {
+            return save(BYTES.convertFromBase64Png(base64Png));
+        }
+
+        @Override
+        public File convertFromPngBytes(byte[] data)
+        {
+            return save(data);
+        }
+
+        private File save(byte[] data)
+        {
+            OutputStream stream = null;
+
+            try
+            {
+                File tmpFile = File.createTempFile("screenshot", ".png");
+
+                stream = new FileOutputStream(tmpFile);
+                stream.write(data);
+
+                return tmpFile;
+            }
+            catch (IOException e)
+            {
+                throw new WebDriverException(e);
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    try
+                    {
+                        stream.close();
+                    }
+                    catch (IOException e)
+                    {
+                        // Nothing sane to do
+                    }
+                }
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return "OutputType.FILE";
+        }
+    };
 
     static
     {
@@ -51,15 +117,21 @@ public final class SeleniumGlobals
         setDoubleFromProperty(TIME_MULTIPLIER_KEY, SeleniumGlobals::setTimeMultiplier);
         setDoubleFromProperty(SHORT_TIMEOUT_IN_SECONDS_KEY, SeleniumGlobals::setShortTimeoutInSeconds);
         setDoubleFromProperty(LONG_TIMEOUT_IN_SECONDS_KEY, SeleniumGlobals::setLongTimeoutInSeconds);
+        setEnumFromProperty(SCREENSHOT_OUTPUT_TYPE, ScreenshotOutputType.class,
+            SeleniumGlobals::setScreenshotOutputType);
 
         ThreadUtils.excludeCallElement(Pattern.compile("^java\\..*"));
         ThreadUtils.excludeCallElement(Pattern.compile("^javax\\..*"));
         ThreadUtils.excludeCallElement(Pattern.compile("^com\\.sun\\..*"));
         ThreadUtils.excludeCallElement(Pattern.compile("^sun\\..*"));
-        ThreadUtils.excludeCallElement(Pattern.compile("^"
-            + SeleniumUtils.class.getName().substring(0, SeleniumUtils.class.getName().lastIndexOf(".")).replace(".",
-                "\\.")
-            + ".*"));
+        ThreadUtils
+            .excludeCallElement(Pattern
+                .compile("^"
+                    + SeleniumUtils.class
+                        .getName()
+                        .substring(0, SeleniumUtils.class.getName().lastIndexOf("."))
+                        .replace(".", "\\.")
+                    + ".*"));
     }
 
     private SeleniumGlobals()
@@ -216,9 +288,21 @@ public final class SeleniumGlobals
      */
     public static void setLongTimeoutInSeconds(double longTimeoutInSeconds)
     {
-        LOG.info("Settings long timeout to %,.1f seconds.", timeMultiplier);
+        LOG.info("Setting long timeout to %,.1f seconds.", timeMultiplier);
 
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
+    }
+
+    public static ScreenshotOutputType getScreenshotOutputType()
+    {
+        return screenshotOutputType;
+    }
+
+    public static void setScreenshotOutputType(ScreenshotOutputType screenshotOutputType)
+    {
+        LOG.info("Setting screenshot output type to: %s", screenshotOutputType);
+
+        SeleniumGlobals.screenshotOutputType = screenshotOutputType;
     }
 
     private static void setDoubleFromProperty(String key, Consumer<Double> setter)
@@ -235,6 +319,16 @@ public final class SeleniumGlobals
             {
                 throw new IllegalArgumentException("Failed to parse " + key, e);
             }
+        }
+    }
+
+    private static <T extends Enum<T>> void setEnumFromProperty(String key, Class<T> enumType, Consumer<T> setter)
+    {
+        String value = System.getProperty(key);
+
+        if (value != null)
+        {
+            setter.accept(Enum.<T> valueOf(enumType, value));
         }
     }
 
