@@ -1,9 +1,9 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Some tests for {@link Utils}.
@@ -31,12 +31,15 @@ public class UtilsTest
     @Test
     public void simplifiedLevenshteinDistanceTest()
     {
-        assertThat(Utils.simplifiedLevenshteinDistance( //
-            "\tThe quick\nbrown fox\njumps over the lazy dog!", "the quick brown fox jumps over the lazy dog"),
+        assertThat(Utils
+            .simplifiedLevenshteinDistance( //
+                "\tThe quick\nbrown fox\njumps over the lazy dog!", "the quick brown fox jumps over the lazy dog"),
             is(0.0));
 
-        assertThat(Utils.simplifiedLevenshteinDistance( //
-            "\tThe quick\nbrown fox!", "the quick brown fox jumps over the lazy dog"), greaterThan(0.5));
+        assertThat(Utils
+            .simplifiedLevenshteinDistance( //
+                "\tThe quick\nbrown fox!", "the quick brown fox jumps over the lazy dog"),
+            greaterThan(0.5));
     }
 
 }

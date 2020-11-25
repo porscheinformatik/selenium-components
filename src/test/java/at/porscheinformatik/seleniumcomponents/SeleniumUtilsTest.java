@@ -2,12 +2,12 @@ package at.porscheinformatik.seleniumcomponents;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link SeleniumUtils}.
@@ -40,7 +40,7 @@ public class SeleniumUtilsTest
                 return 42;
             });
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {
@@ -57,7 +57,7 @@ public class SeleniumUtilsTest
                 throw new NullPointerException();
             });
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {
@@ -73,7 +73,7 @@ public class SeleniumUtilsTest
         {
             int result = SeleniumUtils.keepTrying(0, () -> null);
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {
@@ -88,7 +88,7 @@ public class SeleniumUtilsTest
         {
             boolean result = SeleniumUtils.keepTrying(0, () -> Optional.empty()).isPresent();
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {
@@ -108,7 +108,7 @@ public class SeleniumUtilsTest
         {
             int result = SeleniumUtils.keepTrying(0.1, () -> null);
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {
@@ -123,7 +123,7 @@ public class SeleniumUtilsTest
         {
             boolean result = SeleniumUtils.keepTrying(0.1, () -> Optional.empty()).isPresent();
 
-            Assert.fail("Exception expected, but got " + result);
+            fail("Exception expected, but got " + result);
         }
         catch (Exception e)
         {

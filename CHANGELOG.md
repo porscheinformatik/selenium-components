@@ -3,6 +3,7 @@
 ## selenium-components-0.4.0
 
 - The SeleniumEnvironment is reponsible for screenshots, now.
+- Migrate to Junit5
 
 ## selenium-components-0.3.4
 
