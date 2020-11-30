@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.4.1
+
+- Deprecate Angular specified code in standard components
+- Add a specified AngularSelectComponent repecting the ":" in the value field.
+
 ## selenium-components-0.4.0
 
 - The SeleniumEnvironment is reponsible for screenshots, now.

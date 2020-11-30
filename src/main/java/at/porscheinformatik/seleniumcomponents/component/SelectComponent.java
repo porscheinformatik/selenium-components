@@ -4,6 +4,7 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -28,27 +29,40 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
      *             specific while this component must remain HTML specific.
      */
     @Deprecated
-    private static final BiPredicate<String, OptionComponent> DEFAULT_VALUE_COMPARATOR =
+    public static final BiPredicate<String, OptionComponent> DEFAULT_VALUE_COMPARATOR =
         (value, option) -> Objects.equals(value, option.getValue()) || Objects.equals(value, option.getNgSelectValue());
 
-    private final SeleniumComponentListFactory<OptionComponent> optionsFactory =
+    protected final SeleniumComponentListFactory<OptionComponent> optionsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);
-    private final SeleniumComponentListFactory<OptionGroupComponent> optionGroupsFactory =
+
+    protected final SeleniumComponentListFactory<OptionGroupComponent> optionGroupsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("optgroup"),
             OptionGroupComponent::new);
 
+    @Deprecated
     private final BiPredicate<String, OptionComponent> valueComparator;
 
     public SelectComponent(SeleniumComponent parent, WebElementSelector selector)
     {
-        this(parent, selector, DEFAULT_VALUE_COMPARATOR);
+        super(parent, selector);
+
+        valueComparator = DEFAULT_VALUE_COMPARATOR;
     }
 
     public SelectComponent(SeleniumComponent parent)
     {
-        this(parent, DEFAULT_VALUE_COMPARATOR);
+        this(parent, selectByTagName("select"));
     }
 
+    /**
+     * Creates a new instance
+     *
+     * @param parent the parent
+     * @param selector the selector
+     * @param valueComparator the comparator
+     * @deprecated use the method {@link #select(Predicate)} instead
+     */
+    @Deprecated
     public SelectComponent(SeleniumComponent parent, WebElementSelector selector,
         BiPredicate<String, OptionComponent> valueComparator)
     {
@@ -57,6 +71,14 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         this.valueComparator = valueComparator;
     }
 
+    /**
+     * Creates a new instance
+     *
+     * @param parent the parent
+     * @param valueComparator the comparator
+     * @deprecated use the method {@link #select(Predicate)} instead
+     */
+    @Deprecated
     public SelectComponent(SeleniumComponent parent, BiPredicate<String, OptionComponent> valueComparator)
     {
         this(parent, selectByTagName("select"), valueComparator);
@@ -114,6 +136,22 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         if (option == null)
         {
             throw new AssertionError(String.format("Options with value \"%s\" not found", value));
+        }
+
+        option.click();
+    }
+
+    public void select(Predicate<OptionComponent> predicate)
+    {
+        LOG.interaction("Selecting item of of %s by predicate", describe());
+
+        click();
+
+        OptionComponent option = optionsFactory.find(predicate);
+
+        if (option == null)
+        {
+            throw new AssertionError(String.format("Matching option not found"));
         }
 
         option.click();
