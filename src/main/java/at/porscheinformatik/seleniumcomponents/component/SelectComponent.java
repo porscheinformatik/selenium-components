@@ -23,6 +23,10 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class SelectComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
 {
+    /**
+     * @deprecated 1. this value is not available if compiled for productive environments and 2. this is Angular
+     *             specific while this component must remain HTML specific.
+     */
     private static final BiPredicate<String, OptionComponent> DEFAULT_VALUE_COMPARATOR =
         (value, option) -> Objects.equals(value, option.getValue()) || Objects.equals(value, option.getNgSelectValue());
 
@@ -67,9 +71,12 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
     /**
      * In Angular, when we use a "ngValue" directive, the real value is prefixed with a number followed by a ":". So we
      * should strip that off.
-     * 
+     *
      * @return the value
+     * @deprecated 1. this value is not available if compiled for productive environments and 2. this is Angular
+     *             specific and does not belong here
      */
+    @Deprecated
     public String getNgValue()
     {
         OptionComponent option = getFirstSelectedOption();

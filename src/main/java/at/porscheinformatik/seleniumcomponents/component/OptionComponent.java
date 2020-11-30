@@ -26,6 +26,12 @@ public class OptionComponent extends AbstractSeleniumComponent implements Clicka
         return getAttribute("value");
     }
 
+    /**
+     * @return Angular specific value
+     * @deprecated 1. this value is not available if compiled for productive environments and 2. this is Angular
+     *             specific while the OptionComponent must remain HTML specific.
+     */
+    @Deprecated
     public String getNgSelectValue()
     {
         return getAttribute("ng-reflect-ng-value");
