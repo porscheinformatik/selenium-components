@@ -27,6 +27,7 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
      * @deprecated 1. this value is not available if compiled for productive environments and 2. this is Angular
      *             specific while this component must remain HTML specific.
      */
+    @Deprecated
     private static final BiPredicate<String, OptionComponent> DEFAULT_VALUE_COMPARATOR =
         (value, option) -> Objects.equals(value, option.getValue()) || Objects.equals(value, option.getNgSelectValue());
 
@@ -74,7 +75,7 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
      *
      * @return the value
      * @deprecated 1. this value is not available if compiled for productive environments and 2. this is Angular
-     *             specific and does not belong here
+     *             specific while this component must remain HTML specific.
      */
     @Deprecated
     public String getNgValue()
