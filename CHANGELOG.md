@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.4.2
+
+- Utility methods in SeleniumEnvironment for handling windows and frames.
+- Useful StringPredicate for simplifying work with predicates based on strings.
+
 ## selenium-components-0.4.1
 
 - Deprecate Angular specified code in standard components

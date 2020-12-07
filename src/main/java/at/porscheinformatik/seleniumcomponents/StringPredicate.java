@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -331,6 +332,19 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * (or blank) values. The expression is matched as string, too. If the expression is no valid regular expression
      * pattern only the string match is performed. Matches are case-insensitive.
      *
+     * @param patterns the patterns
+     * @return the predicate
+     */
+    public static StringPredicate like(String... patterns)
+    {
+        return like(false, patterns);
+    }
+
+    /**
+     * Creates a predicate for a string, wildcard pattern or a regular expression. The pattern may be null to match null
+     * (or blank) values. The expression is matched as string, too. If the expression is no valid regular expression
+     * pattern only the string match is performed. Matches are case-insensitive.
+     *
      * @param caseSensitive true for caseSensitive
      * @param patterns the patterns
      * @return the predicate
@@ -529,6 +543,11 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
     public boolean test(String t)
     {
         return false;
+    }
+
+    public <T> Predicate<T> of(Function<T, String> accessor)
+    {
+        return t -> test(t != null ? accessor.apply(t) : null);
     }
 
     private static boolean matchesUsingWildcards(boolean caseSensitive, String pattern, String value)

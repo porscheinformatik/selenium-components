@@ -77,11 +77,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
 
     public void open()
     {
-        String url = getUrl();
-
-        LOG.callUrl(url);
-
-        environment.getDriver().get(url);
+        environment.url(getUrl());
 
         waitUntilReady();
     }
