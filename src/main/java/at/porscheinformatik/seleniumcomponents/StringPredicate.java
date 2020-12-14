@@ -185,9 +185,9 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate is(String... patterns)
+    public static StringPredicate equalTo(String... patterns)
     {
-        return is(false, patterns);
+        return equalTo(false, patterns);
     }
 
     /**
@@ -197,7 +197,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate is(boolean caseSensitive, String... patterns)
+    public static StringPredicate equalTo(boolean caseSensitive, String... patterns)
     {
         return new StringPredicate()
         {
@@ -233,12 +233,61 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
         };
     }
 
-    public static StringPredicate wildcard(String... patterns)
+    /**
+     * Creates a predicate that checks the string contains the specified patterns.
+     *
+     * @param patterns the patterns
+     * @return the predicate
+     */
+    public static StringPredicate contains(String... patterns)
     {
-        return wildcard(false, patterns);
+        return equalTo(false, patterns);
     }
 
-    static StringPredicate wildcard(boolean caseSensitive, String... patterns)
+    /**
+     * Creates a predicate that checks the string contains the specified pattern.
+     *
+     * @param caseSensitive true to respect the case
+     * @param patterns the patterns
+     * @return the predicate
+     */
+    public static StringPredicate contains(boolean caseSensitive, String... patterns)
+    {
+        return new StringPredicate()
+        {
+            @Override
+            public boolean test(String value)
+            {
+                for (String pattern : patterns)
+                {
+                    if (value == pattern)
+                    {
+                        return true;
+                    }
+
+                    if (value == null || pattern == null)
+                    {
+                        return false;
+                    }
+
+                    if (caseSensitive ? value.contains(value) : value.toLowerCase().contains(value.toLowerCase()))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public String toString()
+            {
+                return String.format("is%s", Arrays.toString(patterns));
+            }
+        };
+    }
+
+    public static StringPredicate wildcard(boolean caseSensitive, String... patterns)
     {
         return new StringPredicate()
         {

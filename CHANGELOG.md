@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.4.3
+
+- Add `contains` to StringPredicate
+
 ## selenium-components-0.4.2
 
 - Utility methods in SeleniumEnvironment for handling windows and frames.
