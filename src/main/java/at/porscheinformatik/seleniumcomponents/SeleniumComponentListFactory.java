@@ -79,6 +79,19 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
     }
 
     /**
+     * Selects a child by the specified selector. Use this, if you already know how to selected a specified entry (this is
+     * much faster search {@link #find(Predicate)}ing it). But there is no guarantee, that the child exists. It's like
+     * directly selecting it e.g. by it's Selenium key.
+     *
+     * @param selector the selector
+     * @return the child
+     */
+    public CHILD_TYPE select(WebElementSelector selector)
+    {
+        return childFactory.create(parent, selector);
+    }
+
+    /**
      * Returns the first child, that matches the predicate. This method is just a wrapper that uses the
      * {@link #findAll()} and {@link SeleniumComponentList#find(Predicate)} method. Please prefer to cache the result of
      * {@link #findAll()} instead of calling {{@link #find(Predicate)} multiple times.
@@ -101,8 +114,8 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
         return new SeleniumComponentList<>(childSelector
             .findAll(parent.element())
             .stream()
-            .map(element -> childFactory.create(parent,
-                WebElementSelector.selectElement(childSelector.toString(), element)))
+            .map(element -> childFactory
+                .create(parent, WebElementSelector.selectElement(childSelector.toString(), element)))
             .collect(Collectors.toList()));
     }
 

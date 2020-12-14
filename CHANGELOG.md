@@ -6,6 +6,7 @@
 - Add `clearLocalStorage` to SeleniumEnvironment
 - Fix `selectByLabel` and `selectByValue` of various SelectComponents
 - ClickableSeleniumComponent should respect the short timeout
+- Add `select` to SeleniumComponentListFactory to speed up selection if component can be selected
 
 ## selenium-components-0.4.2
 
