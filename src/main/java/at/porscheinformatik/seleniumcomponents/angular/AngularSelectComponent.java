@@ -1,10 +1,9 @@
 package at.porscheinformatik.seleniumcomponents.angular;
 
-import java.util.Objects;
+import java.util.function.Predicate;
 
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
-import at.porscheinformatik.seleniumcomponents.component.OptionComponent;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
 
 /**
@@ -28,41 +27,30 @@ public class AngularSelectComponent extends SelectComponent
     }
 
     @Override
-    public void selectByValue(String value)
+    public String getValue()
     {
-        LOG.interaction("Selecting \"%s\" of %s by value", value, describe());
-
-        click();
-
-        OptionComponent selectedOption = optionsFactory.find(option -> {
-            String optionValue = option.getValue();
-
-            if (Objects.equals(value, optionValue))
-            {
-                return true;
-            }
-
-            if (optionValue == null)
-            {
-                return false;
-            }
-
-            if (optionValue.contains(":"))
-            {
-                String valuePart = optionValue.split(":")[1].trim();
-
-                return Objects.equals(valuePart, value);
-            }
-
-            return false;
-        });
-
-        if (selectedOption == null)
-        {
-            throw new AssertionError(String.format("Options with value \"%s\" not found", value));
-        }
-
-        selectedOption.click();
+        return sanitizeValue(super.getValue());
     }
 
+    @Override
+    public void selectByValue(Predicate<String> valuePredicate)
+    {
+        select(option -> {
+            String value = option.getValue();
+
+            return valuePredicate.test(value) || valuePredicate.test(sanitizeValue(value));
+        });
+    }
+
+    public static String sanitizeValue(String value)
+    {
+        if (value == null)
+        {
+            return value;
+        }
+
+        int index = value.indexOf(":");
+
+        return index >= 0 ? value.substring(index + 1).trim() : value;
+    }
 }

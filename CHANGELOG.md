@@ -4,6 +4,7 @@
 
 - Add `contains` to StringPredicate
 - Add `clearLocalStorage` to SeleniumEnvironment
+- Fix `selectByLabel` and `selectByValue` of various SelectComponents
 
 ## selenium-components-0.4.2
 
