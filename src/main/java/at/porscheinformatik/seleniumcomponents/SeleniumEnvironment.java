@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -256,7 +257,7 @@ public interface SeleniumEnvironment
      */
     default SubWindow switchToWindowByTitle(String title) throws IllegalArgumentException
     {
-        return switchToWindowByTitle(StringPredicate.is(title));
+        return switchToWindowByTitle(StringPredicate.equalTo(title));
     }
 
     /**
@@ -309,7 +310,7 @@ public interface SeleniumEnvironment
      */
     default SubWindow switchToWindowByUrl(String url)
     {
-        return switchToWindowByUrl(StringPredicate.is(url));
+        return switchToWindowByUrl(StringPredicate.equalTo(url));
     }
 
     /**
@@ -461,6 +462,17 @@ public interface SeleniumEnvironment
     default void deleteCookieByName(String cookieName)
     {
         getDriver().manage().deleteCookieNamed(cookieName);
+    }
+
+    /**
+     * Clears the local storage
+     */
+    default void clearLocalStorage()
+    {
+        WebDriver driver = getDriver();
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+
+        executor.executeScript("window.localStorage.clear()");
     }
 
     /**

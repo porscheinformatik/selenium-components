@@ -3,6 +3,7 @@
 ## selenium-components-0.4.3
 
 - Add `contains` to StringPredicate
+- Add `clearLocalStorage` to SeleniumEnvironment
 
 ## selenium-components-0.4.2
 
