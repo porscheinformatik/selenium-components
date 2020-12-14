@@ -35,26 +35,26 @@ public interface ClickableSeleniumComponent extends VisibleSeleniumComponent
     }
 
     /**
-     * Waits 5 seconds for the component to become clickable and clicks it. We use a bit more than the default short
-     * timeout because it is possible, that selecting a element needs a few seconds to complete. Depending on the
-     * Component Hirarchy used.
+     * Waits more than twice the short timeout for the component to become clickable and clicks it. We use a bit more
+     * than the default short timeout because it is possible, that selecting a element needs a few seconds to complete.
+     * Depending on the Component Hirarchy used.
      */
     default void click()
     {
-        click(5);
+        click(SeleniumGlobals.getShortTimeoutInSeconds() * 2.5);
     }
 
     /**
      * Waits the given seconds for the component to become clickable and clicks it.
-     * 
+     *
      * @param timeoutInSeconds the amount of time to wait until the operation fails
      */
-    default void click(long timeoutInSeconds)
+    default void click(double timeoutInSeconds)
     {
         LOG.interaction("Clicking on %s", describe());
 
         SeleniumAsserts.assertThatSoon(timeoutInSeconds, () -> {
-            if (this.isClickable())
+            if (isClickable())
             {
                 element().click();
 
