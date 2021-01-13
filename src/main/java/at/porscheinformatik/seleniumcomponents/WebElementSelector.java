@@ -227,7 +227,19 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByIndex(int index)
     {
-        return selectByIndex(selectChildren(), index);
+        return selectByIndex("*", index);
+    }
+
+    /**
+     * Returns the element at the specified index of all direct siblings. The index is zero-based.
+     *
+     * @param tagName the name of the tag
+     * @param index the index (0-based)
+     * @return the selector
+     */
+    static WebElementSelector selectByIndex(String tagName, int index)
+    {
+        return selectByCss(String.format("%s:nth-child(%d)", tagName, index + 1));
     }
 
     /**
@@ -268,7 +280,7 @@ public interface WebElementSelector
             @Override
             public String toString()
             {
-                return String.format("%s:nth-child(%d)", selector, index);
+                return String.format("%s:nth-child(%d)", selector, index + 1);
             }
         };
     }

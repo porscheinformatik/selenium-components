@@ -4,6 +4,7 @@
 
 - Slowly increase the delay in keepTrying-calls to reduce resource usage.
 - Fix visiblity detection of Clarity modals without title.
+- Fix and optimize selectByIndex
 
 ## selenium-components-0.4.3
 
