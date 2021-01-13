@@ -19,12 +19,16 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 public abstract class AbstractClarityModalComponent extends AbstractSeleniumComponent
     implements AnimatedSeleniumComponent
 {
-    protected final HtmlComponent modalHeader =
-        new HtmlComponent(this, selectByClassName("modal-header", "modal-header--accessible"));
-    protected final HtmlComponent modalBody = new HtmlComponent(this, selectByClassName("modal-body"));
 
-    private final HtmlComponent closeButton = new HtmlComponent(modalHeader, selectByClassName("close"));
+    protected final HtmlComponent modalDialog = new HtmlComponent(this, selectByClassName("modal-dialog"));
+
+    protected final HtmlComponent modalHeader =
+        new HtmlComponent(modalDialog, selectByClassName("modal-header", "modal-header--accessible"));
+    protected final HtmlComponent modalBody = new HtmlComponent(modalDialog, selectByClassName("modal-body"));
+    protected final HtmlComponent modalFooter = new HtmlComponent(modalDialog, selectByClassName("modal-footer"));
+
     private final HtmlComponent title = new HtmlComponent(modalHeader, selectByClassName("modal-title"));
+    private final HtmlComponent closeIcon = new HtmlComponent(modalHeader, selectByClassName("close"));
 
     public AbstractClarityModalComponent(SeleniumComponent parent)
     {
@@ -43,7 +47,7 @@ public abstract class AbstractClarityModalComponent extends AbstractSeleniumComp
 
     public void close()
     {
-        closeButton.click();
+        closeIcon.click();
 
         assertComponent(this, isNotVisible());
     }
@@ -51,7 +55,6 @@ public abstract class AbstractClarityModalComponent extends AbstractSeleniumComp
     @Override
     public boolean isVisible()
     {
-        // Wait until the title is shown. The modal itself is visible before.
-        return title.isVisible();
+        return modalDialog.isVisible();
     }
 }
