@@ -64,7 +64,7 @@ public final class SeleniumUtils
 
     /**
      * Sets all parents using the specified predicate
-     * 
+     *
      * @param component the component to start at
      * @param predicate the predicate
      * @return the component, null if not found
@@ -290,8 +290,8 @@ public final class SeleniumUtils
     /**
      * Waits until the check function does not throw an exception and returns true. If the timeout is &lt;= 0 or NaN, it
      * checks it at least once. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. The check
-     * function will be called four times a second. If the check throws an exception at the end the exception will be
-     * wrapped by a {@link SeleniumException} and gets thrown this way.
+     * function will be called multiple times during the timeout. If the check throws an exception at the end the
+     * exception will be wrapped by a {@link SeleniumException} and gets thrown this way.
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param check the check
@@ -309,7 +309,7 @@ public final class SeleniumUtils
      * or another non-null value. If the timeout &lt;= 0 or NaN, it calls the {@link Callable} at least once and the
      * timeout will be ignored. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. If the
      * call throws an exception at the end the exception will be wrapped by a {@link SeleniumException} and gets thrown
-     * this way. The {@link Callable} will be called four times a second.
+     * this way. The {@link Callable} will be called multiple times during the timeout.
      *
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
@@ -334,7 +334,7 @@ public final class SeleniumUtils
      * @param <Any> the expected return type
      * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
      * @param callable the {@link Callable}
-     * @param delayInSeconds the delay between calls (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
+     * @param delayInSeconds the initial delay between calls
      * @return the result or the call
      * @throws SeleniumFailException if the call fails to produce a value in time
      */
@@ -353,6 +353,7 @@ public final class SeleniumUtils
         try
         {
             double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
+            double maxDelayInSeconds = scaledTimeoutInSeconds / 20;
 
             if ((long) (scaledTimeoutInSeconds * 1000) <= 0)
             {
@@ -367,6 +368,9 @@ public final class SeleniumUtils
                 while (true)
                 {
                     long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
+
+                    // slowly increase the delay to reduce resource usage
+                    delayInSeconds = Math.min(delayInSeconds * 1.2, maxDelayInSeconds);
 
                     try
                     {
