@@ -62,8 +62,8 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
             }
         }
 
-        return SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(),
-            () -> selector.find(parent.searchContext()));
+        return SeleniumUtils
+            .keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> selector.find(parent.searchContext()));
     }
 
     @Override
@@ -94,16 +94,19 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
         return SeleniumUtils.getAttribute(this, name);
     }
 
-    protected String getText()
+    protected String getClassAttribute()
     {
-        return SeleniumUtils.getText(this);
+        return SeleniumUtils.getClassAttribute(this);
     }
 
     protected boolean containsClassName(String className)
     {
-        String attribute = getAttribute("class");
+        return SeleniumUtils.containsClassName(this, className);
+    }
 
-        return attribute != null && attribute.contains(className);
+    protected String getText()
+    {
+        return SeleniumUtils.getText(this);
     }
 
     @Override

@@ -174,8 +174,7 @@ public final class SeleniumUtils
     }
 
     /**
-     * Returns the attribute with the specified name. Waits {@link SeleniumGlobals#getShortTimeoutInSeconds()} seconds
-     * for the component to become available.
+     * Returns the attribute with the specified name. Retries if stale.
      *
      * @param component the component
      * @param name the name of the attribute
@@ -184,6 +183,31 @@ public final class SeleniumUtils
     public static String getAttribute(SeleniumComponent component, String name)
     {
         return retryOnStale(() -> component.element().getAttribute(name));
+    }
+
+    /**
+     * Returns value of the attribute "class". Retries if stale.
+     *
+     * @param component the component
+     * @return the value
+     */
+    public static String getClassAttribute(SeleniumComponent component)
+    {
+        return getAttribute(component, "class");
+    }
+
+    /**
+     * Returns true if the component has the specified class attribute.
+     *
+     * @param component the component
+     * @param className the className
+     * @return the true if the class attribute contains the specified string (ignores case)
+     */
+    public static boolean containsClassName(SeleniumComponent component, String className)
+    {
+        String attribute = getClassAttribute(component);
+
+        return attribute != null && attribute.toLowerCase().contains(className.toLowerCase());
     }
 
     /**
