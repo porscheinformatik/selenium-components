@@ -6,6 +6,7 @@
 - Fix visiblity detection of Clarity modals without title.
 - Fix and optimize selectByIndex
 - Add class utilities to SeleniumUtils
+- Basic ClarityTabsComponent
 
 ## selenium-components-0.4.3
 
