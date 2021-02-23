@@ -1,8 +1,9 @@
 # selenium-components-0 (alpha)
 
-## selenium-components-0.4.5
+## selenium-components-0.5.0
 
 - Shorter, more precise exception message in assertThatSoon/Later.
+- Upgraded plugins, compiling against Java 11, now.
 
 ## selenium-components-0.4.4
 
