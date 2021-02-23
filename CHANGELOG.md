@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.4.5
+
+- Shorter, more precise exception message in assertThatSoon/Later.
+
 ## selenium-components-0.4.4
 
 - Slowly increase the delay in keepTrying-calls to reduce resource usage.

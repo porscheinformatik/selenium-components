@@ -5,7 +5,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
-import org.slf4j.LoggerFactory;
 
 /**
  * Asserts for {@link SeleniumComponent}s.
@@ -28,7 +27,7 @@ public final class SeleniumAsserts
         private Exception exception = null;
         private AssertionError assertionError = null;
 
-        public Any getValue() throws Exception, AssertionError
+        public Any aquire() throws Exception, AssertionError
         {
             if (exception != null)
             {
@@ -43,6 +42,11 @@ public final class SeleniumAsserts
             return value;
         }
 
+        public Any getValue()
+        {
+            return value;
+        }
+
         public void setValue(Any value)
         {
             this.value = value;
@@ -50,10 +54,20 @@ public final class SeleniumAsserts
             this.assertionError = null;
         }
 
+        public Exception getException()
+        {
+            return exception;
+        }
+
         public void setException(Exception exception)
         {
             this.exception = exception;
             this.assertionError = null;
+        }
+
+        public AssertionError getAssertionError()
+        {
+            return assertionError;
         }
 
         public void setAssertionError(AssertionError error)
@@ -86,7 +100,7 @@ public final class SeleniumAsserts
     /**
      * Same as {@link #assertThatSoon(FailableSupplier, Matcher)} but keeps trying for
      * {@link SeleniumGlobals#getLongTimeoutInSeconds()}
-     * 
+     *
      * @param <Any> the type of the tested value
      * @param supplier the supplier of the tested value
      * @param matcher the matcher for the tested value
@@ -165,7 +179,7 @@ public final class SeleniumAsserts
     /**
      * Same as {@link #assertThatSoon(String, FailableSupplier, Matcher)} but keeps trying for
      * {@link SeleniumGlobals#getLongTimeoutInSeconds()}
-     * 
+     *
      * @param <Any> the type of the tested value
      * @param reason the reason for the assertion
      * @param supplier the supplier of the tested value
@@ -201,63 +215,58 @@ public final class SeleniumAsserts
                 {
                     Any value = supplier.get();
 
-                    Boolean r = matcher.matches(value) ? true : null;
-
                     result.setValue(value);
 
-                    return r;
+                    boolean matches = matcher.matches(value);
+
+                    if (!matches)
+                    {
+                        throw new AssertionError(describeMismatch(reason, matcher, value));
+                    }
+
+                    return true;
                 }
                 catch (Exception e)
                 {
-                    LoggerFactory.getLogger(SeleniumAsserts.class).error("Exception ", e);
-
                     result.setException(e);
 
                     return null;
                 }
                 catch (AssertionError e)
                 {
-                    LoggerFactory.getLogger(SeleniumAsserts.class).error("Assertionerror", e);
-
                     result.setAssertionError(e);
 
                     return null;
                 }
             });
 
-            return result.getValue();
+            return result.aquire();
         }
         catch (Exception e)
         {
-            LoggerFactory.getLogger(SeleniumAsserts.class).error("Catched ", e);
-
-            Object actual;
-            // We set the exception here. When the result has stored an exception, it is overriden later on
-            Throwable cause = e;
-
-            try
+            if (result.getAssertionError() != null)
             {
-                actual = result.getValue();
-            }
-            catch (Exception | AssertionError e1)
-            {
-                actual = e1.getMessage();
-                cause = e1;
+                throw result.getAssertionError();
             }
 
-            LoggerFactory.getLogger(SeleniumAsserts.class).error("Wrapped ", cause);
-
-            Description description = new StringDescription();
-
-            description
-                .appendText(reason)
-                .appendText("\nExpected: ")
-                .appendDescriptionOf(matcher)
-                .appendText("\n     but: ");
-            matcher.describeMismatch(actual, description);
-
-            throw new AssertionError(description.toString(), cause);
+            throw new AssertionError(describeMismatch(reason, matcher, result.getValue()),
+                result.getException() != null ? result.getException() : e);
         }
+    }
+
+    private static <Any> String describeMismatch(String reason, Matcher<? super Any> matcher, Any value)
+    {
+        Description description = new StringDescription();
+
+        description
+            .appendText(reason)
+            .appendText("\nExpected: ")
+            .appendDescriptionOf(matcher)
+            .appendText("\n     but: ");
+
+        matcher.describeMismatch(value, description);
+
+        return description.toString();
     }
 
     /**
