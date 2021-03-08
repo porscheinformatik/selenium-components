@@ -217,12 +217,7 @@ public final class SeleniumAsserts
 
                     result.setValue(value);
 
-                    boolean matches = matcher.matches(value);
-
-                    if (!matches)
-                    {
-                        throw new AssertionError(describeMismatch(reason, matcher, value));
-                    }
+                    MatcherAssert.assertThat(reason, value, matcher);
 
                     return true;
                 }

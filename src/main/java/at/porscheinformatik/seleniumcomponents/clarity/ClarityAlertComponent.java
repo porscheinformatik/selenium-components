@@ -5,6 +5,9 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
@@ -36,6 +39,11 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
     public SeleniumComponentList<ClarityAlertItem> getItems()
     {
         return entryFactory.findAll();
+    }
+
+    public List<String> getAlertTexts()
+    {
+        return getItems().map(ClarityAlertItem::getAlertText).collect(Collectors.toList());
     }
 
     public ClarityAlertType getType()

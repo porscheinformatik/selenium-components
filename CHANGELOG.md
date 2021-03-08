@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.5.1
+
+- getAlertTexts method for ClarityAlertComponent
+- Optimize assertThatSoon/Later
+
 ## selenium-components-0.5.0
 
 - Shorter, more precise exception message in assertThatSoon/Later.
