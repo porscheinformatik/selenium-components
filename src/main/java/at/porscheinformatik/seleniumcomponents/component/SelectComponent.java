@@ -4,12 +4,15 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.function.Predicate;
 
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Quotes;
+import org.openqa.selenium.support.ui.Select;
+
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
-import at.porscheinformatik.seleniumcomponents.StringPredicate;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -18,7 +21,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author HAM
  * @author Daniel Furtlehner
  */
-public class SelectComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
+public class SelectComponent extends AbstractSeleniumComponent implements EditableSeleniumComponent
 {
     protected final SeleniumComponentListFactory<OptionComponent> optionsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);
@@ -26,6 +29,8 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
     protected final SeleniumComponentListFactory<OptionGroupComponent> optionGroupsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("optgroup"),
             OptionGroupComponent::new);
+
+    private Select select;
 
     public SelectComponent(SeleniumComponent parent, WebElementSelector selector)
     {
@@ -37,38 +42,70 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
         this(parent, selectByTagName("select"));
     }
 
+    protected Select getSelect()
+    {
+        if (select == null)
+        {
+            select = new Select(element());
+        }
+
+        return select;
+    }
+
     public String getValue()
     {
-        OptionComponent option = getFirstSelectedOption();
+        WebElement option = getSelect().getFirstSelectedOption();
 
-        return option != null ? option.getValue() : null;
+        return option != null ? option.getAttribute("value") : null;
     }
 
     public String getSelectedLabel()
     {
-        OptionComponent option = getFirstSelectedOption();
+        WebElement option = getSelect().getFirstSelectedOption();
 
-        return option != null ? option.getLabel() : null;
+        return option != null ? option.getText() : null;
     }
 
-    public void selectByLabel(String label)
+    public OptionComponent optionByIndex(int index)
     {
-        selectByLabel(StringPredicate.equalTo(label));
+        return new OptionComponent(this, WebElementSelector.selectByIndex("option", index));
     }
 
-    public void selectByLabel(Predicate<String> labelPredicate)
+    public OptionComponent optionByValue(String value)
     {
-        select(option -> labelPredicate.test(option.getLabel()));
+        return new OptionComponent(this,
+            WebElementSelector.selectByXPath(".//option[@value = " + Quotes.escape(value) + "]"));
+    }
+
+    public OptionComponent optionByLabel(String label)
+    {
+        return new OptionComponent(this,
+            WebElementSelector.selectByXPath(".//option[normalize-space(.) = " + Quotes.escape(label) + "]"));
+    }
+
+    public void selectByIndex(int index)
+    {
+        optionByIndex(index).select();
     }
 
     public void selectByValue(String value)
     {
-        selectByValue(StringPredicate.equalTo(value));
+        optionByValue(value).select();
     }
 
     public void selectByValue(Predicate<String> valuePredicate)
     {
         select(option -> valuePredicate.test(option.getValue()));
+    }
+
+    public void selectByLabel(String label)
+    {
+        optionByLabel(label).select();
+    }
+
+    public void selectByLabel(Predicate<String> labelPredicate)
+    {
+        select(option -> labelPredicate.test(option.getLabel()));
     }
 
     public void select(Predicate<OptionComponent> predicate)
@@ -98,10 +135,5 @@ public class SelectComponent extends AbstractSeleniumComponent implements Clicka
     public SeleniumComponentList<OptionGroupComponent> getOptionGroups()
     {
         return optionGroupsFactory.findAll();
-    }
-
-    private OptionComponent getFirstSelectedOption()
-    {
-        return optionsFactory.find(OptionComponent::isSelected);
     }
 }

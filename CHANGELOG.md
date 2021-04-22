@@ -1,4 +1,9 @@
+
 # selenium-components-0 (alpha)
+
+## selenium-components-0.5.2
+
+- Optimize SelectComponent and AngularSelectComponent
 
 ## selenium-components-0.5.1
 

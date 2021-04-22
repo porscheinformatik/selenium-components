@@ -2,8 +2,11 @@ package at.porscheinformatik.seleniumcomponents.angular;
 
 import java.util.function.Predicate;
 
+import org.openqa.selenium.support.ui.Quotes;
+
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
+import at.porscheinformatik.seleniumcomponents.component.OptionComponent;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
 
 /**
@@ -30,6 +33,18 @@ public class AngularSelectComponent extends SelectComponent
     public String getValue()
     {
         return sanitizeValue(super.getValue());
+    }
+
+    @Override
+    public OptionComponent optionByValue(String value)
+    {
+        return new OptionComponent(this,
+            WebElementSelector
+                .selectByXPath(".//option[@value = "
+                    + Quotes.escape(value)
+                    + "]|.//option[contains(@value, "
+                    + Quotes.escape(": " + value)
+                    + ")]"));
     }
 
     @Override
