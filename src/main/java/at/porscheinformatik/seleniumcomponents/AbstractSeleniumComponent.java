@@ -62,8 +62,7 @@ public abstract class AbstractSeleniumComponent implements VisibleSeleniumCompon
             }
         }
 
-        return SeleniumUtils
-            .keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> selector.find(parent.searchContext()));
+        return SeleniumUtils.keepTrying(() -> selector.find(parent.searchContext()));
     }
 
     @Override

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -10,6 +10,8 @@ import at.porscheinformatik.seleniumcomponents.AbstractSeleniumContainer;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
+import at.porscheinformatik.seleniumcomponents.SeleniumGlobals;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
@@ -33,9 +35,18 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
 
     public void stringFilterColumn(int columnIndex, String filterQuery)
     {
-        DataGridColumnComponent column = head.getColumn(columnIndex);
+        stringFilterColumn(SeleniumGlobals.getShortTimeoutInSeconds(), columnIndex, filterQuery);
+    }
 
-        column.stringFilter.filter(filterQuery);
+    public void stringFilterColumn(double timeoutInSeconds, int columnIndex, String filterQuery)
+    {
+        SeleniumUtils.keepTrying(timeoutInSeconds, () -> {
+            DataGridColumnComponent column = head.getColumn(columnIndex);
+
+            column.stringFilter.filter(filterQuery);
+
+            return true;
+        });
     }
 
     public SeleniumComponentList<RowT> getEntries()

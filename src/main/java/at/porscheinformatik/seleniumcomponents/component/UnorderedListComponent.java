@@ -12,7 +12,6 @@ import at.porscheinformatik.seleniumcomponents.AbstractSeleniumContainer;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
-import at.porscheinformatik.seleniumcomponents.SeleniumGlobals;
 import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
@@ -40,15 +39,12 @@ public class UnorderedListComponent<EntryT extends AbstractSeleniumComponent> ex
 
     public boolean containsItem(Predicate<EntryT> predicate)
     {
-        return SeleniumUtils
-            .optional(
-                () -> SeleniumUtils.keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> findChild(predicate)))
-            .isPresent();
+        return SeleniumUtils.optional(() -> SeleniumUtils.keepTrying(() -> findChild(predicate))).isPresent();
     }
 
     public SeleniumComponentList<EntryT> getVisibleItems()
     {
-        return getItems().filter($ -> $.isVisible());
+        return getItems().filter(AbstractSeleniumComponent::isVisible);
     }
 
 }

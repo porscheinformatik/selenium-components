@@ -13,6 +13,7 @@ import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -85,12 +86,12 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
 
     public void selectByIndex(int index)
     {
-        optionByIndex(index).select();
+        SeleniumUtils.retryOnStale(optionByIndex(index)::select);
     }
 
     public void selectByValue(String value)
     {
-        optionByValue(value).select();
+        SeleniumUtils.retryOnStale(optionByValue(value)::select);
     }
 
     public void selectByValue(Predicate<String> valuePredicate)
@@ -100,7 +101,7 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
 
     public void selectByLabel(String label)
     {
-        optionByLabel(label).select();
+        SeleniumUtils.retryOnStale(optionByLabel(label)::select);
     }
 
     public void selectByLabel(Predicate<String> labelPredicate)

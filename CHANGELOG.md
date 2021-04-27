@@ -5,6 +5,7 @@
 
 - Optimize description of failed click
 - Use JPG for error image strings to avoid truncation
+- Better robustness with keepTrying/retryOnState
 
 ## selenium-components-0.5.2
 

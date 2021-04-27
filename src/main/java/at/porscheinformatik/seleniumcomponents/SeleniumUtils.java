@@ -312,6 +312,23 @@ public final class SeleniumUtils
     }
 
     /**
+     * Waits until the check function does not throw an exception and returns true. Uses
+     * {@link SeleniumGlobals#getShortTimeoutInSeconds()} as default timeout. The timeout will be scaled by the
+     * {@link SeleniumGlobals#getTimeMultiplier()}. The check function will be called multiple times during the timeout.
+     * If the check throws an exception at the end the exception will be wrapped by a {@link SeleniumException} and gets
+     * thrown this way.
+     *
+     * @param check the check
+     * @throws SeleniumException if the {@link Callable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
+     */
+    public static void waitUntil(Supplier<Boolean> check) throws SeleniumException
+    {
+        keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> check.get() ? true : null);
+    }
+
+    /**
      * Waits until the check function does not throw an exception and returns true. If the timeout is &lt;= 0 or NaN, it
      * checks it at least once. The timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. The check
      * function will be called multiple times during the timeout. If the check throws an exception at the end the
@@ -326,6 +343,25 @@ public final class SeleniumUtils
     public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumException
     {
         keepTrying(timeoutInSeconds, () -> check.get() ? true : null);
+    }
+
+    /**
+     * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
+     * or another non-null value. Uses {@link SeleniumGlobals#getShortTimeoutInSeconds()} as default timeout. The
+     * timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. If the call throws an exception at the
+     * end the exception will be wrapped by a {@link SeleniumException} and gets thrown this way. The {@link Callable}
+     * will be called multiple times during the timeout.
+     *
+     * @param <Any> the expected return type
+     * @param callable the {@link Callable}
+     * @return the result
+     * @throws SeleniumException if the {@link Callable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
+     */
+    public static <Any> Any keepTrying(Callable<Any> callable) throws SeleniumException
+    {
+        return keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), callable, 0.1);
     }
 
     /**
