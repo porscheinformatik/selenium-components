@@ -1,12 +1,24 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Base64;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriverException;
@@ -38,6 +50,8 @@ public final class SeleniumGlobals
     public static final String LONG_TIMEOUT_IN_SECONDS_KEY = "selenium-components.longTimeoutInSeconds";
     public static final String SCREENSHOT_OUTPUT_TYPE = "selenium-components.screenshotOutputType";
 
+    private static final int IMAGE_SIZE_THRESHOLD = 80000;
+
     private static boolean debug = false;
     private static double timeMultiplier = 1;
     private static double shortTimeoutInSeconds = 1.0;
@@ -45,9 +59,99 @@ public final class SeleniumGlobals
     private static ScreenshotOutputType screenshotOutputType = ScreenshotOutputType.BASE64;
 
     /**
+     * In contrast to the OutputType.BASE64, this type transforms the image to a low quality JPG. This should avoid
+     * truncating by Surefire.
+     */
+    public static final OutputType<String> LOW_QUALITY_BASE64 = new OutputType<>()
+    {
+        public String convertFromBase64Png(String base64Png)
+        {
+            if (base64Png.length() < IMAGE_SIZE_THRESHOLD)
+            {
+                return "data:image/png;base64," + base64Png;
+            }
+
+            return convertFromPngBytes(Base64.getMimeDecoder().decode(base64Png));
+        }
+
+        public String convertFromPngBytes(byte[] png)
+        {
+            BufferedImage image;
+
+            try (ByteArrayInputStream in = new ByteArrayInputStream(png))
+            {
+                image = ImageIO.read(in);
+            }
+            catch (IOException e)
+            {
+                LOG.warn("Failed to transform image. Returning original", e);
+
+                return "data:image/png;base64," + Base64.getMimeEncoder().encodeToString(png);
+            }
+
+            BufferedImage opaqueImage =
+                new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+            opaqueImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
+
+            float quality = 0.5f;
+            int attempt = 1;
+
+            while (true)
+            {
+                ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+                ImageWriteParam param = writer.getDefaultWriteParam();
+
+                param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                param.setCompressionQuality(quality);
+
+                try (ByteArrayOutputStream out = new ByteArrayOutputStream())
+                {
+                    try (MemoryCacheImageOutputStream memOut = new MemoryCacheImageOutputStream(out))
+                    {
+                        writer.setOutput(memOut);
+                        writer.write(null, new IIOImage(opaqueImage, null, null), param);
+
+                        out.flush();
+
+                        String result =
+                            "data:image/jpg;base64," + Base64.getMimeEncoder().encodeToString(out.toByteArray());
+
+                        if (result.length() < IMAGE_SIZE_THRESHOLD || quality < 0.02f)
+                        {
+                            if (attempt > 1)
+                            {
+                                LOG
+                                    .debug("Needed {0} attempts to reduce image size (quality: {1}, size: {2})",
+                                        attempt, quality, result.length());
+                            }
+
+                            return result;
+                        }
+
+                        quality /= 2;
+                        ++attempt;
+                    }
+                }
+                catch (IOException e)
+                {
+                    LOG.warn("Failed to transform image. Returning original", e);
+
+                    return "data:image/png;base64," + Base64.getMimeEncoder().encodeToString(png);
+                }
+            }
+        }
+
+        public String toString()
+        {
+            return "OutputType.LOW_QUALITY_BASE64";
+        }
+    };
+
+    /**
      * In contrast to the OutputType.FILE, this type does not delete the file on exit :rolling-eyes:
      */
-    public static final OutputType<File> PERSISTENT_FILE = new OutputType<File>()
+    public static final OutputType<File> PERSISTENT_FILE = new OutputType<>()
     {
         @Override
         public File convertFromBase64Png(String base64Png)
@@ -97,7 +201,7 @@ public final class SeleniumGlobals
         @Override
         public String toString()
         {
-            return "OutputType.FILE";
+            return "OutputType.PERSISTENT_FILE";
         }
     };
 
@@ -302,7 +406,7 @@ public final class SeleniumGlobals
     {
         LOG.info("Setting screenshot output type to: %s", screenshotOutputType);
 
-        SeleniumGlobals.screenshotOutputType = screenshotOutputType;
+        SeleniumGlobals.screenshotOutputType = Objects.requireNonNull(screenshotOutputType);
     }
 
     private static void setDoubleFromProperty(String key, Consumer<Double> setter)

@@ -1,10 +1,14 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.5.3
+
+- Optimize description of failed click
+- Use JPG for error image strings to avoid truncation
+
 ## selenium-components-0.5.2
 
 - Optimize SelectComponent and AngularSelectComponent
-- Optimize description of failed click
 
 ## selenium-components-0.5.1
 

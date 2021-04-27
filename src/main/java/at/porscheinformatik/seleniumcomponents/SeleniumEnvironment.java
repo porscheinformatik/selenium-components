@@ -131,9 +131,7 @@ public interface SeleniumEnvironment
      */
     default String takeScreenshotAsBase64()
     {
-        String screenshot = takeScreenshot(OutputType.BASE64);
-
-        return screenshot != null ? "data:image/png;base64," + screenshot : null;
+        return takeScreenshot(SeleniumGlobals.LOW_QUALITY_BASE64);
     }
 
     /**

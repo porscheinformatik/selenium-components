@@ -1,7 +1,5 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import org.openqa.selenium.OutputType;
-
 /**
  * The type of screenshot to take
  *
@@ -9,21 +7,6 @@ import org.openqa.selenium.OutputType;
  */
 public enum ScreenshotOutputType
 {
-
-    BASE64(OutputType.BASE64),
-
-    FILE(SeleniumGlobals.PERSISTENT_FILE);
-
-    private final OutputType<?> outputType;
-
-    ScreenshotOutputType(OutputType<?> outputType)
-    {
-        this.outputType = outputType;
-    }
-
-    public OutputType<?> getOutputType()
-    {
-        return outputType;
-    }
-
+    BASE64,
+    FILE;
 }
