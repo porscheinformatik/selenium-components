@@ -53,7 +53,7 @@ public interface ClickableSeleniumComponent extends VisibleSeleniumComponent
     {
         LOG.interaction("Clicking on %s", describe());
 
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, () -> {
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component is clickable", () -> {
             if (isClickable())
             {
                 element().click();
