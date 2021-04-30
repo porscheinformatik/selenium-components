@@ -3,6 +3,12 @@
 
 ## selenium-components-0.5.3
 
+- Some more window handling options.
+- Fix switching back to original window.
+- Preventing exception when screenshotting closed windows.
+
+## selenium-components-0.5.3
+
 - Optimize description of failed click
 - Use JPG for error image strings to avoid truncation
 - Better robustness with keepTrying/retryOnState

@@ -9,14 +9,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -75,7 +78,15 @@ public interface SeleniumEnvironment
             return null;
         }
 
-        return ((TakesScreenshot) driver).getScreenshotAs(outputType);
+        try
+        {
+            return ((TakesScreenshot) driver).getScreenshotAs(outputType);
+        }
+        catch (NoSuchWindowException e)
+        {
+            // failed to take screenshot because window has been closed already
+            return null;
+        }
     }
 
     /**
@@ -246,6 +257,61 @@ public interface SeleniumEnvironment
     }
 
     /**
+     * @return the window handle, a string to uniquly identify a browser window
+     */
+    default String getWindowHandle()
+    {
+        try
+        {
+            return getDriver().getWindowHandle();
+        }
+        catch (NoSuchWindowException e)
+        {
+            // current window has been closed
+            return null;
+        }
+    }
+
+    /**
+     * Tries to switch to the window with the specified handle. After this, the {@link SeleniumEnvironment} and it's web
+     * driver points to the window, until the {@link SubWindow} will be closed.
+     *
+     * @param windowHandle the the unique id of the window
+     * @return the handle for the window
+     * @throws IllegalArgumentException if the window was not found
+     */
+    default SubWindow switchToWindow(String windowHandle) throws IllegalArgumentException
+    {
+        WebDriver driver = getDriver();
+        String originalHandle = getWindowHandle();
+
+        if (windowHandle == null)
+        {
+            Iterator<String> handles = driver.getWindowHandles().iterator();
+
+            if (!handles.hasNext())
+            {
+                throw new IllegalArgumentException("There is no open window");
+            }
+
+            windowHandle = handles.next();
+        }
+        try
+        {
+            driver.switchTo().window(windowHandle);
+
+            SeleniumAsserts.assertThatSoon(this::getWindowHandle, Matchers.is(windowHandle));
+
+            return new SubWindow(this, originalHandle, windowHandle);
+        }
+        catch (SeleniumException e)
+        {
+            throw new IllegalArgumentException(
+                String.format("There is no matching window. Known windows are: %s", driver.getWindowHandles()), e);
+        }
+    }
+
+    /**
      * Tries to switch the window with the specified title (case-insensitive). After this, the
      * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be closed.
      *
@@ -269,7 +335,7 @@ public interface SeleniumEnvironment
     default SubWindow switchToWindowByTitle(Predicate<String> titlePredicate) throws IllegalArgumentException
     {
         WebDriver driver = getDriver();
-        String originalHandle = driver.getWindowHandle();
+        String originalHandle = getWindowHandle();
         Set<String> windowHandles = driver.getWindowHandles();
         Collection<String> titles = new HashSet<>();
 
@@ -282,7 +348,7 @@ public interface SeleniumEnvironment
 
                     if (titlePredicate.test(currentTitle))
                     {
-                        return new SubWindow(this, originalHandle);
+                        return new SubWindow(this, originalHandle, windowHandle);
                     }
 
                     titles.add(currentTitle);
@@ -322,7 +388,7 @@ public interface SeleniumEnvironment
     default SubWindow switchToWindowByUrl(Predicate<String> urlPredicate)
     {
         WebDriver driver = getDriver();
-        String originalHandle = driver.getWindowHandle();
+        String originalHandle = getWindowHandle();
         Set<String> windowHandles = driver.getWindowHandles();
         Collection<String> urls = new HashSet<>();
 
@@ -337,7 +403,7 @@ public interface SeleniumEnvironment
 
                     if (urlPredicate.test(currentUrl))
                     {
-                        return new SubWindow(this, originalHandle);
+                        return new SubWindow(this, originalHandle, windowHandle);
                     }
 
                     urls.add(currentUrl);
