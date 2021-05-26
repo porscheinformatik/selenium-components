@@ -5,6 +5,7 @@
 
 - More robust SeleniumComponentListFactory if parent element is unavailable
 - KeepTrying handles AssertionErrors correctly (Throwables)
+- Removed CRs from Base64 screensshots to improve copybility
 
 ## selenium-components-0.5.3
 

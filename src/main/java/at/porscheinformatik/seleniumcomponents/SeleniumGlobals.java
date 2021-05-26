@@ -86,7 +86,8 @@ public final class SeleniumGlobals
             {
                 LOG.warn("Failed to transform image. Returning original", e);
 
-                return "data:image/png;base64," + Base64.getMimeEncoder().encodeToString(png);
+                return "data:image/png;base64,"
+                    + Base64.getMimeEncoder().encodeToString(png).replace("\r", "").replace("\n", "");
             }
 
             BufferedImage opaqueImage =
@@ -117,16 +118,16 @@ public final class SeleniumGlobals
                         String result =
                             "data:image/jpg;base64," + Base64.getMimeEncoder().encodeToString(out.toByteArray());
 
-                        if (result.length() < IMAGE_SIZE_THRESHOLD || quality < 0.02f)
+                        if (result.length() < IMAGE_SIZE_THRESHOLD || quality < 0.05f)
                         {
                             if (attempt > 1)
                             {
                                 LOG
-                                    .debug("Needed {0} attempts to reduce image size (quality: {1}, size: {2})",
-                                        attempt, quality, result.length());
+                                    .debug("Needed %s attempts to reduce image size (quality: %s, size: %s)", attempt,
+                                        quality, result.length());
                             }
 
-                            return result;
+                            return result.replace("\r", "").replace("\n", "");
                         }
 
                         quality /= 2;
