@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import static at.porscheinformatik.seleniumcomponents.SeleniumUtils.*;
 
+import java.util.Collections;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -79,9 +80,9 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
     }
 
     /**
-     * Selects a child by the specified selector. Use this, if you already know how to selected a specified entry (this is
-     * much faster search {@link #find(Predicate)}ing it). But there is no guarantee, that the child exists. It's like
-     * directly selecting it e.g. by it's Selenium key.
+     * Selects a child by the specified selector. Use this, if you already know how to selected a specified entry (this
+     * is much faster search {@link #find(Predicate)}ing it). But there is no guarantee, that the child exists. It's
+     * like directly selecting it e.g. by it's Selenium key.
      *
      * @param selector the selector
      * @return the child
@@ -111,6 +112,11 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      */
     public SeleniumComponentList<CHILD_TYPE> findAll()
     {
+        if (!parent.isReady())
+        {
+            return new SeleniumComponentList<>(Collections.emptyList());
+        }
+
         return new SeleniumComponentList<>(childSelector
             .findAll(parent.element())
             .stream()

@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.5.4
+
+- More robust SeleniumComponentListFactory if parent element is unavailable
+
 ## selenium-components-0.5.3
 
 - Some more window handling options.
