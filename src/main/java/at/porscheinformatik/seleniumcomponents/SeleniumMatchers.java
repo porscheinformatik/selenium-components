@@ -45,8 +45,7 @@ public final class SeleniumMatchers
     public static <ComponentT extends SeleniumComponent, AssertionT> Matcher<Stream<ComponentT>> streamContainingExactly(
         Function<ComponentT, AssertionT> itemMapper, AssertionT... expectedEntries)
     {
-        return new StreamContainsItemsMatcher<>(itemMapper, expectedEntries, true,
-            (actualValues, expected) -> actualValues.contains(expected));
+        return new StreamContainsItemsMatcher<>(itemMapper, expectedEntries, true, List::contains);
     }
 
     /**
@@ -61,8 +60,7 @@ public final class SeleniumMatchers
     public static <ComponentT extends SeleniumComponent, AssertionT> Matcher<SeleniumComponentList<ComponentT>> containsExactly(
         Function<ComponentT, AssertionT> itemMapper, AssertionT... expectedEntries)
     {
-        return new ComponentListContainsItemsMatcher<>(itemMapper, expectedEntries, true,
-            (actualValues, expected) -> actualValues.contains(expected));
+        return new ComponentListContainsItemsMatcher<>(itemMapper, expectedEntries, true, List::contains);
     }
 
     /**
@@ -294,7 +292,14 @@ public final class SeleniumMatchers
         @Override
         public void describeTo(Description description)
         {
-            description.appendText("A component that is visible");
+            if (shouldBeVisible)
+            {
+                description.appendText("A component that is visible");
+            }
+            else
+            {
+                description.appendText("A component that is invisible");
+            }
         }
     }
 

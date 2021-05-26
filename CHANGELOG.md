@@ -7,6 +7,7 @@
 - KeepTrying handles AssertionErrors correctly (Throwables)
 - Removed CRs from Base64 screensshots to improve copybility
 - Optimized assertThatSoon once more to improve error reporting
+- Fixed description of VisibilityMatcher
 
 ## selenium-components-0.5.3
 
