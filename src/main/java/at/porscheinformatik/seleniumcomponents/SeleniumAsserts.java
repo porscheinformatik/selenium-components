@@ -24,19 +24,13 @@ public final class SeleniumAsserts
     private static class Result<Any>
     {
         private Any value = null;
-        private Exception exception = null;
-        private AssertionError assertionError = null;
+        private Throwable exception = null;
 
-        public Any aquire() throws Exception, AssertionError
+        public Any aquire() throws Throwable
         {
             if (exception != null)
             {
                 throw exception;
-            }
-
-            if (assertionError != null)
-            {
-                throw assertionError;
             }
 
             return value;
@@ -51,29 +45,16 @@ public final class SeleniumAsserts
         {
             this.value = value;
             this.exception = null;
-            this.assertionError = null;
         }
 
-        public Exception getException()
+        public Throwable getException()
         {
             return exception;
         }
 
-        public void setException(Exception exception)
+        public void setException(Throwable exception)
         {
             this.exception = exception;
-            this.assertionError = null;
-        }
-
-        public AssertionError getAssertionError()
-        {
-            return assertionError;
-        }
-
-        public void setAssertionError(AssertionError error)
-        {
-            this.assertionError = error;
-            this.exception = null;
         }
     }
 
@@ -213,55 +194,60 @@ public final class SeleniumAsserts
             SeleniumUtils.keepTrying(timeoutInSeconds, () -> {
                 try
                 {
-                    Any value = supplier.get();
+                    Any actual = supplier.get();
 
-                    result.setValue(value);
+                    result.setValue(actual);
 
-                    MatcherAssert.assertThat(reason, value, matcher);
-
-                    return true;
+                    if (matcher.matches(actual))
+                    {
+                        return true;
+                    }
                 }
-                catch (Exception e)
+                catch (Throwable e)
                 {
                     result.setException(e);
-
-                    return null;
                 }
-                catch (AssertionError e)
-                {
-                    result.setAssertionError(e);
 
-                    return null;
-                }
+                return null;
             });
 
             return result.aquire();
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            if (result.getAssertionError() != null)
+            Object actual = result.getException();
+
+            if (actual == null)
             {
-                throw result.getAssertionError();
+                actual = result.getValue();
             }
 
-            throw new AssertionError(describeMismatch(reason, matcher, result.getValue()),
-                result.getException() != null ? result.getException() : e);
+            Description description = new StringDescription();
+
+            description
+                .appendText(reason)
+                .appendText(System.lineSeparator())
+                .appendText("Expected: ")
+                .appendDescriptionOf(matcher)
+                .appendText(System.lineSeparator())
+                .appendText("     but: ");
+
+            matcher.describeMismatch(actual, description);
+
+            AssertionError error;
+
+            if (result.getException() != null)
+            {
+                error = new AssertionError(description.toString(), result.getException());
+                error.addSuppressed(e);
+            }
+            else
+            {
+                error = new AssertionError(description.toString(), e);
+            }
+
+            throw error;
         }
-    }
-
-    private static <Any> String describeMismatch(String reason, Matcher<? super Any> matcher, Any value)
-    {
-        Description description = new StringDescription();
-
-        description
-            .appendText(reason)
-            .appendText("\nExpected: ")
-            .appendDescriptionOf(matcher)
-            .appendText("\n     but: ");
-
-        matcher.describeMismatch(value, description);
-
-        return description.toString();
     }
 
     /**
