@@ -102,7 +102,10 @@ public final class SeleniumAsserts
      * @param component the component to test
      * @param matcher the matcher for the tested value
      * @return the component itself
+     * @deprecated use {@link #assertThatSoon(FailableSupplier, Matcher)} with "() -&gt; component" as parameter in order
+     *             to simplify the API
      */
+    @Deprecated
     public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(ComponentT component,
         Matcher<? super ComponentT> matcher)
     {
@@ -134,7 +137,10 @@ public final class SeleniumAsserts
      * @param component the component to test
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
+     * @deprecated use {@link #assertThatSoon(double, FailableSupplier, Matcher)} with "() -&gt; component" as parameter in
+     *             order to simplify the API
      */
+    @Deprecated
     public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(double timeoutInSeconds,
         ComponentT component, Matcher<? super ComponentT> matcher)
     {

@@ -122,7 +122,10 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated Try to avoid this kind of check! This method will wait for the component to become visible only to
+     *             succeed after the timeout (which may be quite long).
      */
+    @Deprecated
     public static void waitUntilInvisible(double timeoutInSeconds, VisibleSeleniumComponent component)
     {
         SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !component.isVisible()));

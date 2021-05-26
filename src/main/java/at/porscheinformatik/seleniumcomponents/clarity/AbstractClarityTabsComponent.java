@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
@@ -48,7 +49,8 @@ public abstract class AbstractClarityTabsComponent extends AbstractSeleniumCompo
         getVisibleNavigationItems().get(index).click();
 
         HtmlComponent tab = new HtmlComponent(this, selectById("clr-tab-content-" + index));
-        assertComponent(tab, SeleniumMatchers.isVisible());
+        
+        SeleniumAsserts.assertThatSoon(() -> tab, SeleniumMatchers.isVisible());
     }
 
     private SeleniumComponentList<ButtonComponent> getVisibleNavigationItems()

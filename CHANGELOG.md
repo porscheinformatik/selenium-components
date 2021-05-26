@@ -1,15 +1,16 @@
 
 # selenium-components-0 (alpha)
 
-## selenium-components-0.5.4
+## selenium-components-0.5.5
 
 - More robust SeleniumComponentListFactory if parent element is unavailable
 - KeepTrying handles AssertionErrors correctly (Throwables)
 - Removed CRs from Base64 screensshots to improve copybility
 - Optimized assertThatSoon once more to improve error reporting
 - Fixed description of VisibilityMatcher
+- Deprecated some obsolete and problematic methods
 
-## selenium-components-0.5.3
+## selenium-components-0.5.4
 
 - Some more window handling options.
 - Fix switching back to original window.

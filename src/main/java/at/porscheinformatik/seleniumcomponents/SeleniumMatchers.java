@@ -6,6 +6,7 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -85,18 +86,35 @@ public final class SeleniumMatchers
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is visible
      */
+    public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isReady()
+    {
+        return new GenericMatcher<>("A component, that is ready",
+            object -> object instanceof SeleniumComponent && ((SeleniumComponent) object).isReady());
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is visible
+     */
     public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isVisible()
     {
-        return new VisibilityMatcher<>(true);
+        return new GenericMatcher<>("A component, that is visible",
+            object -> object instanceof SeleniumComponent && ((VisibleSeleniumComponent) object).isVisible());
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is not visible
+     * @deprecated Try to avoid this kind of check! If this method is used in conjunction with a
+     *             {@link SeleniumAsserts#assertThatSoon(double, String, FailableSupplier, Matcher)}, it will wait for
+     *             the component to become visible only to succeed after the timeout (which may be quite long).
      */
+
+    @Deprecated
     public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isNotVisible()
     {
-        return new VisibilityMatcher<>(false);
+        return new GenericMatcher<>("A component, that is not visible",
+            object -> object instanceof SeleniumComponent && !((VisibleSeleniumComponent) object).isVisible());
     }
 
     /**
@@ -105,7 +123,8 @@ public final class SeleniumMatchers
      */
     public static <ComponentT extends ClickableSeleniumComponent> Matcher<ComponentT> isClickable()
     {
-        return new ClickabilityMatcher<>();
+        return new GenericMatcher<>("A component, that is clickable",
+            object -> object instanceof SeleniumComponent && ((ClickableSeleniumComponent) object).isClickable());
     }
 
     private static class ComponentListHasItemsMatcher<ComponentT extends SeleniumComponent>
@@ -264,14 +283,17 @@ public final class SeleniumMatchers
         }
     }
 
-    private static class VisibilityMatcher<ComponentT extends VisibleSeleniumComponent> extends BaseMatcher<ComponentT>
+    private static class GenericMatcher<ComponentT extends VisibleSeleniumComponent> extends BaseMatcher<ComponentT>
     {
-        private final boolean shouldBeVisible;
+        private final String expectation;
+        private final Predicate<Object> predicate;
 
-        VisibilityMatcher(boolean shouldBeVisible)
+        GenericMatcher(String expectation, Predicate<Object> predicate)
         {
             super();
-            this.shouldBeVisible = shouldBeVisible;
+
+            this.expectation = expectation;
+            this.predicate = predicate;
         }
 
         @Override
@@ -282,49 +304,13 @@ public final class SeleniumMatchers
                 return false;
             }
 
-            VisibleSeleniumComponent component = (VisibleSeleniumComponent) item;
-
-            boolean actual = component.isVisible();
-
-            return actual == shouldBeVisible;
+            return predicate.test(item);
         }
 
         @Override
         public void describeTo(Description description)
         {
-            if (shouldBeVisible)
-            {
-                description.appendText("A component that is visible");
-            }
-            else
-            {
-                description.appendText("A component that is invisible");
-            }
-        }
-    }
-
-    private static class ClickabilityMatcher<ComponentT extends ClickableSeleniumComponent>
-        extends BaseMatcher<ComponentT>
-    {
-        @Override
-        public boolean matches(Object item)
-        {
-            if (item == null)
-            {
-                return false;
-            }
-
-            ClickableSeleniumComponent component = (ClickableSeleniumComponent) item;
-
-            boolean actual = component.isClickable();
-
-            return actual;
-        }
-
-        @Override
-        public void describeTo(Description description)
-        {
-            description.appendText("A component that is clickable");
+            description.appendText(expectation);
         }
     }
 }

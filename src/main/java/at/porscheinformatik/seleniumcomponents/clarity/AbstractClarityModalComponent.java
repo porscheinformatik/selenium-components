@@ -3,12 +3,13 @@
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
-import static at.porscheinformatik.seleniumcomponents.SeleniumMatchers.*;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
+
+import org.hamcrest.Matchers;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.AnimatedSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
@@ -49,7 +50,7 @@ public abstract class AbstractClarityModalComponent extends AbstractSeleniumComp
     {
         closeIcon.click();
 
-        assertComponent(this, isNotVisible());
+        SeleniumAsserts.assertThatSoon(() -> this, Matchers.not(isVisible()));
     }
 
     @Override
