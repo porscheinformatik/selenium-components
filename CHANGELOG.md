@@ -4,6 +4,7 @@
 ## selenium-components-0.5.4
 
 - More robust SeleniumComponentListFactory if parent element is unavailable
+- KeepTrying handles AssertionErrors correctly (Throwables)
 
 ## selenium-components-0.5.3
 

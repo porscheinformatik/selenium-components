@@ -436,7 +436,7 @@ public final class SeleniumUtils
                     {
                         result = callable.call();
                     }
-                    catch (Exception e)
+                    catch (Throwable e)
                     {
                         if (System.currentTimeMillis() > endMillis)
                         {
@@ -471,7 +471,7 @@ public final class SeleniumUtils
             {
                 throw e;
             }
-            catch (Exception e)
+            catch (Throwable e)
             {
                 throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
             }
