@@ -1,14 +1,13 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 
 /**
  * A {@link SeleniumComponent} that can be selected
  *
  * @author ham
  */
-public interface SelectableSeleniumComponent extends SeleniumComponent
+public interface SelectableSeleniumComponent extends ClickableSeleniumComponent
 {
 
     /**
@@ -21,11 +20,7 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
     {
         try
         {
-            return SeleniumUtils.retryOnStale(() -> {
-                WebElement element = element();
-
-                return element.isSelected();
-            });
+            return SeleniumUtils.retryOnStale(() -> element().isSelected());
         }
         catch (NoSuchElementException e)
         {
@@ -42,7 +37,7 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
         {
             LOG.interaction("Selecting %s", describe());
 
-            element().click();
+            click();
         }
     }
 
@@ -55,8 +50,24 @@ public interface SelectableSeleniumComponent extends SeleniumComponent
         {
             LOG.interaction("Deselecting %s", describe());
 
-            element().click();
+            click();
         }
     }
 
+    /**
+     * Calls the appropriate method
+     *
+     * @param selected true for {@link #select()}, false for {@link #unselect()}
+     */
+    default void setSelected(boolean selected)
+    {
+        if (selected)
+        {
+            select();
+        }
+        else
+        {
+            unselect();
+        }
+    }
 }

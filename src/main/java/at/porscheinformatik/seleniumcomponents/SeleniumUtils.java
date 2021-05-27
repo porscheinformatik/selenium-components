@@ -349,6 +349,62 @@ public final class SeleniumUtils
     }
 
     /**
+     * Keeps calling the {@link Runnable} until it does not throw an exception. Uses
+     * {@link SeleniumGlobals#getShortTimeoutInSeconds()} as default timeout. The timeout will be scaled by the
+     * {@link SeleniumGlobals#getTimeMultiplier()}. If the call throws an exception at the end the exception will be
+     * wrapped by a {@link SeleniumException} and gets thrown this way. The {@link Callable} will be called multiple
+     * times during the timeout.
+     *
+     * @param runnable the {@link Runnable}
+     * @throws SeleniumException if the {@link Runnable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
+     */
+    public static void retryOnFail(Runnable runnable) throws SeleniumException
+    {
+        retryOnFail(SeleniumGlobals.getShortTimeoutInSeconds(), runnable, 0.1);
+    }
+
+    /**
+     * Keeps calling the {@link Runnable} until it does not throw an exception. If the timeout &lt;= 0 or NaN, it calls
+     * the {@link Callable} at least once and the timeout will be ignored. The timeout will be scaled by the
+     * {@link SeleniumGlobals#getTimeMultiplier()}. If the call throws an exception at the end the exception will be
+     * wrapped by a {@link SeleniumException} and gets thrown this way. The {@link Runnable} will be called multiple
+     * times during the timeout.
+     *
+     * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
+     * @param runnable the {@link Runnable}
+     * @throws SeleniumException if the {@link Runnable} fails horribly
+     * @throws SeleniumInterruptedException on process interruption
+     * @throws SeleniumTimeoutException on timeout
+     */
+    public static void retryOnFail(double timeoutInSeconds, Runnable runnable) throws SeleniumException
+    {
+        retryOnFail(timeoutInSeconds, runnable, 0.1);
+    }
+
+    /**
+     * Keeps calling the {@link Runnable} until it does not throw an exception. If the timeout &lt;= 0 or NaN, it calls
+     * the {@link Runnable} at least once and the timeout will be ignored. The timeout will be scaled by the
+     * {@link SeleniumGlobals#getTimeMultiplier()}. If the call throws an exception at the end the exception will be
+     * wrapped by a {@link SeleniumException} and gets thrown this way.
+     *
+     * @param timeoutInSeconds the timeout (will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()})
+     * @param runnable the {@link Runnable}
+     * @param delayInSeconds the initial delay between calls
+     * @throws SeleniumFailException if the call fails to produce a value in time
+     */
+    public static void retryOnFail(double timeoutInSeconds, Runnable runnable, double delayInSeconds)
+        throws SeleniumFailException
+    {
+        keepTrying(timeoutInSeconds, () -> {
+            runnable.run();
+
+            return true;
+        }, delayInSeconds);
+    }
+
+    /**
      * Keeps calling the {@link Callable} until it does not throw an exception, returns an {@link Optional} with a value
      * or another non-null value. Uses {@link SeleniumGlobals#getShortTimeoutInSeconds()} as default timeout. The
      * timeout will be scaled by the {@link SeleniumGlobals#getTimeMultiplier()}. If the call throws an exception at the

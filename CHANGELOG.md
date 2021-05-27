@@ -1,6 +1,12 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.5.6
+
+- Prevent stale exception with SelectComponent
+- Additional SeleniumMatchers for editable, selectable, enabled, disabled
+- SeleniumUtils.retryOnFail with runnables in addition to keepTrying
+
 ## selenium-components-0.5.5
 
 - More robust SeleniumComponentListFactory if parent element is unavailable

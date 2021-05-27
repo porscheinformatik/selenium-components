@@ -1,42 +1,24 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
-import org.hamcrest.Matchers;
-import org.openqa.selenium.WebElement;
-
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
+import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
  * @author cet
  */
-public class OptionComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
+public class OptionComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
 {
-
     public OptionComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
     }
 
-    public void select()
+    @Override
+    public void unselect()
     {
-        if (!isSelected())
-        {
-            SeleniumAsserts.assertThatSoon("Select option", () -> {
-                WebElement element = element();
-
-                element.click();
-
-                return element.isSelected();
-            }, Matchers.is(true));
-        }
-    }
-
-    public boolean isSelected()
-    {
-        return element().isSelected();
+        throw new UnsupportedOperationException("An option cannot be unselected. Another one must be selected instead");
     }
 
     public String getValue()

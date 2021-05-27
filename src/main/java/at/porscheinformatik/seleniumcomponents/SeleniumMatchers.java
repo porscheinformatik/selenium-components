@@ -86,7 +86,7 @@ public final class SeleniumMatchers
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is visible
      */
-    public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isReady()
+    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> isReady()
     {
         return new GenericMatcher<>("A component, that is ready",
             object -> object instanceof SeleniumComponent && ((SeleniumComponent) object).isReady());
@@ -99,7 +99,7 @@ public final class SeleniumMatchers
     public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isVisible()
     {
         return new GenericMatcher<>("A component, that is visible",
-            object -> object instanceof SeleniumComponent && ((VisibleSeleniumComponent) object).isVisible());
+            object -> object instanceof VisibleSeleniumComponent && ((VisibleSeleniumComponent) object).isVisible());
     }
 
     /**
@@ -114,7 +114,7 @@ public final class SeleniumMatchers
     public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isNotVisible()
     {
         return new GenericMatcher<>("A component, that is not visible",
-            object -> object instanceof SeleniumComponent && !((VisibleSeleniumComponent) object).isVisible());
+            object -> object instanceof VisibleSeleniumComponent && !((VisibleSeleniumComponent) object).isVisible());
     }
 
     /**
@@ -124,7 +124,41 @@ public final class SeleniumMatchers
     public static <ComponentT extends ClickableSeleniumComponent> Matcher<ComponentT> isClickable()
     {
         return new GenericMatcher<>("A component, that is clickable",
-            object -> object instanceof SeleniumComponent && ((ClickableSeleniumComponent) object).isClickable());
+            object -> object instanceof ClickableSeleniumComponent
+                && ((ClickableSeleniumComponent) object).isClickable());
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is selected
+     */
+    public static <ComponentT extends SelectableSeleniumComponent> Matcher<ComponentT> isSelected()
+    {
+        return new GenericMatcher<>("A component, that is selected",
+            object -> object instanceof SelectableSeleniumComponent
+                && ((SelectableSeleniumComponent) object).isSelected());
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is enabled
+     */
+    public static <ComponentT extends DeactivateableSeleniumComponent> Matcher<ComponentT> isEnabled()
+    {
+        return new GenericMatcher<>("A component, that is enabled",
+            object -> object instanceof DeactivateableSeleniumComponent
+                && ((DeactivateableSeleniumComponent) object).isEnabled());
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is disabled
+     */
+    public static <ComponentT extends DeactivateableSeleniumComponent> Matcher<ComponentT> isDisabled()
+    {
+        return new GenericMatcher<>("A component, that is disabled",
+            object -> object instanceof DeactivateableSeleniumComponent
+                && ((DeactivateableSeleniumComponent) object).isDisabled());
     }
 
     private static class ComponentListHasItemsMatcher<ComponentT extends SeleniumComponent>
@@ -283,7 +317,7 @@ public final class SeleniumMatchers
         }
     }
 
-    private static class GenericMatcher<ComponentT extends VisibleSeleniumComponent> extends BaseMatcher<ComponentT>
+    private static class GenericMatcher<T> extends BaseMatcher<T>
     {
         private final String expectation;
         private final Predicate<Object> predicate;

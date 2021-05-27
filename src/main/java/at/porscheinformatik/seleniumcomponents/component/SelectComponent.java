@@ -10,10 +10,11 @@ import org.openqa.selenium.support.ui.Select;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
-import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
+import at.porscheinformatik.seleniumcomponents.SeleniumMatchers;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -53,6 +54,9 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
         return select;
     }
 
+    /**
+     * @return the (first) selected value
+     */
     public String getValue()
     {
         WebElement option = getSelect().getFirstSelectedOption();
@@ -60,11 +64,20 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
         return option != null ? option.getAttribute("value") : null;
     }
 
+    /**
+     * @return the (first) selected label
+     */
     public String getSelectedLabel()
     {
         WebElement option = getSelect().getFirstSelectedOption();
 
         return option != null ? option.getText() : null;
+    }
+
+    public OptionComponent getSelectedOption()
+    {
+        return new OptionComponent(this,
+            WebElementSelector.selectElement("option[@selected]", getSelect().getFirstSelectedOption()));
     }
 
     public OptionComponent optionByIndex(int index)
@@ -86,12 +99,26 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
 
     public void selectByIndex(int index)
     {
-        SeleniumUtils.retryOnStale(optionByIndex(index)::select);
+        LOG.interaction("Selecting item of %s by index: %s", describe(), index);
+
+        SeleniumAsserts.assertThatSoon("Select item at index: " + index, () -> {
+            optionByIndex(index).select();
+
+            // it's intended, that the option is searched again (the element may change on select an become stale)
+            return optionByIndex(index);
+        }, SeleniumMatchers.isSelected());
     }
 
     public void selectByValue(String value)
     {
-        SeleniumUtils.retryOnStale(optionByValue(value)::select);
+        LOG.interaction("Selecting item of %s by value: %s", describe(), value);
+
+        SeleniumAsserts.assertThatSoon("Select item by value: " + value, () -> {
+            optionByValue(value).select();
+
+            // it's intended, that the option is searched again (the element may change on select an become stale)
+            return optionByValue(value);
+        }, SeleniumMatchers.isSelected());
     }
 
     public void selectByValue(Predicate<String> valuePredicate)
@@ -101,7 +128,14 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
 
     public void selectByLabel(String label)
     {
-        SeleniumUtils.retryOnStale(optionByLabel(label)::select);
+        LOG.interaction("Selecting item of %s by label: %s", describe(), label);
+
+        SeleniumAsserts.assertThatSoon("Select item by label: " + label, () -> {
+            optionByLabel(label).select();
+
+            // it's intended, that the option is searched again (the element may change on select an become stale)
+            return optionByLabel(label);
+        }, SeleniumMatchers.isSelected());
     }
 
     public void selectByLabel(Predicate<String> labelPredicate)
@@ -111,18 +145,23 @@ public class SelectComponent extends AbstractSeleniumComponent implements Editab
 
     public void select(Predicate<OptionComponent> predicate)
     {
-        LOG.interaction("Selecting item of of %s by predicate", describe());
+        LOG.interaction("Selecting item of %s by predicate", describe());
 
-        click();
+        SeleniumAsserts.assertThatSoon("Select item by predicate", () -> {
+            click();
 
-        OptionComponent option = optionsFactory.find(predicate);
+            OptionComponent option = optionsFactory.find(predicate);
 
-        if (option == null)
-        {
-            throw new AssertionError(String.format("Matching option not found"));
-        }
+            if (option == null)
+            {
+                throw new AssertionError(String.format("Matching option not found"));
+            }
 
-        option.click();
+            option.click();
+
+            // it's intended, that the option is searched again (the element may change on select an become stale)
+            return optionsFactory.find(predicate);
+        }, SeleniumMatchers.isSelected());
     }
 
     /**

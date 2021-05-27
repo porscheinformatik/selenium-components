@@ -3,6 +3,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 import org.hamcrest.Matchers;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.DeactivateableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
@@ -10,11 +11,12 @@ import at.porscheinformatik.seleniumcomponents.Utils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
- * An input field.
+ * An (text) input field.
  *
  * @author cet
  */
-public class InputComponent extends AbstractSeleniumComponent implements EditableSeleniumComponent
+public class InputComponent extends AbstractSeleniumComponent
+    implements EditableSeleniumComponent, DeactivateableSeleniumComponent
 {
 
     public static InputComponent byName(SeleniumComponent parent, String name)
@@ -51,8 +53,9 @@ public class InputComponent extends AbstractSeleniumComponent implements Editabl
 
         String jointValues = String.join("", values);
 
-        SeleniumAsserts.assertThatSoon(String.format("Enter \"%s\"", jointValues), () -> Utils.simplify(getValue()),
-            Matchers.is(Utils.simplify(jointValues)));
+        SeleniumAsserts
+            .assertThatSoon(String.format("Enter \"%s\"", jointValues), () -> Utils.simplify(getValue()),
+                Matchers.is(Utils.simplify(jointValues)));
     }
 
     /**
