@@ -1,5 +1,8 @@
 package at.porscheinformatik.seleniumcomponents;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
@@ -197,4 +200,22 @@ public final class Utils
     {
         return IS_DEBUGGING;
     }
+
+    public static String getStackTrace(Throwable throwable)
+    {
+        try (StringWriter stringWriter = new StringWriter())
+        {
+            try (PrintWriter printWriter = new PrintWriter(stringWriter, true))
+            {
+                throwable.printStackTrace(printWriter);
+            }
+
+            return stringWriter.getBuffer().toString();
+        }
+        catch (IOException e)
+        {
+            throw new IllegalArgumentException("Failed to write stack trace", e);
+        }
+    }
+
 }

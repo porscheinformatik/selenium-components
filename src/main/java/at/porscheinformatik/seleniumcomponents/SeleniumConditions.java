@@ -13,7 +13,11 @@ import org.openqa.selenium.WebElement;
 
 /**
  * @author Daniel Furtlehner
+ * @deprecated not used anywhere and can be easily replaced by
+ *             {@link SeleniumAsserts#assertThatSoon(FailableSupplier, org.hamcrest.Matcher)} and
+ *             {@link SeleniumMatchers}.
  */
+@Deprecated
 public final class SeleniumConditions
 {
 
@@ -23,7 +27,7 @@ public final class SeleniumConditions
 
     public static Supplier<Boolean> clickable(ClickableSeleniumComponent component)
     {
-        return new Supplier<Boolean>()
+        return new Supplier<>()
         {
             @Override
             public Boolean get()
@@ -39,9 +43,9 @@ public final class SeleniumConditions
         };
     }
 
-    public static Supplier<Boolean> visible(VisibleSeleniumComponent component)
+    public static Supplier<Boolean> visible(SeleniumComponent component)
     {
-        return new Supplier<Boolean>()
+        return new Supplier<>()
         {
             @Override
             public Boolean get()

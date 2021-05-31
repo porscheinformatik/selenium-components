@@ -102,8 +102,8 @@ public final class SeleniumAsserts
      * @param component the component to test
      * @param matcher the matcher for the tested value
      * @return the component itself
-     * @deprecated use {@link #assertThatSoon(FailableSupplier, Matcher)} with "() -&gt; component" as parameter in order
-     *             to simplify the API
+     * @deprecated use {@link #assertThatSoon(FailableSupplier, Matcher)} with "() -&gt; component" as parameter in
+     *             order to simplify the API
      */
     @Deprecated
     public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(ComponentT component,
@@ -137,8 +137,8 @@ public final class SeleniumAsserts
      * @param component the component to test
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
-     * @deprecated use {@link #assertThatSoon(double, FailableSupplier, Matcher)} with "() -&gt; component" as parameter in
-     *             order to simplify the API
+     * @deprecated use {@link #assertThatSoon(double, FailableSupplier, Matcher)} with "() -&gt; component" as parameter
+     *             in order to simplify the API
      */
     @Deprecated
     public static <ComponentT extends SeleniumComponent> ComponentT assertComponent(double timeoutInSeconds,
@@ -260,7 +260,9 @@ public final class SeleniumAsserts
      * An assertion using {@link SeleniumComponent#isReady()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isReady()}
      */
+    @Deprecated
     public static void assertIsReady(SeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is ready", component.isReady());
@@ -271,117 +273,139 @@ public final class SeleniumAsserts
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isReady()}
      */
+    @Deprecated
     public static void assertIsReady(double timeoutInSeconds, SeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "There exists " + component, () -> component.isReady(), Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link ClickableSeleniumComponent#isClickable()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isClickable()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isClickable()}
      */
-    public static void assertIsClickable(ClickableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsClickable(ActiveSeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component.toString() + " is clickable", component.isClickable());
     }
 
     /**
-     * An assertion using {@link ClickableSeleniumComponent#isClickable()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isClickable()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isClickable()}
      */
-    public static void assertIsClickable(double timeoutInSeconds, ClickableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsClickable(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is clickable", component::isClickable,
             Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link VisibleSeleniumComponent#isVisible()} and expecting true.
+     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isVisible()}
      */
-    public static void assertIsVisible(VisibleSeleniumComponent component)
+    @Deprecated
+    public static void assertIsVisible(SeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is visible", component.isVisible());
     }
 
     /**
-     * An assertion using {@link VisibleSeleniumComponent#isVisible()} and expecting true.
+     * An assertion using {@link SeleniumComponent#isVisible()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isVisible()}
      */
-    public static void assertIsVisible(double timeoutInSeconds, VisibleSeleniumComponent component)
+    @Deprecated
+    public static void assertIsVisible(double timeoutInSeconds, SeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is visible", () -> component.isVisible(),
             Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link EditableSeleniumComponent#isEnabled()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isEnabled()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isEnabled()}
      */
-    public static void assertIsEnabled(EditableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsEnabled(ActiveSeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is enabled", component.isEnabled());
     }
 
     /**
-     * An assertion using {@link EditableSeleniumComponent#isEnabled()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isEnabled()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isEnabled()}
      */
-    public static void assertIsEnabled(double timeoutInSeconds, EditableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsEnabled(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is enabled", component::isEnabled,
             Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link SelectableSeleniumComponent#isSelected()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isSelected()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isSelected()}
      */
-    public static void assertIsSelected(SelectableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsSelected(ActiveSeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is selected", component.isSelected());
     }
 
     /**
-     * An assertion using {@link SelectableSeleniumComponent#isSelected()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isSelected()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isSelected()}
      */
-    public static void assertIsSelected(double timeoutInSeconds, SelectableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsSelected(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is selected", component::isSelected,
             Matchers.is(true));
     }
 
     /**
-     * An assertion using {@link EditableSeleniumComponent#isEditable()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isEditable()} and expecting true.
      *
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isEditable()}
      */
-    public static void assertIsEditable(EditableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsEditable(ActiveSeleniumComponent component)
     {
         MatcherAssert.assertThat("The component " + component + " is editable", component.isEditable());
     }
 
     /**
-     * An assertion using {@link EditableSeleniumComponent#isEditable()} and expecting true.
+     * An assertion using {@link ActiveSeleniumComponent#isEditable()} and expecting true.
      *
      * @param timeoutInSeconds the timeout
      * @param component the component
+     * @deprecated replace with {@link SeleniumMatchers#isEditable()}
      */
-    public static void assertIsEditable(double timeoutInSeconds, EditableSeleniumComponent component)
+    @Deprecated
+    public static void assertIsEditable(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
         assertThatSoon(timeoutInSeconds, "The component " + component + " is editable", component::isEditable,
             Matchers.is(true));

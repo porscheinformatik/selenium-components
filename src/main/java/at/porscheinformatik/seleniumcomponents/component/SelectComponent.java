@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Quotes;
 import org.openqa.selenium.support.ui.Select;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
@@ -23,7 +23,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author HAM
  * @author Daniel Furtlehner
  */
-public class SelectComponent extends AbstractSeleniumComponent implements EditableSeleniumComponent
+public class SelectComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
     protected final SeleniumComponentListFactory<OptionComponent> optionsFactory =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);

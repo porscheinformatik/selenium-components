@@ -3,7 +3,7 @@ package at.porscheinformatik.seleniumcomponents.component;
 import org.hamcrest.Matchers;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.DeactivateableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
@@ -15,8 +15,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author cet
  */
-public class InputComponent extends AbstractSeleniumComponent
-    implements EditableSeleniumComponent, DeactivateableSeleniumComponent
+public class InputComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
 
     public static InputComponent byName(SeleniumComponent parent, String name)

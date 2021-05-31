@@ -1,6 +1,16 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.0
+
+- Fixed bug with the visibility check of the SeleniumUtils. Some componets overrive the isVisible methode (e.g. pages or tabs), but the isVisible method in the SeleniumUtils did not use this method causing the visibility check to be invalid. 
+- API simplifications:
+  - Combined Selectable-, Editable- and ClickableSeleniumComponent into ActivteSeleniumComponent. 
+  - The SeleniumComponent is now a Visible one by default
+  - The SeleniumConditions are deprecated because the are not used and can be perfectly replaced by assertThatSoon with matchers.
+  - Some Assert methods have been deprecated where Matchers exist. It should reduce the number of assert method variants.
+  - Removed some utility methods, because they just link to the appropriate method in the component.
+
 ## selenium-components-0.5.6
 
 - Prevent stale exception with SelectComponent

@@ -3,14 +3,14 @@ package at.porscheinformatik.seleniumcomponents.component;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.ClickableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
  * @author cet
  */
-public class LinkComponent extends AbstractSeleniumComponent implements ClickableSeleniumComponent
+public class LinkComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
 
     public LinkComponent(SeleniumComponent parent)

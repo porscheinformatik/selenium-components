@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface AnimatedSeleniumComponent extends VisibleSeleniumComponent
+public interface AnimatedSeleniumComponent extends SeleniumComponent
 {
 
     default void waitUntilAnimationFinished()

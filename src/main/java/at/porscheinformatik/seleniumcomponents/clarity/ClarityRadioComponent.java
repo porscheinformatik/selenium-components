@@ -6,7 +6,7 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
@@ -15,7 +15,7 @@ import at.porscheinformatik.seleniumcomponents.component.RadioComponent;
 /**
  * @author Daniel Furtlehner
  */
-public class ClarityRadioComponent extends AbstractSeleniumComponent implements SelectableSeleniumComponent
+public class ClarityRadioComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
     private final RadioComponent radio = new RadioComponent(this);
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));

@@ -6,13 +6,13 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 /**
  * @author Daniel Furtlehner
@@ -84,22 +84,22 @@ public final class SeleniumMatchers
 
     /**
      * @param <ComponentT> type of component to check
-     * @return matcher that checks if the component is visible
+     * @return matcher that checks if the component is ready
      */
     public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> isReady()
     {
-        return new GenericMatcher<>("A component, that is ready",
-            object -> object instanceof SeleniumComponent && ((SeleniumComponent) object).isReady());
+        return new GenericSeleniumComponentMatcher<>("A component, that is ready", SeleniumComponent::isReady,
+            Matchers.equalTo(true));
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is visible
      */
-    public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isVisible()
+    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> isVisible()
     {
-        return new GenericMatcher<>("A component, that is visible",
-            object -> object instanceof VisibleSeleniumComponent && ((VisibleSeleniumComponent) object).isVisible());
+        return new GenericSeleniumComponentMatcher<>("A component, that is visible", SeleniumComponent::isVisible,
+            Matchers.equalTo(true));
     }
 
     /**
@@ -111,55 +111,81 @@ public final class SeleniumMatchers
      */
 
     @Deprecated
-    public static <ComponentT extends VisibleSeleniumComponent> Matcher<ComponentT> isNotVisible()
+    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> isNotVisible()
     {
-        return new GenericMatcher<>("A component, that is not visible",
-            object -> object instanceof VisibleSeleniumComponent && !((VisibleSeleniumComponent) object).isVisible());
+        return new GenericSeleniumComponentMatcher<>("A component, that is not visible", SeleniumComponent::isVisible,
+            Matchers.equalTo(false));
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is clickable
      */
-    public static <ComponentT extends ClickableSeleniumComponent> Matcher<ComponentT> isClickable()
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isClickable()
     {
-        return new GenericMatcher<>("A component, that is clickable",
-            object -> object instanceof ClickableSeleniumComponent
-                && ((ClickableSeleniumComponent) object).isClickable());
+        return new GenericSeleniumComponentMatcher<>("A component, that is clickable",
+            ActiveSeleniumComponent::isClickable, Matchers.equalTo(true));
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is selected
      */
-    public static <ComponentT extends SelectableSeleniumComponent> Matcher<ComponentT> isSelected()
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isSelected()
     {
-        return new GenericMatcher<>("A component, that is selected",
-            object -> object instanceof SelectableSeleniumComponent
-                && ((SelectableSeleniumComponent) object).isSelected());
+        return new GenericSeleniumComponentMatcher<>("A component, that is selected",
+            ActiveSeleniumComponent::isSelected, Matchers.equalTo(true));
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component is editable
+     */
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isEditable()
+    {
+        return new GenericSeleniumComponentMatcher<>("A component, that is selected",
+            ActiveSeleniumComponent::isEditable, Matchers.equalTo(true));
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is enabled
      */
-    public static <ComponentT extends DeactivateableSeleniumComponent> Matcher<ComponentT> isEnabled()
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isEnabled()
     {
-        return new GenericMatcher<>("A component, that is enabled",
-            object -> object instanceof DeactivateableSeleniumComponent
-                && ((DeactivateableSeleniumComponent) object).isEnabled());
+        return new GenericSeleniumComponentMatcher<>("A component, that is enabled", ActiveSeleniumComponent::isEnabled,
+            Matchers.equalTo(true));
     }
 
     /**
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is disabled
      */
-    public static <ComponentT extends DeactivateableSeleniumComponent> Matcher<ComponentT> isDisabled()
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isDisabled()
     {
-        return new GenericMatcher<>("A component, that is disabled",
-            object -> object instanceof DeactivateableSeleniumComponent
-                && ((DeactivateableSeleniumComponent) object).isDisabled());
+        return new GenericSeleniumComponentMatcher<>("A component, that is disabled",
+            ActiveSeleniumComponent::isDisabled, Matchers.equalTo(true));
     }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component has the specified tagName
+     */
+    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> hasTagName(String tagName)
+    {
+        return new GenericSeleniumComponentMatcher<>("A component with \"" + tagName + "\" as tagName",
+            SeleniumUtils::getTagName, Matchers.equalTo(tagName));
+    }
+
+    //    /**
+    //     * @param <ComponentT> type of component to check
+    //     * @return matcher that checks if the component has the specified attribute
+    //     */
+    //    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> hasAttribute(String attributeName, String value)
+    //    {
+    //        return new GenericSeleniumComponentMatcher<>("A component with \"" + tagName + "\" as tagName",
+    //            SeleniumUtils::getTagName, Matchers.equalTo(tagName));
+    //    }
 
     private static class ComponentListHasItemsMatcher<ComponentT extends SeleniumComponent>
         extends BaseMatcher<SeleniumComponentList<ComponentT>>
@@ -317,34 +343,74 @@ public final class SeleniumMatchers
         }
     }
 
-    private static class GenericMatcher<T> extends BaseMatcher<T>
+    private static class GenericSeleniumComponentMatcher<T extends SeleniumComponent, V> extends BaseMatcher<T>
     {
         private final String expectation;
-        private final Predicate<Object> predicate;
+        private final Function<T, V> valueAccessor;
+        private final Matcher<V> valueMatchcher;
 
-        GenericMatcher(String expectation, Predicate<Object> predicate)
+        private V value;
+        private boolean valueAvailable;
+        private Throwable exception;
+
+        public GenericSeleniumComponentMatcher(String expectation, Function<T, V> valueAccessor,
+            Matcher<V> valueMatchcher)
         {
             super();
 
             this.expectation = expectation;
-            this.predicate = predicate;
+            this.valueAccessor = valueAccessor;
+            this.valueMatchcher = valueMatchcher;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public boolean matches(Object item)
         {
+            value = null;
+            valueAvailable = false;
+            exception = null;
+
             if (item == null)
             {
                 return false;
             }
 
-            return predicate.test(item);
+            if (!(item instanceof SeleniumComponent))
+            {
+                return false;
+            }
+
+            try
+            {
+                value = valueAccessor.apply((T) item);
+            }
+            catch (Throwable e)
+            {
+                this.exception = e;
+
+                return false;
+            }
+
+            valueAvailable = true;
+
+            return valueMatchcher.matches(value);
         }
 
         @Override
         public void describeTo(Description description)
         {
             description.appendText(expectation);
+
+            if (valueAvailable)
+            {
+                description.appendText(", but the accessor returned : ").appendValue(value);
+            }
+
+            if (exception != null)
+            {
+                description.appendText(", \nbut the accessor caused a ").appendText(Utils.getStackTrace(exception));
+            }
         }
     }
 }

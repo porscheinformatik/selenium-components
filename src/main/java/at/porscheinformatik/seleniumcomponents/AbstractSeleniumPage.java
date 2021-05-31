@@ -97,11 +97,6 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         waitUntilReady(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
-    public final void waitUntilReady(double timeoutInSeconds)
-    {
-        SeleniumUtils.waitUntilReady(timeoutInSeconds, this);
-    }
-
     @Override
     public String describe()
     {

@@ -89,10 +89,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link SeleniumComponent#waitUntilReady(double)}
      */
+    @Deprecated
     public static void waitUntilReady(double timeoutInSeconds, SeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> component.isReady());
+        component.waitUntilReady(timeoutInSeconds);
     }
 
     /**
@@ -100,10 +102,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link ActiveSeleniumComponent#waitUntilClickable(double)}
      */
-    public static void waitUntilClickable(double timeoutInSeconds, ClickableSeleniumComponent component)
+    @Deprecated
+    public static void waitUntilClickable(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> component.isClickable());
+        component.waitUntilClickable(timeoutInSeconds);
     }
 
     /**
@@ -111,10 +115,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link SeleniumComponent#waitUntilVisible(double)}
      */
-    public static void waitUntilVisible(double timeoutInSeconds, VisibleSeleniumComponent component)
+    @Deprecated
+    public static void waitUntilVisible(double timeoutInSeconds, SeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, () -> component.isVisible());
+        component.waitUntilVisible(timeoutInSeconds);
     }
 
     /**
@@ -126,7 +132,7 @@ public final class SeleniumUtils
      *             succeed after the timeout (which may be quite long).
      */
     @Deprecated
-    public static void waitUntilInvisible(double timeoutInSeconds, VisibleSeleniumComponent component)
+    public static void waitUntilInvisible(double timeoutInSeconds, SeleniumComponent component)
     {
         SeleniumGlobals.ignoreDebug(() -> waitUntil(timeoutInSeconds, () -> !component.isVisible()));
     }
@@ -136,10 +142,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link ActiveSeleniumComponent#waitUntilEnabled(double)}
      */
-    public static void waitUntilEnabled(double timeoutInSeconds, EditableSeleniumComponent component)
+    @Deprecated
+    public static void waitUntilEnabled(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, component::isEnabled);
+        component.waitUntilEnabled(timeoutInSeconds);
     }
 
     /**
@@ -147,10 +155,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link ActiveSeleniumComponent#waitUntilSelected(double)}
      */
-    public static void waitUntilSelected(double timeoutInSeconds, SelectableSeleniumComponent component)
+    @Deprecated
+    public static void waitUntilSelected(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, component::isSelected);
+        component.waitUntilSelected(timeoutInSeconds);
     }
 
     /**
@@ -158,10 +168,12 @@ public final class SeleniumUtils
      *
      * @param timeoutInSeconds the timeout in seconds
      * @param component the component
+     * @deprecated use {@link ActiveSeleniumComponent#waitUntilEditable(double)}
      */
-    public static void waitUntilEditable(double timeoutInSeconds, EditableSeleniumComponent component)
+    @Deprecated
+    public static void waitUntilEditable(double timeoutInSeconds, ActiveSeleniumComponent component)
     {
-        waitUntil(timeoutInSeconds, component::isEditable);
+        component.waitUntilEditable(timeoutInSeconds);
     }
 
     /**

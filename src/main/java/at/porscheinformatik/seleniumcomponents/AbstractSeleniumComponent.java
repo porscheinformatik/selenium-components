@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public abstract class AbstractSeleniumComponent implements VisibleSeleniumComponent
+public abstract class AbstractSeleniumComponent implements SeleniumComponent
 {
 
     private final SeleniumComponent parent;
