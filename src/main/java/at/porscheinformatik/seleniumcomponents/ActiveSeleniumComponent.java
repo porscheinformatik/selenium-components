@@ -187,7 +187,8 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
      */
     default void sendKeys(CharSequence... keysToSend)
     {
-        String description = LOG.interaction("Sending \"%s\" to %s", String.join("", keysToSend), describe());
+        String description =
+            LOG.interaction("Sending \"%s\" to %s", Utils.escapeJava(String.join("", keysToSend)), describe());
 
         // It could take some time to input the data. So we should wait longer than the short timeout
         SeleniumAsserts.assertThatLater(description, () -> {

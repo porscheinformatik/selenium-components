@@ -127,6 +127,11 @@ public final class Utils
 
     public static String simplify(String s)
     {
+        if (s == null)
+        {
+            return null;
+        }
+
         return s.replaceAll("[^\\p{IsLatin}^\\d]", "").toLowerCase();
     }
 
@@ -145,6 +150,16 @@ public final class Utils
      */
     public static double levenshteinDistance(String lhs, String rhs)
     {
+        if (lhs == null)
+        {
+            lhs = "";
+        }
+
+        if (rhs == null)
+        {
+            rhs = "";
+        }
+
         int len0 = lhs.length() + 1;
         int len1 = rhs.length() + 1;
 
@@ -216,6 +231,25 @@ public final class Utils
         {
             throw new IllegalArgumentException("Failed to write stack trace", e);
         }
+    }
+
+    public static String escapeJava(String s)
+    {
+        if (s == null)
+        {
+            return null;
+        }
+
+        return s
+            .replace("\\", "\\\\")
+            .replace("'", "\\'")
+            .replace("\"", "\\\"")
+            .replace("\t", "\\t")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\b", "\\b")
+            .replace("\f", "\\f")
+            .replace("\0", "\\0");
     }
 
 }

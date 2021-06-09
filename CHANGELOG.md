@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.1
+
+- Fixed a possible NPE with Utils.simplify()
+
 ## selenium-components-0.6.0
 
 - Fixed bug with the visibility check of the SeleniumUtils. Some componets overrive the isVisible methode (e.g. pages or tabs), but the isVisible method in the SeleniumUtils did not use this method causing the visibility check to be invalid. 

@@ -2,7 +2,6 @@ package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.SelectableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 

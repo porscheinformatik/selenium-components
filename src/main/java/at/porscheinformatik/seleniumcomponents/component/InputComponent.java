@@ -4,7 +4,6 @@ import org.hamcrest.Matchers;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
-import at.porscheinformatik.seleniumcomponents.EditableSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.Utils;
