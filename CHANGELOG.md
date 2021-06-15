@@ -1,6 +1,14 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.3
+
+- Reenable input validation (https://bugs.chromium.org/p/chromium/issues/detail?id=1205107 has been fixed)
+
+## selenium-components-0.6.2
+
+- Disable input validation (it fails because of https://bugs.chromium.org/p/chromium/issues/detail?id=1205107)
+
 ## selenium-components-0.6.1
 
 - Fixed a possible NPE with Utils.simplify()
