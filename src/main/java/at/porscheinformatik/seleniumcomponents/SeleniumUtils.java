@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -222,7 +223,22 @@ public final class SeleniumUtils
     {
         String attribute = getClassAttribute(component);
 
-        return attribute != null && attribute.toLowerCase().contains(className.toLowerCase());
+        if (attribute == null)
+        {
+            return false;
+        }
+
+        String[] classNames = attribute.split(" ");
+
+        for (String currentClassName : classNames)
+        {
+            if (Objects.equals(currentClassName, className))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

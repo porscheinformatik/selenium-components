@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.4
+
+- Fix the SeleniumUtils.containsClassName method which had false positives
+
 ## selenium-components-0.6.3
 
 - Reenable input validation (https://bugs.chromium.org/p/chromium/issues/detail?id=1205107 has been fixed)
