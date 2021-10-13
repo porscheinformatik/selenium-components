@@ -13,8 +13,8 @@
     <url>https://github.com/porscheinformatik/selenium-components</url>
 
     <scm>
-        <connection>scm:git:https://github.com/porscheinformatik/selenium-components.git</connection>
-        <developerConnection>scm:git:https://github.com/porscheinformatik/selenium-components.git</developerConnection>
+        <connection>scm:git:git@github.com:porscheinformatik/selenium-components.git</connection>
+        <developerConnection>scm:git:git@github.com:porscheinformatik/selenium-components.git</developerConnection>
         <url>https://github.com/porscheinformatik/selenium-components</url>
         <tag>HEAD</tag>
     </scm>
