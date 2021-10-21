@@ -139,7 +139,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
     /**
      * Waits more than twice the short timeout for the component to become clickable and clicks it. We use a bit more
      * than the default short timeout because it is possible, that selecting a element needs a few seconds to complete.
-     * Depending on the Component Hirarchy used.
+     * Depending on the Component Hierarchy used.
      */
     default void click()
     {
@@ -155,16 +155,9 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
     {
         String description = LOG.interaction("Clicking on %s", describe());
 
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, description, () -> {
-            if (isClickable())
-            {
-                element().click();
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, description, () -> this, SeleniumMatchers.isClickable());
 
-                return true;
-            }
-
-            return false;
-        }, is(true));
+        element().click();
     }
 
     /**

@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.5
+
+- Better error handling if component is not clickable
+
 ## selenium-components-0.6.4
 
 - Fix the SeleniumUtils.containsClassName method which had false positives
