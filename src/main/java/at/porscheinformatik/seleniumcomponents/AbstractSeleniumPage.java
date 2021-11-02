@@ -8,6 +8,10 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 /**
+ * A component, that spans the whole page, starting with a "body" tag. In contrast to the
+ * {@link AbstractSeleniumStandalonePage}, it has no URL nor it can open itself.
+ *
+ * @author Manfred Hantschel
  * @author Daniel Furtlehner
  */
 public abstract class AbstractSeleniumPage implements SeleniumComponent
@@ -63,28 +67,9 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         return readyState.equals("complete");
     }
 
-    /**
-     * Returns the URL to open.
-     *
-     * @return the url
-     */
-    protected abstract String getUrl();
-
     public final WebElementSelector getSelector()
     {
         return selector;
-    }
-
-    public void open()
-    {
-        environment.url(getUrl());
-
-        waitUntilReady();
-    }
-
-    public void close()
-    {
-        environment.quit();
     }
 
     public String takeScreenshot()
@@ -97,15 +82,16 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         waitUntilReady(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
+    public void open(String url)
+    {
+        environment().url(url);
+
+        waitUntilReady();
+    }
+
     @Override
     public String describe()
     {
         return "";
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.format(getUrl());
     }
 }

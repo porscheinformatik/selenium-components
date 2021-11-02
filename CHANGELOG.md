@@ -4,6 +4,7 @@
 ## selenium-components-0.6.5
 
 - Better error handling if component is not clickable
+- Separate AbstractSeleniumPage into a page and the "standalone" page. The standalone page has the same functionality as the page until now.
 
 ## selenium-components-0.6.4
 
