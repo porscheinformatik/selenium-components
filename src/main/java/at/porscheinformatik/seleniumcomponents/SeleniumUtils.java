@@ -64,7 +64,7 @@ public final class SeleniumUtils
     }
 
     /**
-     * Sets all parents using the specified predicate
+     * Searches all parents using the specified predicate
      *
      * @param component the component to start at
      * @param predicate the predicate
@@ -83,6 +83,20 @@ public final class SeleniumUtils
         }
 
         return null;
+    }
+
+    /**
+     * Returns the parent of the specified type or null if not found
+     *
+     * @param <T> the type
+     * @param component the component where to start
+     * @param type the type of the parent
+     * @return the component
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends SeleniumComponent> T findParentByType(SeleniumComponent component, Class<T> type)
+    {
+        return (T) findParent(component, parent -> type.equals(parent.getClass()));
     }
 
     /**

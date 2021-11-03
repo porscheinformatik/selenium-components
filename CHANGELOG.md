@@ -1,6 +1,11 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.6
+
+- Added SeleniumUtils.findParentByType(..) that returns the parent of the specific type
+- 
+
 ## selenium-components-0.6.5
 
 - Better error handling if component is not clickable
