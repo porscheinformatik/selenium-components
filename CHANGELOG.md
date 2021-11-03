@@ -4,7 +4,7 @@
 ## selenium-components-0.6.6
 
 - Added SeleniumUtils.findParentByType(..) that returns the parent of the specific type
-- 
+- Fixed the XPath selectors for attributes
 
 ## selenium-components-0.6.5
 

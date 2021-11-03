@@ -176,10 +176,29 @@ public interface WebElementSelector
     {
         if (attributeValue == null)
         {
-            return selectByCss(String.format("%s[%s]", tagName, attributeName));
+            return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
 
-        return selectByCss(String.format("%s[%s='%s']", tagName, attributeName, attributeValue));
+        return selectByXPath(String.format(".//%s[@%s='%s']", tagName, attributeName, attributeValue));
+    }
+
+    /**
+     * Select an element by the value of the given attribute
+     *
+     * @param tagName the html tag to select
+     * @param attributeName the name of the attribute
+     * @param attributeValue the value the attribute should contain. When null only the attribute name must match
+     * @return the selector
+     */
+    static WebElementSelector selectByAttributeContains(String tagName, String attributeName,
+        @Nullable String attributeValue)
+    {
+        if (attributeValue == null)
+        {
+            return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
+        }
+
+        return selectByXPath(String.format(".//%s[contains(@%s, '%s')]", tagName, attributeName, attributeValue));
     }
 
     /**
