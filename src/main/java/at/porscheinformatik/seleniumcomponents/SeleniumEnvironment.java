@@ -336,12 +336,13 @@ public interface SeleniumEnvironment
     {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
-        Set<String> windowHandles = driver.getWindowHandles();
         Collection<String> titles = new HashSet<>();
 
         try
         {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
+                Set<String> windowHandles = driver.getWindowHandles();
+
                 for (String windowHandle : windowHandles)
                 {
                     String currentTitle = driver.switchTo().window(windowHandle).getTitle();
@@ -389,13 +390,14 @@ public interface SeleniumEnvironment
     {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
-        Set<String> windowHandles = driver.getWindowHandles();
         Collection<String> urls = new HashSet<>();
 
         try
         {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 urls.clear();
+
+                Set<String> windowHandles = driver.getWindowHandles();
 
                 for (String windowHandle : windowHandles)
                 {
