@@ -7,6 +7,7 @@
 - Fixed the XPath selectors for attributes
 - Reenabled keepTrying with keepTrying (used by assertThatSoon)
 - Fixed a bug when switching windows
+- Basic Clarity icon
 
 ## selenium-components-0.6.5
 
