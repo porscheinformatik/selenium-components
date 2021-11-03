@@ -29,8 +29,6 @@ public final class SeleniumUtils
 
     private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumUtils.class);
 
-    private static final ThreadLocal<Integer> ALREADY_TRYING = new ThreadLocal<>();
-
     private static final AtomicInteger POOL_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService POOL_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread(runnable,
@@ -502,84 +500,68 @@ public final class SeleniumUtils
     public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
         throws SeleniumFailException
     {
-        Integer alreadyTrying = ALREADY_TRYING.get();
+        double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
+        double maxDelayInSeconds = scaledTimeoutInSeconds / 20;
 
-        if (alreadyTrying != null)
+        if ((long) (scaledTimeoutInSeconds * 1000) <= 0)
         {
             return tryOnce(callable);
         }
 
-        ALREADY_TRYING.set(1);
-
         try
         {
-            double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
-            double maxDelayInSeconds = scaledTimeoutInSeconds / 20;
+            Any result = null;
+            long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
 
-            if ((long) (scaledTimeoutInSeconds * 1000) <= 0)
+            while (true)
             {
-                return tryOnce(callable);
-            }
+                long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
 
-            try
-            {
-                Any result = null;
-                long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
+                // slowly increase the delay to reduce resource usage
+                delayInSeconds = Math.min(delayInSeconds * 1.2, maxDelayInSeconds);
 
-                while (true)
+                try
                 {
-                    long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
-
-                    // slowly increase the delay to reduce resource usage
-                    delayInSeconds = Math.min(delayInSeconds * 1.2, maxDelayInSeconds);
-
-                    try
+                    result = callable.call();
+                }
+                catch (Throwable e)
+                {
+                    if (System.currentTimeMillis() > endMillis)
                     {
-                        result = callable.call();
+                        throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
                     }
-                    catch (Throwable e)
-                    {
-                        if (System.currentTimeMillis() > endMillis)
-                        {
-                            throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
-                        }
-                    }
+                }
 
-                    if (result instanceof Optional)
-                    {
-                        if (((Optional<?>) result).isPresent())
-                        {
-                            return result;
-                        }
-                    }
-                    else if (result != null)
+                if (result instanceof Optional)
+                {
+                    if (((Optional<?>) result).isPresent())
                     {
                         return result;
                     }
-
-                    long currentMillis = System.currentTimeMillis();
-
-                    if (currentMillis > endMillis)
-                    {
-                        throw new SeleniumFailException(
-                            LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
-                    }
-
-                    waitUntil(nextTickMillis);
                 }
-            }
-            catch (SeleniumFailException e)
-            {
-                throw e;
-            }
-            catch (Throwable e)
-            {
-                throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
+                else if (result != null)
+                {
+                    return result;
+                }
+
+                long currentMillis = System.currentTimeMillis();
+
+                if (currentMillis > endMillis)
+                {
+                    throw new SeleniumFailException(
+                        LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
+                }
+
+                waitUntil(nextTickMillis);
             }
         }
-        finally
+        catch (SeleniumFailException e)
         {
-            ALREADY_TRYING.set(alreadyTrying);
+            throw e;
+        }
+        catch (Throwable e)
+        {
+            throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
         }
     }
 

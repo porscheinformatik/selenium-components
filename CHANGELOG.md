@@ -5,6 +5,7 @@
 
 - Added SeleniumUtils.findParentByType(..) that returns the parent of the specific type
 - Fixed the XPath selectors for attributes
+- Reenabled keepTrying with keepTrying (used by assertThatSoon)
 
 ## selenium-components-0.6.5
 
