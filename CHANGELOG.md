@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.6.7
+
+- Fast access for radio components by index
+
 ## selenium-components-0.6.6
 
 - Added SeleniumUtils.findParentByType(..) that returns the parent of the specific type

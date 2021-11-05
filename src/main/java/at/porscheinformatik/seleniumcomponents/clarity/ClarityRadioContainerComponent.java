@@ -34,6 +34,11 @@ public class ClarityRadioContainerComponent extends ClarityFormControlContainer
         return radioComponentFactory;
     }
 
+    public ClarityRadioComponent getRadioComponentAtIndex(int index)
+    {
+        return new ClarityRadioComponent(this, WebElementSelector.selectByIndex("clr-radio-wrapper", index));
+    }
+
     public SeleniumComponentList<ClarityRadioComponent> getRadioComponents()
     {
         return radioComponentFactory.findAll();
@@ -46,6 +51,6 @@ public class ClarityRadioContainerComponent extends ClarityFormControlContainer
 
     public ClarityRadioComponent getSelectedRadioComponent()
     {
-        return findRadioComponent(component -> component.isSelected());
+        return findRadioComponent(ClarityRadioComponent::isSelected);
     }
 }
