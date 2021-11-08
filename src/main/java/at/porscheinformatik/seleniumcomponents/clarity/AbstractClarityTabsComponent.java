@@ -1,9 +1,8 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public abstract class AbstractClarityTabsComponent extends AbstractSeleniumCompo
         getVisibleNavigationItems().get(index).click();
 
         HtmlComponent tab = new HtmlComponent(this, selectById("clr-tab-content-" + index));
-        
+
         SeleniumAsserts.assertThatSoon(() -> tab, SeleniumMatchers.isVisible());
     }
 
