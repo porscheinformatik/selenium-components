@@ -4,6 +4,7 @@
 ## selenium-components-0.6.8
 
 - Fast access for select options, that "contain" a value
+- Container for Clarity selects
 
 ## selenium-components-0.6.7
 
