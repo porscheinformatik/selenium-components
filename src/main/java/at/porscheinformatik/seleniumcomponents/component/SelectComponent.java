@@ -91,6 +91,12 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
             WebElementSelector.selectByXPath(".//option[@value = " + Quotes.escape(value) + "]"));
     }
 
+    public OptionComponent optionByValueContains(String value)
+    {
+        return new OptionComponent(this,
+            WebElementSelector.selectByXPath(".//option[contains(@value, " + Quotes.escape(value) + ")]"));
+    }
+
     public OptionComponent optionByLabel(String label)
     {
         return new OptionComponent(this,
@@ -118,6 +124,18 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
 
             // it's intended, that the option is searched again (the element may change on select an become stale)
             return optionByValue(value);
+        }, SeleniumMatchers.isSelected());
+    }
+
+    public void selectByValueContains(String value)
+    {
+        LOG.interaction("Selecting item of %s by value: %s", describe(), value);
+
+        SeleniumAsserts.assertThatSoon("Select item by value: " + value, () -> {
+            optionByValueContains(value).select();
+
+            // it's intended, that the option is searched again (the element may change on select an become stale)
+            return optionByValueContains(value);
         }, SeleniumMatchers.isSelected());
     }
 
