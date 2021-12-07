@@ -58,4 +58,22 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
             label.click();
         }
     }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return radio.isEnabled();
+    }
+
+    @Override
+    public boolean isEditable()
+    {
+        return radio.isEditable();
+    }
+
+    @Override
+    public boolean isDisabled()
+    {
+        return radio.isDisabled();
+    }
 }

@@ -62,6 +62,24 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
         }
     }
 
+    @Override
+    public boolean isEnabled()
+    {
+        return checkbox.isEnabled();
+    }
+
+    @Override
+    public boolean isEditable()
+    {
+        return checkbox.isEditable();
+    }
+
+    @Override
+    public boolean isDisabled()
+    {
+        return checkbox.isDisabled();
+    }
+
     public String getId()
     {
         return checkbox.getId();
