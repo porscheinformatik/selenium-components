@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.0
+
+- Upgrade to Selenium 4
+
 ## selenium-components-0.6.8
 
 - Fast access for select options, that "contain" a value
