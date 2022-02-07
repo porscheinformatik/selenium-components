@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -322,6 +323,54 @@ public interface SeleniumEnvironment
     default SubWindow switchToWindowByTitle(String title) throws IllegalArgumentException
     {
         return switchToWindowByTitle(StringPredicate.equalTo(title));
+    }
+
+    /**
+     * Tries to switch to "the other windows". Assumes that there are exactly two windows. After this, the
+     * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be closed.
+     *
+     * @return the handle for the window
+     * @throws IllegalArgumentException if the window was not found
+     */
+    default SubWindow switchToOtherWindow() throws IllegalArgumentException
+    {
+        WebDriver driver = getDriver();
+        String originalHandle = getWindowHandle();
+
+        try
+        {
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
+                Set<String> windowHandles = driver.getWindowHandles();
+
+                if (windowHandles.size() != 2)
+                {
+                    throw new IllegalArgumentException(
+                        "Could not switch to other window. There should be exactly two windows, "
+                            + "but these windows where found: "
+                            + windowHandles);
+                }
+
+                for (String windowHandle : windowHandles)
+                {
+                    if (Objects.equals(originalHandle, windowHandle))
+                    {
+                        continue;
+                    }
+
+                    driver.switchTo().window(windowHandle);
+
+                    SeleniumAsserts.assertThatSoon(this::getWindowHandle, Matchers.is(windowHandle));
+
+                    return new SubWindow(this, originalHandle, windowHandle);
+                }
+
+                return null;
+            });
+        }
+        catch (SeleniumException e)
+        {
+            throw new IllegalArgumentException("Could not switch to other window", e);
+        }
     }
 
     /**

@@ -1,6 +1,14 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.2
+
+- Add switchToOtherWindow to Environment.
+
+## selenium-components-0.7.1
+
+- Fix getName method of Clarity checkbox.
+
 ## selenium-components-0.7.0
 
 - Upgrade to Selenium 4
