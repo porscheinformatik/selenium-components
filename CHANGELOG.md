@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.3
+
+- Ignore error when switching back to closed browser.
+
 ## selenium-components-0.7.2
 
 - Add switchToOtherWindow to Environment.
