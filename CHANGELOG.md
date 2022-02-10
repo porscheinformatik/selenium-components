@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.4
+
+- Failing to take screenshot does not break error reporting
+
 ## selenium-components-0.7.3
 
 - Ignore error when switching back to closed browser.

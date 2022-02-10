@@ -88,6 +88,11 @@ public interface SeleniumEnvironment
             // failed to take screenshot because window has been closed already
             return null;
         }
+        catch (Exception e) {
+            LOG.warn("Failed to take screenshot", e);
+            
+            return null;
+        }
     }
 
     /**
