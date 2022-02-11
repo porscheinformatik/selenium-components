@@ -88,9 +88,10 @@ public interface SeleniumEnvironment
             // failed to take screenshot because window has been closed already
             return null;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             LOG.warn("Failed to take screenshot", e);
-            
+
             return null;
         }
     }
@@ -192,7 +193,7 @@ public interface SeleniumEnvironment
      */
     default LocalDate parseDate(String dateAsString, FormatStyle style)
     {
-        if (dateAsString == null)
+        if (dateAsString == null || dateAsString.trim().length() == 0)
         {
             return null;
         }
