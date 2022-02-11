@@ -1,13 +1,10 @@
 
 # selenium-components-0 (alpha)
 
-## selenium-components-0.7.5
-
-- SeleniumEnvironment.parseDate accepts empty string and returns null in this case.
-
 ## selenium-components-0.7.4
 
 - Failing to take screenshot does not break error reporting
+- SeleniumEnvironment.parseDate accepts empty string and returns null in this case.
 
 ## selenium-components-0.7.3
 
