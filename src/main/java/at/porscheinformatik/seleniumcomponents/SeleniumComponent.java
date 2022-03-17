@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -94,6 +95,33 @@ public interface SeleniumComponent extends WebElementContainer
         SeleniumAsserts
             .assertThatSoon(timeoutInSeconds, "Component becomes visible: " + describe(), () -> this,
                 SeleniumMatchers.isVisible());
+    }
+
+    /**
+     * This method is not intended to be used in regular test cases. Its main use is to highlight a element while
+     * debugging a test.
+     * 
+     * <p>
+     * Sometime there are multiple elements on the page that match a given selector. Then it is hard to find, why a test
+     * breaks. It might use the wrong element. Using the highlight method should make it farily easy to see if the
+     * correct element is selected.
+     * </p>
+     * 
+     * <p>
+     * This method will set a border and background for the element. In most of the cases this should be enough to see
+     * if the correct element is selected. But sometimes elements are not directly visible on screen, because they have
+     * no size. For this reason, a "hightlighted=true" attribute is added to the element. You can then execute the
+     * following script in the DevTools of your brower to find all highlighted elements.
+     * <code>document.querySelectorAll('[highlighted]')</code>
+     * </p>
+     */
+    default void highlight()
+    {
+        JavascriptExecutor executor = (JavascriptExecutor) environment().getDriver();
+
+        executor
+            .executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;'); "
+                + "arguments[0].setAttribute('highlighted', 'true')", element());
     }
 
     @Override
