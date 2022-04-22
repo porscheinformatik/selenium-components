@@ -246,7 +246,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByIndex(int index)
     {
-        return selectByIndex("*", index);
+        return selectByIndex((String) null, index);
     }
 
     /**
@@ -258,7 +258,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByIndex(String tagName, int index)
     {
-        return selectByCss(String.format("%s:nth-child(%d)", tagName, index + 1));
+        return selectByXPath(String.format("(//%s)[%d]", tagName, index + 1));
     }
 
     /**
@@ -299,7 +299,7 @@ public interface WebElementSelector
             @Override
             public String toString()
             {
-                return String.format("%s:nth-child(%d)", selector, index + 1);
+                return String.format(":nth-child(%d of %s)", index + 1, selector);
             }
         };
     }

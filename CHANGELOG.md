@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.5
+
+- Fix the selectByIndex methods to work as described and intended.
+
 ## selenium-components-0.7.4
 
 - Failing to take screenshot does not break error reporting
