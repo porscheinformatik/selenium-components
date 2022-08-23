@@ -1,12 +1,10 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
-import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
 
-public class ClaritySelectContainerComponent extends AbstractSeleniumComponent
+public class ClaritySelectContainerComponent extends ClarityFormControlContainer
 {
     public static ClaritySelectContainerComponent within(SeleniumComponent parent)
     {
@@ -19,17 +17,11 @@ public class ClaritySelectContainerComponent extends AbstractSeleniumComponent
             WebElementSelector.selectBySeleniumKey("clr-select-container", seleniumKey));
     }
 
-    public final HtmlComponent label = new HtmlComponent(this, WebElementSelector.selectByTagName("label"));
     public final SelectComponent select = new SelectComponent(this);
 
     public ClaritySelectContainerComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
-    }
-
-    public String getLabel()
-    {
-        return label.getText();
     }
 
     public String getSelectedLabel()
@@ -50,5 +42,10 @@ public class ClaritySelectContainerComponent extends AbstractSeleniumComponent
     public void selectByValueContains(String value)
     {
         select.selectByValueContains(value);
+    }
+
+    public void selectByLabel(String label)
+    {
+        select.selectByLabel(label);
     }
 }
