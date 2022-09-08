@@ -35,6 +35,11 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
         return label.getText();
     }
 
+    public String getValue()
+    {
+        return radio.element().getAttribute("value");
+    }
+
     @Override
     public boolean isSelected()
     {
