@@ -10,7 +10,7 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class ClarityComboboxContainerComponent extends ClarityFormControlContainer
 {
-    private final ClarityComboboxComponent combobox = new ClarityComboboxComponent(this);
+    public final ClarityComboboxComponent combobox = new ClarityComboboxComponent(this);
 
     // ---
 
@@ -29,17 +29,5 @@ public class ClarityComboboxContainerComponent extends ClarityFormControlContain
     public ClarityComboboxContainerComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
-    }
-
-    // ---
-
-    public void clearBox()
-    {
-        combobox.clearAll();
-    }
-
-    public void selectItem(String label)
-    {
-        combobox.selectByLabel(label);
     }
 }

@@ -62,11 +62,7 @@ public class ClarityComboboxComponent extends AbstractSeleniumComponent implemen
 
     public void clearAll()
     {
-        assertThatLater(() -> {
-            labelPills.findAll().forEach(ClarityComboboxLabelPillComponent::delete);
-
-            return labelPills.findAll().size();
-        }, equalTo(0));
+        labelPills.findAll().forEach(ClarityComboboxLabelPillComponent::delete);
     }
 
     // ===

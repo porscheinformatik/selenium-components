@@ -35,13 +35,6 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
         return select.getSelectedOption().getValue();
     }
 
-    public String getSelectedValueWithoutIndex()
-    {
-        String value = getSelectedValue();
-
-        return value.substring(value.indexOf(": ") + 2);
-    }
-
     public void selectByValue(String value)
     {
         select.selectByValue(value);

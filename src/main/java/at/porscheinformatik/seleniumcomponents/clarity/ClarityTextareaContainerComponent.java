@@ -8,7 +8,7 @@ import at.porscheinformatik.seleniumcomponents.component.TextAreaComponent;
 
 public class ClarityTextareaContainerComponent extends ClarityFormControlContainer
 {
-    private final TextAreaComponent textarea = new TextAreaComponent(this);
+    public final TextAreaComponent textarea = new TextAreaComponent(this);
 
     // ---
 
@@ -28,12 +28,5 @@ public class ClarityTextareaContainerComponent extends ClarityFormControlContain
     public ClarityTextareaContainerComponent(SeleniumComponent parent, WebElementSelector selector)
     {
         super(parent, selector);
-    }
-
-    // ---
-
-    public void enterText(String text)
-    {
-        textarea.enter(text);
     }
 }
