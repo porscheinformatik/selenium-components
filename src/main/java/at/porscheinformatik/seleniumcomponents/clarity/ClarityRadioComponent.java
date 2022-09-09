@@ -8,6 +8,7 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 import at.porscheinformatik.seleniumcomponents.component.RadioComponent;
@@ -33,6 +34,11 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
     public String getLabel()
     {
         return label.getText();
+    }
+
+    public String getValue()
+    {
+        return SeleniumUtils.getAttribute(radio, "value");
     }
 
     @Override
