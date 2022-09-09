@@ -1,5 +1,7 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
+import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
+
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
@@ -8,13 +10,12 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
 {
     public static ClaritySelectContainerComponent within(SeleniumComponent parent)
     {
-        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByTagName("clr-select-container"));
+        return new ClaritySelectContainerComponent(parent, selectByTagName("clr-select-container"));
     }
 
     public static ClaritySelectContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
-        return new ClaritySelectContainerComponent(parent,
-            WebElementSelector.selectBySeleniumKey("clr-select-container", seleniumKey));
+        return new ClaritySelectContainerComponent(parent, selectBySeleniumKey("clr-select-container", seleniumKey));
     }
 
     public final SelectComponent select = new SelectComponent(this);
