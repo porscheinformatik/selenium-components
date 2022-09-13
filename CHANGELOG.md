@@ -1,6 +1,19 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.8
+
+- Add components for Clarity comboboxes.
+
+## selenium-components-0.7.7
+
+- Add ClarityInputContainer.
+- Improve ClarityFormControlContainer.
+
+## selenium-components-0.7.6
+
+- Fix the selectByIndex methods to work as described.
+
 ## selenium-components-0.7.5
 
 - Fix the selectByIndex methods to work as described and intended.
