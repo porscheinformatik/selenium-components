@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.9
+
+- Make it possible to globally disable the logger in order to avoid logging of passwords.
+
 ## selenium-components-0.7.8
 
 - Add components for Clarity comboboxes.

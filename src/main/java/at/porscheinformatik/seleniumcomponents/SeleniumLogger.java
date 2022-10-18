@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SeleniumLogger
 {
+    private static boolean enabled = true;
 
     private final Logger logger;
 
@@ -21,6 +22,16 @@ public class SeleniumLogger
         super();
 
         logger = LoggerFactory.getLogger(type);
+    }
+
+    public static void enable()
+    {
+        enabled = true;
+    }
+
+    public static void disable()
+    {
+        enabled = false;
     }
 
     /**
@@ -74,7 +85,7 @@ public class SeleniumLogger
      */
     public void callUrl(String url)
     {
-        if (logger.isInfoEnabled())
+        if (enabled && logger.isInfoEnabled())
         {
             info("Calling URL ...\n\n%s\n%s\n%s\n\n", Utils.repeat("-", url.length()), url,
                 Utils.repeat("-", url.length()));
@@ -83,7 +94,7 @@ public class SeleniumLogger
 
     public void trace(String description, Object... args)
     {
-        if (logger.isTraceEnabled())
+        if (enabled && logger.isTraceEnabled())
         {
             logger.trace("[S] " + String.format(description, args));
         }
@@ -91,7 +102,7 @@ public class SeleniumLogger
 
     public void trace(String description, Throwable t, Object... args)
     {
-        if (logger.isTraceEnabled())
+        if (enabled && logger.isTraceEnabled())
         {
             logger.trace("[S] " + String.format(description, args), t);
         }
@@ -99,7 +110,7 @@ public class SeleniumLogger
 
     public void debug(String description, Object... args)
     {
-        if (logger.isDebugEnabled())
+        if (enabled && logger.isDebugEnabled())
         {
             logger.debug("[S] " + String.format(description, args));
         }
@@ -107,7 +118,7 @@ public class SeleniumLogger
 
     public void debug(String description, Throwable t, Object... args)
     {
-        if (logger.isDebugEnabled())
+        if (enabled && logger.isDebugEnabled())
         {
             logger.debug("[S] " + String.format(description, args), t);
         }
@@ -115,7 +126,7 @@ public class SeleniumLogger
 
     public void info(String description, Object... args)
     {
-        if (logger.isInfoEnabled())
+        if (enabled && logger.isInfoEnabled())
         {
             logger.info("[S] " + String.format(description, args));
         }
@@ -123,7 +134,7 @@ public class SeleniumLogger
 
     public void info(String description, Throwable t, Object... args)
     {
-        if (logger.isInfoEnabled())
+        if (enabled && logger.isInfoEnabled())
         {
             logger.info("[S] " + String.format(description, args), t);
         }
@@ -131,7 +142,7 @@ public class SeleniumLogger
 
     public void warn(String description, Object... args)
     {
-        if (logger.isWarnEnabled())
+        if (enabled && logger.isWarnEnabled())
         {
             logger.warn("[S] " + String.format(description, args));
         }
@@ -139,7 +150,7 @@ public class SeleniumLogger
 
     public void warn(String description, Throwable t, Object... args)
     {
-        if (logger.isWarnEnabled())
+        if (enabled && logger.isWarnEnabled())
         {
             logger.warn("[S] " + String.format(description, args), t);
         }
@@ -147,7 +158,7 @@ public class SeleniumLogger
 
     public void error(String description, Object... args)
     {
-        if (logger.isErrorEnabled())
+        if (enabled && logger.isErrorEnabled())
         {
             logger.error("[S] " + String.format(description, args));
         }
@@ -155,10 +166,9 @@ public class SeleniumLogger
 
     public void error(String description, Throwable t, Object... args)
     {
-        if (logger.isErrorEnabled())
+        if (enabled && logger.isErrorEnabled())
         {
             logger.error("[S] " + String.format(description, args), t);
         }
     }
-
 }
