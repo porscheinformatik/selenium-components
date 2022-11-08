@@ -10,7 +10,6 @@ import at.porscheinformatik.seleniumcomponents.component.InputComponent;
 
 public class ClarityInputContainerComponent extends ClarityFormControlContainer
 {
-
     public static ClarityInputContainerComponent within(SeleniumComponent parent)
     {
         return new ClarityInputContainerComponent(parent, selectByTagName("clr-input-container"));
@@ -19,6 +18,29 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
     public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new ClarityInputContainerComponent(parent, selectBySeleniumKey("clr-input-container", seleniumKey));
+    }
+
+    public static ClarityInputContainerComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey)
+    {
+        String xpath = String.format(".//clr-input-container[.//input[@selenium-key='%s']]", seleniumKey);
+
+        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityInputContainerComponent byFormControlName(SeleniumComponent parent, String formControlName)
+    {
+        String xpath = String.format(".//clr-input-container[.//input[@formcontrolname='%s']]", formControlName);
+
+        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityInputContainerComponent byLabel(SeleniumComponent parent, String label)
+    {
+        String xpath = String
+            .format(".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]",
+                label);
+
+        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
     private final InputComponent input = new InputComponent(this);

@@ -15,6 +15,23 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class ButtonComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static ButtonComponent within(SeleniumComponent parent)
+    {
+        return new ButtonComponent(parent, selectByTagName("button"));
+    }
+
+    public static ButtonComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
+    {
+        return new ButtonComponent(parent, selectBySeleniumKey("button", seleniumKey));
+    }
+
+    public static ButtonComponent byLabel(SeleniumComponent parent, String label)
+    {
+        String xpath = String.format(".//button[contains(text(),'%s')]", label);
+
+        return new ButtonComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     public ButtonComponent(SeleniumComponent parent)
     {
         super(parent, selectByTagName("button"));

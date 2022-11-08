@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -18,6 +18,39 @@ import at.porscheinformatik.seleniumcomponents.component.RadioComponent;
  */
 public class ClarityRadioComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static ClarityInputContainerComponent within(SeleniumComponent parent)
+    {
+        return new ClarityInputContainerComponent(parent, selectByTagName("clr-radio-wrapper"));
+    }
+
+    public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
+    {
+        return new ClarityInputContainerComponent(parent, selectBySeleniumKey("clr-radio-wrapper", seleniumKey));
+    }
+
+    public static ClarityRadioComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey)
+    {
+        String xpath = String.format(".//clr-radio-wrapper[.//input[@selenium-key='%s']]", seleniumKey);
+
+        return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityRadioComponent byFormControlName(SeleniumComponent parent, String formControlName)
+    {
+        String xpath = String.format(".//clr-radio-wrapper[.//input[@formcontrolname='%s']]", formControlName);
+
+        return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityRadioComponent byLabel(SeleniumComponent parent, String label)
+    {
+        String xpath = String
+            .format(".//clr-radio-wrapper[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]",
+                label);
+
+        return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     private final RadioComponent radio = new RadioComponent(this);
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
 
