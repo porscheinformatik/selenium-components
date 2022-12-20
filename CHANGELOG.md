@@ -1,6 +1,14 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.11
+
+- Fix buttons in wizards (based on types, now)
+
+## selenium-components-0.7.10
+
+- Add helper methods to some components
+
 ## selenium-components-0.7.9
 
 - Make it possible to globally disable the logger in order to avoid logging of passwords.

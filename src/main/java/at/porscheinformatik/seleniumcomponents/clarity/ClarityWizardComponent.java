@@ -29,11 +29,15 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
         this, WebElementSelector.selectByClassName("clr-wizard-stepnav-item"), ClarityWizardStepnavEntry::new);
 
     private final HtmlComponent wizardContent = new HtmlComponent(this, selectByClassName("clr-wizard-content"));
-    private final HtmlComponent buttonWrapper =
+
+    protected final HtmlComponent buttonWrapper =
         new HtmlComponent(this, selectByClassName("clr-wizard-footer-buttons-wrapper"));
-    private final ButtonComponent nextButton = new ButtonComponent(buttonWrapper, selectByClassName("btn-primary"));
-    private final ButtonComponent prevButton = new ButtonComponent(buttonWrapper, selectByClassName("btn-outline"));
-    private final ButtonComponent finishButton = new ButtonComponent(buttonWrapper, selectByClassName("btn-success"));
+
+    private final ButtonComponent nextButton = new ButtonComponent(buttonWrapper, selectByAttribute("type", "next"));
+    private final ButtonComponent prevButton =
+        new ButtonComponent(buttonWrapper, selectByAttribute("type", "previous"));
+    private final ButtonComponent finishButton =
+        new ButtonComponent(buttonWrapper, selectByAttribute("type", "finish"));
 
     public ClarityWizardComponent(SeleniumComponent parent)
     {
