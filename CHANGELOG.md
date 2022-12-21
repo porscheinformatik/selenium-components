@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.12
+
+- Made the open(url) method of the page deprecated, since it implies that the caller should known the URL of the page
+
 ## selenium-components-0.7.11
 
 - Fix buttons in wizards (based on types, now)

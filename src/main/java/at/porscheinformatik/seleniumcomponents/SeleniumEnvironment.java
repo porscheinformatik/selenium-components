@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.hamcrest.Matchers;
@@ -61,6 +62,36 @@ public interface SeleniumEnvironment
     default String url()
     {
         return getDriver().getCurrentUrl();
+    }
+
+    /**
+     * Calls the URL, assumes that the result is compatible to the specified page and waits until the page gets ready.
+     *
+     * @param <T> the type of page
+     * @param url the URL
+     * @param pageFactory the factory for the page
+     * @return the page
+     */
+    default <T extends AbstractSeleniumPage> T open(String url, Function<SeleniumEnvironment, T> pageFactory)
+    {
+        return open(url, pageFactory.apply(this));
+    }
+
+    /**
+     * Calls the URL, assumes that the result is compatible to the specified page and waits until the page gets ready.
+     *
+     * @param <T> the type of page
+     * @param url the URL
+     * @param page an instance of the page
+     * @return the page
+     */
+    default <T extends AbstractSeleniumPage> T open(String url, T page)
+    {
+        url(url);
+
+        page.waitUntilReady();
+
+        return page;
     }
 
     /**

@@ -21,9 +21,7 @@ public abstract class AbstractSeleniumStandalonePage extends AbstractSeleniumPag
 
     public void open()
     {
-        environment().url(getUrl());
-
-        waitUntilReady();
+        environment().open(getUrl(), this);
     }
 
     public void close()
