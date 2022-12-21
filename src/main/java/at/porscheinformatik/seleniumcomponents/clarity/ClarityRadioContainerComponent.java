@@ -1,5 +1,6 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
+import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.function.Predicate;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
+import at.porscheinformatik.seleniumcomponents.SeleniumMatchers;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 /**
@@ -51,7 +53,13 @@ public class ClarityRadioContainerComponent extends ClarityFormControlContainer
 
     public void selectByValue(String value)
     {
-        findRadioComponent(radio -> Objects.equals(radio.getValue(), value)).select();
+        ClarityRadioComponent component = findRadioComponent(radio -> Objects.equals(radio.getValue(), value));
+
+        assertThatSoon(() -> {
+            component.select();
+
+            return component;
+        }, SeleniumMatchers.isSelected());
     }
 
     public ClarityRadioComponent findRadioComponent(Predicate<ClarityRadioComponent> predicate)
