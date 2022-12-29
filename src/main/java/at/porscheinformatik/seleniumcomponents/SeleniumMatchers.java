@@ -177,6 +177,16 @@ public final class SeleniumMatchers
             SeleniumUtils::getTagName, Matchers.equalTo(tagName));
     }
 
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks if the component contains the specified text (case insensitive)
+     */
+    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> containsText(String text)
+    {
+        return new GenericSeleniumComponentMatcher<>("A component that contains \"" + text + "\" as text",
+            SeleniumUtils::getText, Matchers.containsStringIgnoringCase(text));
+    }
+
     //    /**
     //     * @param <ComponentT> type of component to check
     //     * @return matcher that checks if the component has the specified attribute

@@ -1,6 +1,15 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.7.14
+
+- Add a Selenium Matcher for contaning text
+
+## selenium-components-0.7.13
+
+- Fix an issue with selecting radio buttons.
+
+
 ## selenium-components-0.7.12
 
 - Made the open(url) method of the page deprecated, since it implies that the caller should known the URL of the page
