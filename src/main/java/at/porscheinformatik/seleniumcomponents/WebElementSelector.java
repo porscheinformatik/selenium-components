@@ -228,7 +228,7 @@ public interface WebElementSelector
 
     /**
      * A selector that uses an XPath query. If this selector starts with a "/", it will ignore the hierarchy of
-     * components.
+     * components. You may usually want it to begin with ".//" which is any descendant of the current component.
      *
      * @param xpath the XPath query
      * @return the selector

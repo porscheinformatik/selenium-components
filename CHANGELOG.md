@@ -4,6 +4,7 @@
 ## selenium-components-0.7.14
 
 - Add a Selenium Matcher for contaning text
+- Add an escapeXPath utility for escaping stings used in XPath arguments
 
 ## selenium-components-0.7.13
 

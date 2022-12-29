@@ -252,4 +252,14 @@ public final class Utils
             .replace("\0", "\\0");
     }
 
+    public static String escapeXPath(String s)
+    {
+        if (s == null)
+        {
+            return null;
+        }
+
+        return s.replace("\"", "\"\"");
+    }
+
 }
