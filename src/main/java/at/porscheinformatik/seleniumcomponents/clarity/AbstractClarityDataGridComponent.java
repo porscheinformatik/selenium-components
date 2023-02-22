@@ -22,9 +22,13 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSeleniumComponent>
     extends AbstractSeleniumComponent
 {
+    public final ClarityDataGridFooterComponent footer = new ClarityDataGridFooterComponent(this);
+
     private final HtmlComponent gridContainer = new HtmlComponent(this, selectByClassName("datagrid"));
     private final DataGridHeadComponent head = new DataGridHeadComponent(gridContainer);
     private final DataGridBodyComponent<RowT> body;
+
+    // ---
 
     protected AbstractClarityDataGridComponent(SeleniumComponent parent, SeleniumComponentFactory<RowT> rowFactory)
     {
@@ -32,6 +36,8 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
 
         body = new DataGridBodyComponent<>(this, rowFactory);
     }
+
+    // ---
 
     public void stringFilterColumn(int columnIndex, String filterQuery)
     {
@@ -53,6 +59,8 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     {
         return body.findAllChilds();
     }
+
+    // ===
 
     private static class DataGridHeadComponent extends AbstractSeleniumContainer<DataGridRowComponent>
     {

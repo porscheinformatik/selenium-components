@@ -2,6 +2,8 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import java.util.Objects;
+
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -35,5 +37,52 @@ public class ClarityIconComponent extends AbstractSeleniumComponent
     public String getShape()
     {
         return this.getAttribute("shape");
+    }
+
+    public ClarityIconDirection getDirection()
+    {
+        String direction = this.getAttribute("direction");
+
+        return ClarityIconDirection.fromDirection(direction);
+    }
+
+    // ===
+
+    public enum ClarityIconDirection
+    {
+        UP("up"),
+        DOWN("down"),
+        LEFT("left"),
+        RIGHT("right"),
+        UNSET(null);
+
+        private final String direction;
+
+        public static ClarityIconDirection fromDirection(String direction)
+        {
+            for (ClarityIconDirection val : values())
+            {
+                if (Objects.equals(val.getDirection(), direction))
+                {
+                    return val;
+                }
+            }
+
+            return UNSET;
+        }
+
+        // ---
+
+        private ClarityIconDirection(String direction)
+        {
+            this.direction = direction;
+        }
+
+        // ---
+
+        public String getDirection()
+        {
+            return direction;
+        }
     }
 }
