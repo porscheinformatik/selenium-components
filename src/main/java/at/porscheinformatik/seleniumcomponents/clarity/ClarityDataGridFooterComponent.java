@@ -83,7 +83,7 @@ public class ClarityDataGridFooterComponent extends AbstractSeleniumComponent
 
     private static class ClarityDataGridPageSize extends AbstractSeleniumComponent
     {
-        private SelectComponent pageSizeSelect = new SelectComponent(this);
+        private final SelectComponent pageSizeSelect = new SelectComponent(this);
 
         // ---
 
@@ -107,12 +107,14 @@ public class ClarityDataGridFooterComponent extends AbstractSeleniumComponent
 
     private static class ClarityDataGridPaginationList extends AbstractSeleniumComponent
     {
-        private ButtonComponent firstButton = new ButtonComponent(this, selectByClassName("pagination-first"));
-        private ButtonComponent previousButton = new ButtonComponent(this, selectByClassName("pagination-previous"));
-        private InputComponent currentPage = new InputComponent(this, selectByClassName("pagination-current"));
-        private ButtonComponent nextButton = new ButtonComponent(this, selectByClassName("pagination-next"));
-        private ButtonComponent lastButton = new ButtonComponent(this, selectByClassName("pagination-last"));
-        private HtmlComponent totalPages = new HtmlComponent(this, selectByAttribute("aria-label", "Total Pages"));
+        private final ButtonComponent firstButton = new ButtonComponent(this, selectByClassName("pagination-first"));
+        private final ButtonComponent previousButton =
+            new ButtonComponent(this, selectByClassName("pagination-previous"));
+        private final InputComponent currentPage = new InputComponent(this, selectByClassName("pagination-current"));
+        private final ButtonComponent nextButton = new ButtonComponent(this, selectByClassName("pagination-next"));
+        private final ButtonComponent lastButton = new ButtonComponent(this, selectByClassName("pagination-last"));
+        private final HtmlComponent totalPages =
+            new HtmlComponent(this, selectByAttribute("aria-label", "Total Pages"));
 
         // ---
 
@@ -130,11 +132,16 @@ public class ClarityDataGridFooterComponent extends AbstractSeleniumComponent
 
         public int getCurrentPage()
         {
+            if (!isReady())
+            {
+                return 1;
+            }
+
             String page = currentPage.getValue();
 
             if (null == page || page.isBlank())
             {
-                return 0;
+                return 1;
             }
 
             return Integer.parseInt(page);
@@ -142,6 +149,11 @@ public class ClarityDataGridFooterComponent extends AbstractSeleniumComponent
 
         public int getTotalPages()
         {
+            if (!isReady())
+            {
+                return 1;
+            }
+
             String total = totalPages.getText();
 
             if (null == total || total.isBlank())
@@ -154,22 +166,34 @@ public class ClarityDataGridFooterComponent extends AbstractSeleniumComponent
 
         public void first()
         {
-            firstButton.click();
+            if (isReady())
+            {
+                firstButton.click();
+            }
         }
 
         public void previous()
         {
-            previousButton.click();
+            if (isReady())
+            {
+                previousButton.click();
+            }
         }
 
         public void next()
         {
-            nextButton.click();
+            if (isReady())
+            {
+                nextButton.click();
+            }
         }
 
         public void last()
         {
-            lastButton.click();
+            if (isReady())
+            {
+                lastButton.click();
+            }
         }
     }
 }
