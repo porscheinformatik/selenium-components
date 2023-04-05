@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -54,7 +56,7 @@ public class CombinableWebElementSelector implements WebElementSelector
     }
 
     @Override
-    public WebElementSelector combine(WebElementSelector child)
+    public WebElementSelector combine(@Nonnull WebElementSelector child)
     {
         if (child instanceof CombinableWebElementSelector)
         {

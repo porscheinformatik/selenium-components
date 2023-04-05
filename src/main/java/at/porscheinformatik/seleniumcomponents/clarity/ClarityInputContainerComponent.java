@@ -2,13 +2,11 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.InputComponent;
-import org.openqa.selenium.NoSuchElementException;
 
 public class ClarityInputContainerComponent extends ClarityFormControlContainer
 {
@@ -75,6 +73,7 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
 
     /**
      * Use this method to check whether or not you can write a new value to the input control.
+     *
      * @return true if the input control has been disabled, and true otherwise
      */
     public boolean isDisabled()

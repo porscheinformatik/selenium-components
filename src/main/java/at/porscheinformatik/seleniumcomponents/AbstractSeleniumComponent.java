@@ -2,6 +2,8 @@ package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -14,7 +16,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
 {
 
     private final SeleniumComponent parent;
-    private final WebElementSelector selector;
+    private final @Nonnull WebElementSelector selector;
 
     /**
      * Creates a new {@link SeleniumComponent} with the specified parent and the specified selector.
@@ -49,7 +51,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
         }
     }
 
-    protected WebElement element(WebElementSelector selector)
+    protected WebElement element(@Nonnull WebElementSelector selector)
     {
         if (parent instanceof AbstractSeleniumComponent)
         {

@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.8.0
+
+- Upgraded Selenium to 4.8.3
+
 ## selenium-components-0.7.14
 
 - Add a Selenium Matcher for contaning text
