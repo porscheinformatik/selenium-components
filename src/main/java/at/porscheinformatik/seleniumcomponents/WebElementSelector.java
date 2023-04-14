@@ -258,7 +258,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByIndex(String tagName, int index)
     {
-        return selectByXPath(String.format("(//%s)[%d]", tagName, index + 1));
+        return selectByXPath(String.format("(.//%s)[%d]", tagName, index + 1));
     }
 
     /**

@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.8.1
+
+- Fix selectByIndex (it did not respect the parent component)
+
 ## selenium-components-0.8.0
 
 - Upgraded Selenium to 4.8.3
