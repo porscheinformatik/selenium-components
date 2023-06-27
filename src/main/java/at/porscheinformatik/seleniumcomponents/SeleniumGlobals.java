@@ -41,7 +41,6 @@ import org.openqa.selenium.WebDriverException;
  */
 public final class SeleniumGlobals
 {
-
     private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumGlobals.class);
 
     public static final String DEBUG_KEY = "selenium-components.debug";
@@ -208,6 +207,25 @@ public final class SeleniumGlobals
 
     static
     {
+        initializeFromProperties();
+
+        ThreadUtils.excludeCallElement(Pattern.compile("^java\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^javax\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^com\\.sun\\..*"));
+        ThreadUtils.excludeCallElement(Pattern.compile("^sun\\..*"));
+        ThreadUtils
+            .excludeCallElement(Pattern
+                .compile("^"
+                    + SeleniumUtils.class
+                        .getName()
+                        .substring(0, SeleniumUtils.class.getName().lastIndexOf("."))
+                        .replace(".", "\\.")
+                    + ".*"));
+    }
+
+    @SuppressWarnings("null")
+    private static void initializeFromProperties()
+    {
         String debug = System.getProperty(DEBUG_KEY);
 
         if ("false".equals(debug))
@@ -224,19 +242,6 @@ public final class SeleniumGlobals
         setDoubleFromProperty(LONG_TIMEOUT_IN_SECONDS_KEY, SeleniumGlobals::setLongTimeoutInSeconds);
         setEnumFromProperty(SCREENSHOT_OUTPUT_TYPE, ScreenshotOutputType.class,
             SeleniumGlobals::setScreenshotOutputType);
-
-        ThreadUtils.excludeCallElement(Pattern.compile("^java\\..*"));
-        ThreadUtils.excludeCallElement(Pattern.compile("^javax\\..*"));
-        ThreadUtils.excludeCallElement(Pattern.compile("^com\\.sun\\..*"));
-        ThreadUtils.excludeCallElement(Pattern.compile("^sun\\..*"));
-        ThreadUtils
-            .excludeCallElement(Pattern
-                .compile("^"
-                    + SeleniumUtils.class
-                        .getName()
-                        .substring(0, SeleniumUtils.class.getName().lastIndexOf("."))
-                        .replace(".", "\\.")
-                    + ".*"));
     }
 
     private SeleniumGlobals()
@@ -436,5 +441,4 @@ public final class SeleniumGlobals
             setter.accept(Enum.<T> valueOf(enumType, value));
         }
     }
-
 }
