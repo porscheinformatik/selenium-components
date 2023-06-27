@@ -1,6 +1,11 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.9.0
+
+- Restore SeleniumMatchers.isNotVisible
+- Removed a lot of deprecated code
+
 ## selenium-components-0.8.1
 
 - Fix selectByIndex (it did not respect the parent component)
