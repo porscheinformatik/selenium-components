@@ -127,17 +127,6 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
             this.wizard = wizard;
         }
 
-        /**
-         * @return the title of the page
-         * @deprecated This method may return the wrong result. It does not return the title of this page, but the title
-         *             of the currently active page of the wizard! Use wizard.getPageTitle() instead.
-         */
-        @Deprecated
-        public String getTitle()
-        {
-            return wizard.getPageTitle();
-        }
-
         public boolean isActive()
         {
             return containsClassName("active");

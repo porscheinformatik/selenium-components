@@ -82,32 +82,6 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         waitUntilReady(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
-    /**
-     * Opens the specified URL and assumes, that the result consists of this page.
-     *
-     * @param url the URL to be called
-     * @deprecated Do not use this method anymore! The class, that implements this page, should rather provide a static
-     *             "open" method (without an URL, but with supported parameters) and should return an instance of
-     *             itself. This is because the page usually knows it's URL while this method implies, that the caller
-     *             should know the URL. This call can be replaced with a call to
-     *             {@link SeleniumEnvironment#open(String, AbstractSeleniumPage)}. A static open method looks like the
-     *             following:
-     *
-     *             <pre>
-     *             public static MyPage open(SeleniumEnvironment environment)
-     *             {
-     *                 return environment.open("https://localhost/mypage", MyPage::new);
-     *             }
-     *             </pre>
-     */
-    @Deprecated
-    public void open(String url)
-    {
-        environment().url(url);
-
-        waitUntilReady();
-    }
-
     @Override
     public String describe()
     {

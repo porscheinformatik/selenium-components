@@ -98,15 +98,29 @@ public interface SeleniumComponent extends WebElementContainer
     }
 
     /**
+     * Waits until the component becomes ready.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     * @deprecated do not use this method, as it depends on a timeout waited to be reached
+     */
+    @Deprecated
+    default void waitUntilInvisible(double timeoutInSeconds)
+    {
+        SeleniumAsserts
+            .assertThatSoon(timeoutInSeconds, "Component becomes invisible: " + describe(), () -> this,
+                SeleniumMatchers.isNotVisible());
+    }
+
+    /**
      * This method is not intended to be used in regular test cases. Its main use is to highlight a element while
      * debugging a test.
-     * 
+     *
      * <p>
      * Sometime there are multiple elements on the page that match a given selector. Then it is hard to find, why a test
      * breaks. It might use the wrong element. Using the highlight method should make it farily easy to see if the
      * correct element is selected.
      * </p>
-     * 
+     *
      * <p>
      * This method will set a border and background for the element. In most of the cases this should be enough to see
      * if the correct element is selected. But sometimes elements are not directly visible on screen, because they have
