@@ -7,9 +7,11 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.AnimatedSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
+import at.porscheinformatik.seleniumcomponents.SeleniumMatchers;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.ButtonComponent;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
@@ -82,6 +84,8 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     public void finish()
     {
         finishButton.click();
+
+        SeleniumAsserts.assertThatSoon(() -> this, SeleniumMatchers.isNotVisible());
     }
 
     public boolean isNextClickable()

@@ -103,18 +103,21 @@ public final class SeleniumMatchers
     }
 
     /**
+     * <b>It's no good practice to use this method</b>, but sometimes, it is necessary. It verifies, that the component
+     * is not visible. Since it depends on the {@link SeleniumComponent#isVisible()} method, it will always wait for the
+     * default timeout - the component may appear during that time. In the end, it will return false, if the component
+     * did not appear. This means, that calling this method always takes time and performs multiple roundtrips from the
+     * test runner to the browser, hence, do not use it unless it is really necessary.<br>
+     * <br>
+     * The method compensates the fact, that when using debug mode, this call would wait forever.
+     *
      * @param <ComponentT> type of component to check
      * @return matcher that checks if the component is not visible
-     * @deprecated Try to avoid this kind of check! If this method is used in conjunction with a
-     *             {@link SeleniumAsserts#assertThatSoon(double, String, FailableSupplier, Matcher)}, it will wait for
-     *             the component to become visible only to succeed after the timeout (which may be quite long).
      */
-
-    @Deprecated
     public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> isNotVisible()
     {
-        return new GenericSeleniumComponentMatcher<>("A component, that is not visible", SeleniumComponent::isVisible,
-            Matchers.equalTo(false));
+        return new GenericSeleniumComponentMatcher<>("A component, that is not visible",
+            component -> SeleniumGlobals.ignoreDebug(component::isVisible), Matchers.equalTo(false));
     }
 
     /**
@@ -397,7 +400,7 @@ public final class SeleniumMatchers
             }
             catch (Throwable e)
             {
-                this.exception = e;
+                exception = e;
 
                 return false;
             }
