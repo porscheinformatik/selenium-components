@@ -4,6 +4,7 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
+import static org.hamcrest.Matchers.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.AnimatedSeleniumComponent;
@@ -71,21 +72,62 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
         return stepNav.findAll();
     }
 
+    /**
+     * Click the "next" button and expect the page title to change.
+     */
     public void next()
+    {
+        String pageTitle = getPageTitle();
+
+        clickNext();
+
+        SeleniumAsserts.assertThatSoon("Page title should change", this::getPageTitle, not(equalTo(pageTitle)));
+    }
+
+    /**
+     * Click the "next" button.
+     */
+    public void clickNext()
     {
         nextButton.click();
     }
 
+    /**
+     * Click the "previous" button and expect the page title to change.
+     */
     public void previous()
+    {
+        String pageTitle = getPageTitle();
+
+        clickPrevious();
+
+        SeleniumAsserts.assertThatSoon("Page title should change", this::getPageTitle, not(equalTo(pageTitle)));
+    }
+
+    /**
+     * Click the "previous" button.
+     */
+    public void clickPrevious()
     {
         prevButton.click();
     }
 
+    /**
+     * Click the "finish" button and expect the wizard to close itself.
+     */
     public void finish()
     {
-        finishButton.click();
+        clickFinish();
 
-        SeleniumAsserts.assertThatSoon(() -> this, SeleniumMatchers.isNotVisible());
+        SeleniumAsserts.assertThatSoon("Wizard should be closed", () -> this, SeleniumMatchers.isNotVisible());
+    }
+
+    /**
+     * Click the "finish" button.
+     */
+    public void clickFinish()
+    {
+        finishButton.click();
     }
 
     public boolean isNextClickable()
@@ -125,6 +167,11 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
             super(wizard.wizardContent, selector);
 
             this.wizard = wizard;
+        }
+
+        public ClarityWizardComponent getWizard()
+        {
+            return wizard;
         }
 
         public boolean isActive()

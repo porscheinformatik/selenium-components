@@ -3,6 +3,10 @@
 
 ## selenium-components-0.9.0
 
+- Optimize ClarityWizardComponent by checking result after next(), previous() and finish()
+
+## selenium-components-0.9.0
+
 - Restore SeleniumMatchers.isNotVisible
 - Removed a lot of deprecated code
 
