@@ -1,6 +1,11 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.10.0
+
+- Update to Java 17
+- Update dependencies
+
 ## selenium-components-0.9.0
 
 - Optimize ClarityWizardComponent by checking result after next(), previous() and finish()
