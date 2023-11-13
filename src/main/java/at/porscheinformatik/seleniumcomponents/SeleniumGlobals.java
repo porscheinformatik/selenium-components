@@ -375,7 +375,7 @@ public final class SeleniumGlobals
      */
     public static void setShortTimeoutInSeconds(double shortTimeoutInSeconds)
     {
-        LOG.info("Settings short timeout to %,.1f seconds.", timeMultiplier);
+        LOG.info("Settings short timeout to %,.1f seconds.", shortTimeoutInSeconds);
 
         SeleniumGlobals.shortTimeoutInSeconds = shortTimeoutInSeconds;
     }
@@ -398,7 +398,7 @@ public final class SeleniumGlobals
      */
     public static void setLongTimeoutInSeconds(double longTimeoutInSeconds)
     {
-        LOG.info("Setting long timeout to %,.1f seconds.", timeMultiplier);
+        LOG.info("Setting long timeout to %,.1f seconds.", longTimeoutInSeconds);
 
         SeleniumGlobals.longTimeoutInSeconds = longTimeoutInSeconds;
     }
