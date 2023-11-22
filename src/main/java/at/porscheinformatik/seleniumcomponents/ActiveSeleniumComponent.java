@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import static org.hamcrest.Matchers.*;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -31,14 +32,21 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
 
     /**
      * Waits until the component becomes enabled.
+     */
+    default void waitUntilEnabled()
+    {
+        waitUntilEnabled(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes enabled.
      *
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilEnabled(double timeoutInSeconds)
     {
-        SeleniumAsserts
-            .assertThatSoon(timeoutInSeconds, "Component becomes enabled: " + describe(), () -> this,
-                SeleniumMatchers.isEnabled());
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes enabled: " + describe(), () -> this,
+            SeleniumMatchers.isEnabled());
     }
 
     /**
@@ -59,15 +67,39 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
     }
 
     /**
+     * Calls the appropriate method
+     *
+     * @param selected true for {@link #select()}, false for {@link #unselect()}
+     */
+    default void setSelected(boolean selected)
+    {
+        if (selected)
+        {
+            select();
+        }
+        else
+        {
+            unselect();
+        }
+    }
+
+    /**
+     * Waits until the component becomes selected.
+     */
+    default void waitUntilSelected()
+    {
+        waitUntilSelected(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
      * Waits until the component becomes selected.
      *
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilSelected(double timeoutInSeconds)
     {
-        SeleniumAsserts
-            .assertThatSoon(timeoutInSeconds, "Component becomes selected: " + describe(), () -> this,
-                SeleniumMatchers.isSelected());
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes selected: " + describe(), () -> this,
+            SeleniumMatchers.isSelected());
     }
 
     /**
@@ -82,14 +114,21 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
 
     /**
      * Waits until the component becomes clickable.
+     */
+    default void waitUntilClickable()
+    {
+        waitUntilClickable(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes clickable.
      *
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilClickable(double timeoutInSeconds)
     {
-        SeleniumAsserts
-            .assertThatSoon(timeoutInSeconds, "Component becomes clickable: " + describe(), () -> this,
-                SeleniumMatchers.isClickable());
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes clickable: " + describe(), () -> this,
+            SeleniumMatchers.isClickable());
     }
 
     /**
@@ -104,14 +143,21 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
 
     /**
      * Waits until the component becomes editable.
+     */
+    default void waitUntilEditable()
+    {
+        waitUntilEnabled(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes editable.
      *
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilEditable(double timeoutInSeconds)
     {
-        SeleniumAsserts
-            .assertThatSoon(timeoutInSeconds, "Component becomes editable: " + describe(), () -> this,
-                SeleniumMatchers.isEditable());
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes editable: " + describe(), () -> this,
+            SeleniumMatchers.isEditable());
     }
 
     /**
@@ -126,14 +172,51 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
 
     /**
      * Waits until the component becomes disabled.
+     */
+    default void waitUntilDisabled()
+    {
+        waitUntilDisabled(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes disabled.
      *
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilDisabled(double timeoutInSeconds)
     {
-        SeleniumAsserts
-            .assertThatSoon(timeoutInSeconds, "Component becomes disabled: " + describe(), () -> this,
-                SeleniumMatchers.isDisabled());
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes disabled: " + describe(), () -> this,
+            SeleniumMatchers.isDisabled());
+    }
+
+    /**
+     * @return true, if the center of the component is within the current viewport of the browser.
+     */
+    default boolean isInViewport()
+    {
+        return (Boolean) ((JavascriptExecutor) environment().getDriver()).executeScript("""
+            var elem = arguments[0], box = elem.getBoundingClientRect(), cx = box.left + box.width / 2, cy = box.top + box.height / 2, e = document.elementFromPoint(cx, cy);
+            for (; e; e = e.parentElement) if (e === elem) return true;
+            return false;""", element());
+    }
+
+    /**
+     * Waits until the center of the component is within the current viewport of the browser.
+     */
+    default void waitUntilInViewport()
+    {
+        waitUntilInViewport(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the center of the component is within the current viewport of the browser.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     */
+    default void waitUntilInViewport(double timeoutInSeconds)
+    {
+        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component is in viewport: " + describe(), () -> this,
+            SeleniumMatchers.isInViewport());
     }
 
     /**
@@ -155,9 +238,32 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
     {
         String description = LOG.interaction("Clicking on %s", describe());
 
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, description, () -> this, SeleniumMatchers.isClickable());
+        waitUntilClickable(timeoutInSeconds);
 
         element().click();
+    }
+
+    /**
+     * Moves the viewport to display the component.
+     */
+    default void scrollIntoView()
+    {
+        scrollIntoView(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Moves the viewport to display the component.
+     *
+     * @param timeoutInSeconds the amount of time to wait until the operation fails
+     */
+    default void scrollIntoView(double timeoutInSeconds)
+    {
+        String description = LOG.interaction("Scrolling %s into view", describe());
+
+        ((JavascriptExecutor) environment().getDriver()).executeScript("arguments[0].scrollIntoViewIfNeeded()",
+            element());
+
+        waitUntilInViewport(timeoutInSeconds);
     }
 
     /**
@@ -224,23 +330,6 @@ public interface ActiveSeleniumComponent extends SeleniumComponent
             LOG.interaction("Deselecting %s", describe());
 
             click();
-        }
-    }
-
-    /**
-     * Calls the appropriate method
-     *
-     * @param selected true for {@link #select()}, false for {@link #unselect()}
-     */
-    default void setSelected(boolean selected)
-    {
-        if (selected)
-        {
-            select();
-        }
-        else
-        {
-            unselect();
         }
     }
 

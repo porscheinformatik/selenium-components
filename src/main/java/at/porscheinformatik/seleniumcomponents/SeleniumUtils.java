@@ -26,7 +26,6 @@ import org.openqa.selenium.StaleElementReferenceException;
  */
 public final class SeleniumUtils
 {
-
     private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumUtils.class);
 
     private static final AtomicInteger POOL_THREAD_ID = new AtomicInteger(1);

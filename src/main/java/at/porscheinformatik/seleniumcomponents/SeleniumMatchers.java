@@ -38,7 +38,7 @@ public final class SeleniumMatchers
      * @param <ComponentT> type of components in the stream
      * @param <AssertionT> type of objects to compare
      * @param itemMapper mapping function that is called for each item in the stream and the return value is compared to
-     *            the expected entries
+     * the expected entries
      * @param expectedEntries entries we expect
      * @return A Matcher that checks if exactly the provided entries are in the stream. Not more and not less.
      */
@@ -53,7 +53,7 @@ public final class SeleniumMatchers
      * @param <ComponentT> type of components in the list
      * @param <AssertionT> type of objects to compare
      * @param itemMapper mapping function that is called for each item in the list and the return value is compared to
-     *            the expected entries
+     * the expected entries
      * @param expectedEntries entries we expect
      * @return A Matcher that checks if exactly the provided entries are in the list. Not more and not less.
      */
@@ -68,9 +68,9 @@ public final class SeleniumMatchers
      * @param <ComponentT> type of components in the list
      * @param <AssertionT> type of objects to compare
      * @param itemMapper mapping function that is called for each item in the list and the return value is compared to
-     *            the expected entries
+     * the expected entries
      * @param contains a function that is called with the actual list of entries for each expected entry. It must return
-     *            true when the expected entry is in the list. False otherwise.
+     * true when the expected entry is in the list. False otherwise.
      * @param expectedEntries entries we expect
      * @return A Matcher that checks if exactly the provided entries are in the list. Not more and not less.
      */
@@ -118,6 +118,16 @@ public final class SeleniumMatchers
     {
         return new GenericSeleniumComponentMatcher<>("A component, that is not visible",
             component -> SeleniumGlobals.ignoreDebug(component::isVisible), Matchers.equalTo(false));
+    }
+
+    /**
+     * @param <ComponentT> type of component to check
+     * @return matcher that checks that the center of the component is within the viewport of the browser
+     */
+    public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isInViewport()
+    {
+        return new GenericSeleniumComponentMatcher<>("A component, that is within the viewport",
+            ActiveSeleniumComponent::isInViewport, Matchers.equalTo(true));
     }
 
     /**
@@ -194,7 +204,8 @@ public final class SeleniumMatchers
     //     * @param <ComponentT> type of component to check
     //     * @return matcher that checks if the component has the specified attribute
     //     */
-    //    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> hasAttribute(String attributeName, String value)
+    //    public static <ComponentT extends SeleniumComponent> Matcher<ComponentT> hasAttribute(String attributeName,
+    //    String value)
     //    {
     //        return new GenericSeleniumComponentMatcher<>("A component with \"" + tagName + "\" as tagName",
     //            SeleniumUtils::getTagName, Matchers.equalTo(tagName));
@@ -212,8 +223,8 @@ public final class SeleniumMatchers
                 return false;
             }
 
-            @SuppressWarnings("unchecked")
-            SeleniumComponentList<ComponentT> factory = (SeleniumComponentList<ComponentT>) item;
+            @SuppressWarnings("unchecked") SeleniumComponentList<ComponentT> factory =
+                (SeleniumComponentList<ComponentT>) item;
 
             return factory.size() > 0;
         }
@@ -254,8 +265,8 @@ public final class SeleniumMatchers
                 return false;
             }
 
-            @SuppressWarnings("unchecked")
-            SeleniumComponentList<ComponentT> list = (SeleniumComponentList<ComponentT>) item;
+            @SuppressWarnings("unchecked") SeleniumComponentList<ComponentT> list =
+                (SeleniumComponentList<ComponentT>) item;
 
             actualValues = parseActualValues(list);
 
@@ -319,8 +330,7 @@ public final class SeleniumMatchers
                 return false;
             }
 
-            @SuppressWarnings("unchecked")
-            Stream<ComponentT> stream = (Stream<ComponentT>) item;
+            @SuppressWarnings("unchecked") Stream<ComponentT> stream = (Stream<ComponentT>) item;
 
             actualValues = parseActualValues(stream);
 
@@ -351,8 +361,7 @@ public final class SeleniumMatchers
         private List<AssertionT> parseActualValues(Stream<ComponentT> stream)
         {
             return stream //
-                .map(mapping)
-                .collect(Collectors.toList());
+                .map(mapping).collect(Collectors.toList());
         }
     }
 

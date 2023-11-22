@@ -1,6 +1,11 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.10.1
+
+- Additional waitFor* methods
+- scrollIntoView for ActiveSeleniumComponents
+
 ## selenium-components-0.10.0
 
 - Update to Java 17
@@ -25,7 +30,7 @@
 
 ## selenium-components-0.7.14
 
-- Add a Selenium Matcher for contaning text
+- Add a Selenium Matcher for contaisning text
 - Add an escapeXPath utility for escaping stings used in XPath arguments
 
 ## selenium-components-0.7.13
