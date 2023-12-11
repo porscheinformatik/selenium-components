@@ -2,6 +2,8 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import org.openqa.selenium.Keys;
+
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -25,12 +27,20 @@ public class ClaritySingleSelectComboboxComponent<OPTION_TYPE extends AbstractCl
         super(parent, selector, optionFactory);
     }
 
-    // ---
+    // --- //
 
     @Override
     public void clear()
     {
         input.clear();
+    }
+
+    public void clearAndMarkDirty()
+    {
+        input.clear();
+
+        // we need to do this here or the formControl will not recognize the value having changed
+        input.sendKeys(".", Keys.BACK_SPACE);
     }
 
     public String getSelectedLabel()
