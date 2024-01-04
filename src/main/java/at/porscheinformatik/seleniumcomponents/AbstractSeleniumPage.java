@@ -19,7 +19,7 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     private final SeleniumEnvironment environment;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
 
-    public AbstractSeleniumPage(SeleniumEnvironment environment)
+    protected AbstractSeleniumPage(SeleniumEnvironment environment)
     {
         super();
 
@@ -43,8 +43,8 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
     {
         try
         {
-            return SeleniumUtils
-                .keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> selector.find(environment.getDriver()));
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(),
+                () -> selector.find(environment.getDriver()));
         }
         catch (Exception e)
         {
@@ -77,9 +77,16 @@ public abstract class AbstractSeleniumPage implements SeleniumComponent
         return environment.takeScreenshot();
     }
 
+    @Override
     public final void waitUntilReady()
     {
-        waitUntilReady(SeleniumGlobals.getLongTimeoutInSeconds());
+        assertReadySoon(SeleniumGlobals.getLongTimeoutInSeconds());
+    }
+
+    @Override
+    public final void assertReadySoon()
+    {
+        assertReadySoon(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
     @Override

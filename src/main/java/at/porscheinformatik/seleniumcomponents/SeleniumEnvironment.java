@@ -89,7 +89,7 @@ public interface SeleniumEnvironment
     {
         url(url);
 
-        page.waitUntilReady();
+        page.assertReadySoon();
 
         return page;
     }

@@ -1,6 +1,14 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.10.3
+
+- Add assert...Soon to all waitFor... methods (that do not trigger the "no-assertion" warning).
+
+## selenium-components-0.10.2
+
+- Add method to clear combobox and mark it dirty.
+
 ## selenium-components-0.10.1
 
 - Additional waitFor* methods

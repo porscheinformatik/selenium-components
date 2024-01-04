@@ -54,7 +54,15 @@ public interface SeleniumComponent extends WebElementContainer
      */
     default void waitUntilReady()
     {
-        waitUntilReady(SeleniumGlobals.getShortTimeoutInSeconds());
+        assertReadySoon(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes ready.
+     */
+    default void assertReadySoon()
+    {
+        assertReadySoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
     /**
@@ -63,6 +71,16 @@ public interface SeleniumComponent extends WebElementContainer
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilReady(double timeoutInSeconds)
+    {
+        assertReadySoon(timeoutInSeconds);
+    }
+
+    /**
+     * Waits until the component becomes ready.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     */
+    default void assertReadySoon(double timeoutInSeconds)
     {
         SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes ready: " + describe(), () -> this,
             SeleniumMatchers.isReady());
@@ -94,7 +112,15 @@ public interface SeleniumComponent extends WebElementContainer
      */
     default void waitUntilVisible()
     {
-        waitUntilVisible(SeleniumGlobals.getShortTimeoutInSeconds());
+        assertVisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * Waits until the component becomes ready.
+     */
+    default void assertVisibleSoon()
+    {
+        assertVisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
     /**
@@ -103,6 +129,16 @@ public interface SeleniumComponent extends WebElementContainer
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilVisible(double timeoutInSeconds)
+    {
+        assertVisibleSoon(timeoutInSeconds);
+    }
+
+    /**
+     * Waits until the component becomes ready.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     */
+    default void assertVisibleSoon(double timeoutInSeconds)
     {
         SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes visible: " + describe(), () -> this,
             SeleniumMatchers.isVisible());
@@ -119,7 +155,21 @@ public interface SeleniumComponent extends WebElementContainer
      */
     default void waitUntilInvisible()
     {
-        waitUntilInvisible(SeleniumGlobals.getShortTimeoutInSeconds());
+        assertInvisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
+    }
+
+    /**
+     * <b>It's no good practice to use this method</b>, but sometimes, it is necessary. It verifies, that the component
+     * is not visible. Since it depends on the {@link SeleniumComponent#isVisible()} method, it will always wait for the
+     * default timeout - the component may appear during that time. In the end, it will return false, if the component
+     * did not appear. This means, that calling this method always takes time and performs multiple roundtrips from the
+     * test runner to the browser, hence, do not use it unless it is really necessary.<br>
+     * <br>
+     * The method compensates the fact, that when using debug mode, this call would wait forever.
+     */
+    default void assertInvisibleSoon()
+    {
+        assertInvisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
     /**
@@ -134,6 +184,22 @@ public interface SeleniumComponent extends WebElementContainer
      * @param timeoutInSeconds the timeout in seconds
      */
     default void waitUntilInvisible(double timeoutInSeconds)
+    {
+        assertVisibleSoon(timeoutInSeconds);
+    }
+
+    /**
+     * <b>It's no good practice to use this method</b>, but sometimes, it is necessary. It verifies, that the component
+     * is not visible. Since it depends on the {@link SeleniumComponent#isVisible()} method, it will always wait for the
+     * default timeout - the component may appear during that time. In the end, it will return false, if the component
+     * did not appear. This means, that calling this method always takes time and performs multiple roundtrips from the
+     * test runner to the browser, hence, do not use it unless it is really necessary.<br>
+     * <br>
+     * The method compensates the fact, that when using debug mode, this call would wait forever.
+     *
+     * @param timeoutInSeconds the timeout in seconds
+     */
+    default void assertInvisibleSoon(double timeoutInSeconds)
     {
         SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes invisible: " + describe(), () -> this,
             SeleniumMatchers.isNotVisible());
