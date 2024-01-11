@@ -33,7 +33,7 @@ public interface SeleniumComponent extends WebElementContainer
     {
         SeleniumComponent parent = parent();
 
-        Objects.requireNonNull(parent, () ->
+        Objects.requireNonNull(parent,
             "The parent is null which means, that this component is root. Implement this method by supplying a valid "
                 + "environment");
 
@@ -185,7 +185,7 @@ public interface SeleniumComponent extends WebElementContainer
      */
     default void waitUntilInvisible(double timeoutInSeconds)
     {
-        assertVisibleSoon(timeoutInSeconds);
+        assertInvisibleSoon(timeoutInSeconds);
     }
 
     /**
