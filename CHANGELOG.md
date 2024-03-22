@@ -1,6 +1,10 @@
 
 # selenium-components-0 (alpha)
 
+## selenium-components-0.10.5
+
+- Fix an issue with comboboxes without selected option.  
+
 ## selenium-components-0.10.4
 
 - Fix an invalid call in waitUntilInvisible.

@@ -4,6 +4,7 @@ import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import java.util.function.Predicate;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Quotes;
 import org.openqa.selenium.support.ui.Select;
@@ -59,9 +60,16 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
      */
     public String getValue()
     {
-        WebElement option = getSelect().getFirstSelectedOption();
+        try
+        {
+            WebElement option = getSelect().getFirstSelectedOption();
 
-        return option != null ? option.getAttribute("value") : null;
+            return option != null ? option.getAttribute("value") : null;
+        }
+        catch (NoSuchElementException e)
+        {
+            return null;
+        }
     }
 
     /**
