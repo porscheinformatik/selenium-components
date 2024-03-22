@@ -5,7 +5,7 @@
 
     <groupId>at.porscheinformatik.selenium-components</groupId>
     <artifactId>selenium-components</artifactId>
-    <version>0.10.5-SNAPSHOT</version>
+    <version>0.10.5</version>
 
     <packaging>jar</packaging>
 
@@ -38,7 +38,7 @@
     <scm>
         <connection>scm:git:git@github.com:porscheinformatik/selenium-components.git</connection>
         <developerConnection>scm:git:git@github.com:porscheinformatik/selenium-components.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>selenium-components-0.10.5</tag>
         <url>https://github.com/porscheinformatik/selenium-components</url>
     </scm>
 
