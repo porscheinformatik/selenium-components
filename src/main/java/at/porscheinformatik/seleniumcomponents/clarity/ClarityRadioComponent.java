@@ -23,11 +23,31 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
         return new ClarityInputContainerComponent(parent, selectByTagName("clr-radio-wrapper"));
     }
 
+    public static ClarityInputContainerComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ClarityInputContainerComponent(parent, selectByTestId("clr-radio-wrapper", testId));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new ClarityInputContainerComponent(parent, selectBySeleniumKey("clr-radio-wrapper", seleniumKey));
     }
 
+    public static ClarityRadioComponent byTestIdOfInput(SeleniumComponent parent, String testId)
+    {
+        String xpath = String.format(".//clr-radio-wrapper[.//input[@data-testid='%s']]", testId);
+
+        return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestIdOfInput(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static ClarityRadioComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey)
     {
         String xpath = String.format(".//clr-radio-wrapper[.//input[@selenium-key='%s']]", seleniumKey);
@@ -44,9 +64,8 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
 
     public static ClarityRadioComponent byLabel(SeleniumComponent parent, String label)
     {
-        String xpath = String
-            .format(".//clr-radio-wrapper[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]",
-                label);
+        String xpath = String.format(
+            ".//clr-radio-wrapper[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]", label);
 
         return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
     }

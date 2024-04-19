@@ -17,6 +17,15 @@ public class ClarityTextareaContainerComponent extends ClarityFormControlContain
         return new ClarityTextareaContainerComponent(parent, selectByTagName("clr-textarea-container"));
     }
 
+    public static ClarityTextareaContainerComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ClarityTextareaContainerComponent(parent, selectByTestId("clr-textarea-container", testId));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated
     public static ClarityTextareaContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new ClarityTextareaContainerComponent(parent,

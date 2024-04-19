@@ -20,6 +20,15 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
         return new ButtonComponent(parent, selectByTagName("button"));
     }
 
+    public static ButtonComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ButtonComponent(parent, selectByTestId("button", testId));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static ButtonComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new ButtonComponent(parent, selectBySeleniumKey("button", seleniumKey));
@@ -37,9 +46,13 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
         super(parent, selectByTagName("button"));
     }
 
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ButtonComponent(SeleniumComponent parent, String seleniumKey)
     {
-        this(parent, selectBySeleniumKey("button", seleniumKey));
+        this(parent, selectByTestIdOrSeleniumKey("button", seleniumKey));
     }
 
     public ButtonComponent(SeleniumComponent parent, WebElementSelector selector)

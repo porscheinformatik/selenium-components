@@ -12,12 +12,20 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class LinkComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static LinkComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new LinkComponent(parent, WebElementSelector.selectByTestId("a", testId));
+    }
 
     public LinkComponent(SeleniumComponent parent)
     {
         this(parent, selectByTagName("a"));
     }
 
+    /**
+     * @deprecated Use {@link #LinkComponent(SeleniumComponent, WebElementSelector)} instead
+     */
+    @Deprecated(forRemoval = true)
     public LinkComponent(SeleniumComponent parent, String seleniumKey)
     {
         this(parent, selectBySeleniumKey("a", seleniumKey));

@@ -1,9 +1,13 @@
-
 # selenium-components-0 (alpha)
+
+## selenium-components-0.11.0
+
+- The attribute `selenium-key` will be removed in favor of the official `data-testid` attribute. All methods
+  involving `selenium-key` will be deprecated.
 
 ## selenium-components-0.10.5
 
-- Fix an issue with comboboxes without selected option.  
+- Fix an issue with comboboxes without selected option.
 
 ## selenium-components-0.10.4
 
@@ -52,7 +56,6 @@
 ## selenium-components-0.7.13
 
 - Fix an issue with selecting radio buttons.
-
 
 ## selenium-components-0.7.12
 
@@ -129,7 +132,8 @@
 ## selenium-components-0.6.5
 
 - Better error handling if component is not clickable
-- Separate AbstractSeleniumPage into a page and the "standalone" page. The standalone page has the same functionality as the page until now.
+- Separate AbstractSeleniumPage into a page and the "standalone" page. The standalone page has the same functionality as
+  the page until now.
 
 ## selenium-components-0.6.4
 
@@ -149,13 +153,17 @@
 
 ## selenium-components-0.6.0
 
-- Fixed bug with the visibility check of the SeleniumUtils. Some componets overrive the isVisible methode (e.g. pages or tabs), but the isVisible method in the SeleniumUtils did not use this method causing the visibility check to be invalid. 
+- Fixed bug with the visibility check of the SeleniumUtils. Some componets overrive the isVisible methode (e.g. pages or
+  tabs), but the isVisible method in the SeleniumUtils did not use this method causing the visibility check to be
+  invalid.
 - API simplifications:
-  - Combined Selectable-, Editable- and ClickableSeleniumComponent into ActivteSeleniumComponent. 
-  - The SeleniumComponent is now a Visible one by default
-  - The SeleniumConditions are deprecated because the are not used and can be perfectly replaced by assertThatSoon with matchers.
-  - Some Assert methods have been deprecated where Matchers exist. It should reduce the number of assert method variants.
-  - Removed some utility methods, because they just link to the appropriate method in the component.
+    - Combined Selectable-, Editable- and ClickableSeleniumComponent into ActivteSeleniumComponent.
+    - The SeleniumComponent is now a Visible one by default
+    - The SeleniumConditions are deprecated because the are not used and can be perfectly replaced by assertThatSoon
+      with matchers.
+    - Some Assert methods have been deprecated where Matchers exist. It should reduce the number of assert method
+      variants.
+    - Removed some utility methods, because they just link to the appropriate method in the component.
 
 ## selenium-components-0.5.6
 
@@ -413,9 +421,9 @@
 
 ### Breaking Changes
 
-- Moved isClickable, click to ClickableSelenumComponent interface.
-- Moved isEditable, clear, sendKeys, isEnabled to EditableSelenumComponent interface.
-- Moved isSelected to SelectableSeleniumComonent interface.
+- Moved isClickable, click to ClickableSeleniumComponent interface.
+- Moved isEditable, clear, sendKeys, isEnabled to EditableSeleniumComponent interface.
+- Moved isSelected to SelectableSeleniumComponent interface.
 
 ### Enhancements
 

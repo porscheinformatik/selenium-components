@@ -12,7 +12,8 @@ import at.porscheinformatik.seleniumcomponents.clarity.ClarityMultiSelectCombobo
  * @author TechScar
  */
 public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-    PILL_TYPE extends AbstractClarityComboboxLabelPillComponent> extends ClarityFormControlContainer
+    PILL_TYPE extends AbstractClarityComboboxLabelPillComponent>
+    extends ClarityFormControlContainer
 {
     public final ClarityMultiSelectComboboxComponent<OPTION_TYPE, PILL_TYPE> multiSelect;
 
@@ -20,17 +21,31 @@ public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends Ab
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
         PILL_TYPE extends AbstractClarityComboboxLabelPillComponent> ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> within(
-            SeleniumComponent parent, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-            SeleniumComponentFactory<PILL_TYPE> pillFactory)
+        SeleniumComponent parent, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
+        SeleniumComponentFactory<PILL_TYPE> pillFactory)
     {
         return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectByTagName("clr-combobox-container"),
             optionFactory, pillFactory);
     }
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
+        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent> ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> byTestId(
+        SeleniumComponent parent, String testId, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
+        SeleniumComponentFactory<PILL_TYPE> pillFactory)
+    {
+        return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectByTestId(testId), optionFactory,
+            pillFactory);
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String, SeleniumComponentFactory, SeleniumComponentFactory)}
+     * instead
+     */
+    @Deprecated(forRemoval = true)
+    public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
         PILL_TYPE extends AbstractClarityComboboxLabelPillComponent> ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> bySeleniumKey(
-            SeleniumComponent parent, String seleniumKey, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-            SeleniumComponentFactory<PILL_TYPE> pillFactory)
+        SeleniumComponent parent, String seleniumKey, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
+        SeleniumComponentFactory<PILL_TYPE> pillFactory)
     {
         return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectBySeleniumKey(seleniumKey),
             optionFactory, pillFactory);

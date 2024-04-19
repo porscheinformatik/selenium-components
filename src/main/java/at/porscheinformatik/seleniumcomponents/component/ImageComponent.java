@@ -15,15 +15,23 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class ImageComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static ImageComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ImageComponent(parent, WebElementSelector.selectByTestId("img", testId));
+    }
 
     public ImageComponent(SeleniumComponent parent)
     {
         this(parent, selectByTagName("img"));
     }
 
+    /**
+     * @deprecated Use {@link #ImageComponent(SeleniumComponent, WebElementSelector)} instead
+     */
+    @Deprecated(forRemoval = true)
     public ImageComponent(SeleniumComponent parent, String seleniumKey)
     {
-        this(parent, selectBySeleniumKey("img", seleniumKey));
+        this(parent, selectByTestIdOrSeleniumKey("img", seleniumKey));
     }
 
     public ImageComponent(SeleniumComponent parent, WebElementSelector selector)

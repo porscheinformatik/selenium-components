@@ -25,7 +25,7 @@ public interface WebElementSelector
      * Creates a selector that always uses the specified element. This selector ignores the {@link SearchContext}.
      *
      * @param description a description for toString, to make it easier to find the specified element. Most-often the
-     *            description looks like a CSS selector.
+     * description looks like a CSS selector.
      * @param element the element to return
      * @return the selector
      */
@@ -63,7 +63,7 @@ public interface WebElementSelector
      * This is a shortcut method to use a Selenium selector as selector.
      *
      * @param description a description for toString, to make it easier to find the specified element. Most-often the
-     *            description looks like a CSS selector.
+     * description looks like a CSS selector.
      * @param by the Selenium selector
      * @return the {@link WebElementSelector} for the given Selenium selector
      */
@@ -202,12 +202,68 @@ public interface WebElementSelector
     }
 
     /**
+     * A selector that uses the value of the "data-testid" attribute of an element. This selector respects the hierarchy
+     * of components. The implementation is bases on a CSS selector query.
+     *
+     * @param testId the expected value of the "data-testid" attribute of the element
+     * @return the selector
+     */
+    static WebElementSelector selectByTestId(String testId)
+    {
+        return selectByTestId("*", testId);
+    }
+
+    /**
+     * A selector that uses a tagName and the value of the "data-testid" attribute of an element. This selector respects
+     * the hierarchy of components. The implementation is bases on a CSS selector query.
+     *
+     * @param tagName the tag name of the element
+     * @param testId the expected value of the "data-testid" attribute of the element
+     * @return the selector
+     */
+    static WebElementSelector selectByTestId(String tagName, String testId)
+    {
+        return selectByAttribute(tagName, "data-testid", testId);
+    }
+
+    /**
+     * A selector that uses the value of the "data-testid" or "selenium-key" attribute of an element. This selector
+     * respects the hierarchy of components. The implementation is bases on a CSS selector query.
+     *
+     * @param key the expected value of the "data-testid" or "selenium-key" attribute of the element
+     * @return the selector
+     * @deprecated use {@link #selectByTestId(String)} instead
+     */
+    @Deprecated(forRemoval = true)
+    static WebElementSelector selectByTestIdOrSeleniumKey(String key)
+    {
+        return selectByTestIdOrSeleniumKey("*", key);
+    }
+
+    /**
+     * A selector that uses a tagName and the value of the the "data-testid" or "selenium-key" attribute of an element.
+     * This selector respects the hierarchy of components. The implementation is bases on a CSS selector query.
+     *
+     * @param tagName the tag name of the element
+     * @param key the expected value of the the "data-testid" or "selenium-key" attribute of the element
+     * @return the selector
+     * @deprecated use {@link #selectByTestId(String, String)} instead
+     */
+    @Deprecated(forRemoval = true)
+    static WebElementSelector selectByTestIdOrSeleniumKey(String tagName, String key)
+    {
+        return selectByXPath(String.format(".//%s[@data-testid='%s' or @selenium-key='%s']", tagName, key, key));
+    }
+
+    /**
      * A selector that uses the value of the "selenium-key" attribute of an element. This selector respects the
      * hierarchy of components. The implementation is bases on a CSS selector query.
      *
      * @param key the expected value of the "selenium-key" attribute of the element
      * @return the selector
+     * @deprecated use {@link #selectByTestId(String)} instead
      */
+    @Deprecated(forRemoval = true)
     static WebElementSelector selectBySeleniumKey(String key)
     {
         return selectBySeleniumKey("*", key);
@@ -220,7 +276,9 @@ public interface WebElementSelector
      * @param tagName the tag name of the element
      * @param key the expected value of the "selenium-key" attribute of the element
      * @return the selector
+     * @deprecated use {@link #selectByTestId(String, String)} instead
      */
+    @Deprecated(forRemoval = true)
     static WebElementSelector selectBySeleniumKey(String tagName, String key)
     {
         return selectByAttribute(tagName, "selenium-key", key);

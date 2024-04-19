@@ -28,8 +28,9 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
     private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("modal-title-text"));
 
-    private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav = new SeleniumComponentListFactory<>(
-        this, WebElementSelector.selectByClassName("clr-wizard-stepnav-item"), ClarityWizardStepnavEntry::new);
+    private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav =
+        new SeleniumComponentListFactory<>(this, WebElementSelector.selectByClassName("clr-wizard-stepnav-item"),
+            ClarityWizardStepnavEntry::new);
 
     private final HtmlComponent wizardContent = new HtmlComponent(this, selectByClassName("clr-wizard-content"));
 
@@ -155,11 +156,20 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
      */
     public static class ClarityWizardPageComponent extends AbstractSeleniumComponent
     {
+        public static ClarityWizardPageComponent byTestId(ClarityWizardComponent wizard, String testId)
+        {
+            return new ClarityWizardPageComponent(wizard, selectByTestId(testId));
+        }
+
         private final ClarityWizardComponent wizard;
 
+        /**
+         * @deprecated Use {@link #ClarityWizardPageComponent(ClarityWizardComponent, WebElementSelector)} instead
+         */
+        @Deprecated(forRemoval = true)
         public ClarityWizardPageComponent(ClarityWizardComponent wizard, String seleniumKey)
         {
-            this(wizard, WebElementSelector.selectBySeleniumKey(seleniumKey));
+            this(wizard, WebElementSelector.selectByTestIdOrSeleniumKey(seleniumKey));
         }
 
         public ClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector)

@@ -22,6 +22,15 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
         return new InputComponent(parent, WebElementSelector.selectByName(name));
     }
 
+    public static InputComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static InputComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new InputComponent(parent, WebElementSelector.selectBySeleniumKey(seleniumKey));
@@ -51,9 +60,8 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
 
         String jointValues = String.join("", values);
 
-        SeleniumAsserts
-            .assertThatSoon(String.format("Enter \"%s\"", jointValues), () -> Utils.simplify(getValue()),
-                Matchers.is(Utils.simplify(jointValues)));
+        SeleniumAsserts.assertThatSoon(String.format("Enter \"%s\"", jointValues), () -> Utils.simplify(getValue()),
+            Matchers.is(Utils.simplify(jointValues)));
     }
 
     /**

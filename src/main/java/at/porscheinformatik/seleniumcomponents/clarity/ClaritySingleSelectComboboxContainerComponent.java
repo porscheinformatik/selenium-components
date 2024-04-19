@@ -24,6 +24,16 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
             optionFactory);
     }
 
+    public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent> ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> byTestId(
+        SeleniumComponent parent, String testId, SeleniumComponentFactory<OPTION_TYPE> optionFactory)
+    {
+        return new ClaritySingleSelectComboboxContainerComponent<>(parent, selectByTestId(testId), optionFactory);
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String, SeleniumComponentFactory)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent> ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> bySeleniumKey(
         SeleniumComponent parent, String seleniumKey, SeleniumComponentFactory<OPTION_TYPE> optionFactory)
     {

@@ -15,11 +15,31 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
         return new ClarityInputContainerComponent(parent, selectByTagName("clr-input-container"));
     }
 
+    public static ClarityInputContainerComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ClarityInputContainerComponent(parent, selectByTestId("clr-input-container", testId));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
         return new ClarityInputContainerComponent(parent, selectBySeleniumKey("clr-input-container", seleniumKey));
     }
 
+    public static ClarityInputContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId)
+    {
+        String xpath = String.format(".//clr-input-container[.//input[@data-testid='%s']]", testId);
+
+        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    /**
+     * @deprecated Use {@link #byTestIdOfInput(SeleniumComponent, String)} instead
+     */
+    @Deprecated(forRemoval = true)
     public static ClarityInputContainerComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey)
     {
         String xpath = String.format(".//clr-input-container[.//input[@selenium-key='%s']]", seleniumKey);
@@ -36,9 +56,8 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
 
     public static ClarityInputContainerComponent byLabel(SeleniumComponent parent, String label)
     {
-        String xpath = String
-            .format(".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]",
-                label);
+        String xpath = String.format(
+            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]", label);
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
