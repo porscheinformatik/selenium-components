@@ -1,5 +1,13 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.11.2
+
+- Fixed an issue with DataGrids of Clartiy 17.2.1
+
+## selenium-components-0.11.1
+
+- Introduced ClarityPasswordContainerComponent
+
 ## selenium-components-0.11.0
 
 - The attribute `selenium-key` will be removed in favor of the official `data-testid` attribute. All methods

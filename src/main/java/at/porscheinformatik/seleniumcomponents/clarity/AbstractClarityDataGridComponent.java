@@ -16,8 +16,8 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
 /**
- * @author Daniel Furtlehner
  * @param <RowT> type of rows in this grid
+ * @author Daniel Furtlehner
  */
 public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSeleniumComponent>
     extends AbstractSeleniumComponent
@@ -81,7 +81,8 @@ public abstract class AbstractClarityDataGridComponent<RowT extends AbstractSele
     {
         DataGridBodyComponent(SeleniumComponent parent, SeleniumComponentFactory<RowT> rowFactory)
         {
-            super(parent, selectByClassName("datagrid"), selectByCss(".datagrid-table > .datagrid-row"), rowFactory);
+            super(parent, selectByClassName("datagrid"), selectByCss(".datagrid-table .datagrid-rows .datagrid-row"),
+                rowFactory);
         }
     }
 
