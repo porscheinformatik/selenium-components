@@ -19,13 +19,16 @@ import java.util.function.Predicate;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.remote.RemoteExecuteMethod;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.html5.RemoteWebStorage;
 
 /**
  * Environment for Selenium tests.
@@ -131,7 +134,7 @@ public interface SeleniumEnvironment
      * Takes a screenshot.
      *
      * @return the screenshot, depending on {@link SeleniumGlobals#getScreenshotOutputType()} it either returns a Base64
-     *         image or the path to the file. May be null if screenshots are not possible.
+     * image or the path to the file. May be null if screenshots are not possible.
      */
     default String takeScreenshot()
     {
@@ -351,7 +354,8 @@ public interface SeleniumEnvironment
 
     /**
      * Tries to switch the window with the specified title (case-insensitive). After this, the
-     * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be closed.
+     * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be
+     * closed.
      *
      * @param title the title
      * @return the handle for the window
@@ -364,7 +368,8 @@ public interface SeleniumEnvironment
 
     /**
      * Tries to switch to "the other windows". Assumes that there are exactly two windows. After this, the
-     * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be closed.
+     * {@link SeleniumEnvironment} and it's web driver points to the window, until the {@link SubWindow} will be
+     * closed.
      *
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
@@ -616,15 +621,32 @@ public interface SeleniumEnvironment
         getDriver().manage().deleteCookieNamed(cookieName);
     }
 
-    /**
-     * Clears the local storage
-     */
-    default void clearLocalStorage()
+    default LocalStorage localStorage()
     {
         WebDriver driver = getDriver();
-        JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-        executor.executeScript("window.localStorage.clear()");
+        if (driver instanceof RemoteWebDriver remoteWebDriver)
+        {
+            RemoteExecuteMethod executeMethod = new RemoteExecuteMethod(remoteWebDriver);
+            RemoteWebStorage webStorage = new RemoteWebStorage(executeMethod);
+
+            return webStorage.getLocalStorage();
+        }
+        else
+        {
+            throw new UnsupportedOperationException("Unsupported driver: " + driver.getClass().getName());
+        }
+    }
+
+    /**
+     * Clears the local storage
+     *
+     * @deprecated use {@link #localStorage()}.clear() instead
+     */
+    @Deprecated(forRemoval = true)
+    default void clearLocalStorage()
+    {
+        localStorage().clear();
     }
 
     /**

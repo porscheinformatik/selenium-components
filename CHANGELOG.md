@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.11.3
+
+- Add code for interacting with local storage
+
 ## selenium-components-0.11.2
 
 - Fixed an issue with DataGrids of Clartiy 17.2.1
