@@ -3,6 +3,8 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
 import static org.hamcrest.Matchers.*;
 
+import org.openqa.selenium.Keys;
+
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
@@ -22,8 +24,6 @@ public abstract class AbstractClarityComboboxComponent<OPTION_TYPE extends Abstr
 
     protected final ClarityComboboxOptionsComponent<OPTION_TYPE> options;
 
-    // ---
-
     protected AbstractClarityComboboxComponent(SeleniumComponent parent, WebElementSelector selector,
         SeleniumComponentFactory<OPTION_TYPE> optionFactory)
     {
@@ -32,20 +32,23 @@ public abstract class AbstractClarityComboboxComponent<OPTION_TYPE extends Abstr
         options = new ClarityComboboxOptionsComponent<>(SeleniumUtils.root(this), optionFactory);
     }
 
-    // ---
-
     @Override
     abstract public void clear();
 
-    public void selectByLabel(String label)
+    public void selectByLabel(String partialText)
     {
         input.clear();
-        input.enter(label);
+        input.enter(partialText);
 
         assertThatSoon(options::isVisible, is(true));
 
-        options.selectOptionByLabel(label);
+        options.selectOptionByLabel(partialText);
+
+        // blur in order to make sure, that the options are closed
+        input.type(Keys.TAB);
     }
+
+    public abstract void assertSelected(String partialText);
 
     @Override
     public boolean isEnabled()

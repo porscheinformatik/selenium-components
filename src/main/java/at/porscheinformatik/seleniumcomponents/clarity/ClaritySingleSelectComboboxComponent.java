@@ -2,8 +2,10 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
 
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -15,19 +17,17 @@ import at.porscheinformatik.seleniumcomponents.clarity.ClarityComboboxOptionsCom
 public class ClaritySingleSelectComboboxComponent<OPTION_TYPE extends AbstractClarityComboboxOptionComponent>
     extends AbstractClarityComboboxComponent<OPTION_TYPE>
 {
-    public ClaritySingleSelectComboboxComponent(SeleniumComponent parent,
+    protected ClaritySingleSelectComboboxComponent(SeleniumComponent parent,
         SeleniumComponentFactory<OPTION_TYPE> optionFactory)
     {
         super(parent, selectByTagName("clr-combobox"), optionFactory);
     }
 
-    public ClaritySingleSelectComboboxComponent(SeleniumComponent parent, WebElementSelector selector,
+    protected ClaritySingleSelectComboboxComponent(SeleniumComponent parent, WebElementSelector selector,
         SeleniumComponentFactory<OPTION_TYPE> optionFactory)
     {
         super(parent, selector, optionFactory);
     }
-
-    // --- //
 
     @Override
     public void clear()
@@ -46,5 +46,12 @@ public class ClaritySingleSelectComboboxComponent<OPTION_TYPE extends AbstractCl
     public String getSelectedLabel()
     {
         return input.getValue();
+    }
+
+    @Override
+    public void assertSelected(String partialText)
+    {
+        SeleniumAsserts.assertThatSoon("\"" + partialText + "\" is selected", this::getSelectedLabel,
+            Matchers.containsString(partialText));
     }
 }

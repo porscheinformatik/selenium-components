@@ -1,5 +1,11 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.12.0
+
+- Stabelize Clarity comboboxes. It's a minor breaking change, because I could not resist to move the abstract
+  classes to their own file.
+- Added selectByText and selectByClassNameAndText to the WebElementSelectors
+
 ## selenium-components-0.11.3
 
 - Add code for interacting with local storage

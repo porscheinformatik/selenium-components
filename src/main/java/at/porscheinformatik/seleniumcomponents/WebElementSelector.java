@@ -202,6 +202,35 @@ public interface WebElementSelector
     }
 
     /**
+     * A selector that matches any element with the specified name, that contains the specified text. It does not matter
+     * if the text ist nested in other elements.
+     *
+     * @param tagName the html tag to select
+     * @param text the text the element should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByText(String tagName, String text)
+    {
+        return selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, text));
+    }
+
+    /**
+     * A selector that matches any element with the specified name, that contains the specified text. It does not matter
+     * if the text ist nested in other elements.
+     *
+     * @param tagName the html tag to select
+     * @param className the class name of the element
+     * @param text the text the element should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByClassNameAndText(String tagName, String className, String text)
+    {
+        return selectByXPath(
+            String.format(".//%s[contains(concat(' ', @class, ' '), ' %s ') and contains(., '%s')]", tagName, className,
+                text));
+    }
+
+    /**
      * A selector that uses the value of the "data-testid" attribute of an element. This selector respects the hierarchy
      * of components. The implementation is bases on a CSS selector query.
      *

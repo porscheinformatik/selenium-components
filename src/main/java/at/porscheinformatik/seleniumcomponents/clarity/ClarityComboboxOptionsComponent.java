@@ -1,8 +1,6 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
-import static org.hamcrest.Matchers.*;
 
 import java.util.function.Predicate;
 
@@ -19,6 +17,7 @@ public class ClarityComboboxOptionsComponent<OPTION_TYPE extends AbstractClarity
 {
     private final SeleniumComponentListFactory<OPTION_TYPE> options;
 
+    private final SeleniumComponentFactory<OPTION_TYPE> optionFactory;
     // ---
 
     /**
@@ -26,7 +25,7 @@ public class ClarityComboboxOptionsComponent<OPTION_TYPE extends AbstractClarity
      * DOM, but appended at the very end, just before the {@code </body>} tag. Therefore, it must be queried from the
      * DOM root. There can only be one active {@code <clr-options class="clr-combobox-options">} dropdown at a time, so
      * this should always work (considering a timeout).
-     * 
+     *
      * @param parent The parent component
      */
     public ClarityComboboxOptionsComponent(SeleniumComponent parent,
@@ -40,22 +39,31 @@ public class ClarityComboboxOptionsComponent<OPTION_TYPE extends AbstractClarity
     {
         super(parent, selector);
 
+        this.optionFactory = optionFactory;
         options = new SeleniumComponentListFactory<>(this, selectByClassName("clr-combobox-option"), optionFactory);
     }
 
     // ---
 
+    /**
+     * @param predicate the predicate to find the option
+     * @return the option or null
+     * @deprecated avoid for performance reasons
+     */
+    @Deprecated(forRemoval = true)
     public OPTION_TYPE findOption(Predicate<OPTION_TYPE> predicate)
     {
         return options.find(predicate);
     }
 
+    public OPTION_TYPE getOptionByLabel(String label)
+    {
+        return optionFactory.create(this, WebElementSelector.selectByText("clr-option", label));
+    }
+
     public void selectOptionByLabel(String label)
     {
-        OPTION_TYPE foundOption =
-            assertThatSoon(() -> options.find(option -> option.getText().contains(label)), notNullValue());
-
-        foundOption.click();
+        getOptionByLabel(label).click();
     }
 
     public static abstract class AbstractClarityComboboxOptionComponent extends AbstractSeleniumComponent
