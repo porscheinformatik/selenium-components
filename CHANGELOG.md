@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.12.1
+
+- Add selectByLabel* methode to WebElementSelectors
+- Add byText and byLabel factory methods to some components
+
 ## selenium-components-0.12.0
 
 - Stabelize Clarity comboboxes. It's a minor breaking change, because I could not resist to move the abstract

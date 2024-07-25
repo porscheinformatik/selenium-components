@@ -156,7 +156,7 @@ public final class SeleniumMatchers
      */
     public static <ComponentT extends ActiveSeleniumComponent> Matcher<ComponentT> isEditable()
     {
-        return new GenericSeleniumComponentMatcher<>("A component, that is selected",
+        return new GenericSeleniumComponentMatcher<>("A component, that is editable",
             ActiveSeleniumComponent::isEditable, Matchers.equalTo(true));
     }
 

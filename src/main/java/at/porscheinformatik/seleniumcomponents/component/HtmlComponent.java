@@ -15,6 +15,51 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public final class HtmlComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static HtmlComponent byId(SeleniumComponent parent, String id)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectById(id));
+    }
+
+    public static HtmlComponent byTagName(SeleniumComponent parent, String tagName)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByTagName(tagName));
+    }
+
+    public static HtmlComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByTestId(testId));
+    }
+
+    public static HtmlComponent byText(SeleniumComponent parent, String tagName, String partialText)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByText(tagName, partialText));
+    }
+
+    public static HtmlComponent byClassName(SeleniumComponent parent, String className)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByClassName(className));
+    }
+
+    public static HtmlComponent byClassNameAndText(SeleniumComponent parent, String className, String text)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByClassNameAndText(className, text));
+    }
+
+    public static HtmlComponent byClassNameAndText(SeleniumComponent parent, String tagName, String className,
+        String text)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByClassNameAndText(tagName, className, text));
+    }
+
+    public static HtmlComponent byCss(SeleniumComponent parent, String css)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByCss(css));
+    }
+
+    public static HtmlComponent byXPath(SeleniumComponent parent, String xpath)
+    {
+        return new HtmlComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
 
     /**
      * Creates the component.

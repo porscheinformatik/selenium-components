@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.clarity;
 
@@ -16,11 +16,26 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 
 /**
  * Component for https://vmware.github.io/clarity/documentation/v1.0/checkboxes
- * 
+ *
  * @author Daniel Furtlehner
  */
 public class ClarityCheckboxComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static ClarityCheckboxComponent within(SeleniumComponent parent)
+    {
+        return new ClarityCheckboxComponent(parent, selectByTagName("clr-checkbox-wrapper"));
+    }
+
+    public static ClarityCheckboxComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ClarityCheckboxComponent(parent, selectByTestId("clr-checkbox-wrapper", testId));
+    }
+
+    public static ClarityCheckboxComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ClarityCheckboxComponent(parent, selectByText("clr-checkbox-wrapper", partialText));
+    }
+
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
     private final CheckboxComponent checkbox = new CheckboxComponent(this);
 

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.component;
 
@@ -14,7 +14,6 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class HeadingComponent extends AbstractSeleniumComponent
 {
-
     public HeadingComponent(SeleniumComponent parent, int level)
     {
         super(parent, selectByTagName("h" + level));

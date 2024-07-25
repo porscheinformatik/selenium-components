@@ -10,6 +10,26 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class TextAreaComponent extends InputComponent
 {
+    public static InputComponent within(SeleniumComponent parent)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByTagName("textarea"));
+    }
+
+    public static InputComponent byName(SeleniumComponent parent, String name)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByName(name));
+    }
+
+    public static InputComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
+    }
+
+    public static InputComponent byLabel(SeleniumComponent parent, String label)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByXPath(
+            String.format(".//textarea[@id=//label[contains(text(),'%s')]/@for]", label)));
+    }
 
     public TextAreaComponent(SeleniumComponent parent)
     {

@@ -20,6 +20,11 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
         return new ClarityInputContainerComponent(parent, selectByTestId("clr-input-container", testId));
     }
 
+    public static ClarityInputContainerComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ClarityInputContainerComponent(parent, selectByText("clr-input-container", partialText));
+    }
+
     /**
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */

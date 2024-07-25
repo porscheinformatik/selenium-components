@@ -4,6 +4,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -42,7 +43,7 @@ public interface WebElementSelector
             @Override
             public List<WebElement> findAll(SearchContext context)
             {
-                return Arrays.asList(element);
+                return Collections.singletonList(element);
             }
 
             @Override
@@ -127,6 +128,20 @@ public interface WebElementSelector
     }
 
     /**
+     * A selector that uses the tag name of an element, that contains a label with the specified text. Prefer using
+     * {@link #selectByLabelFor(String, String)} - just use this method if the element is not directly linked to the
+     * label.
+     *
+     * @param tagName the html tag to select
+     * @param partialLabel the text the label should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByTagNameContainingLabel(String tagName, String partialLabel)
+    {
+        return selectByXPath(String.format(".//%s[.//label[contains(.,'%s')]]", tagName, partialLabel));
+    }
+
+    /**
      * A selector that uses the value of the "class" attribute of an element. If the "class" attribute contains multiple
      * classes, the selector will test each. This selector respects the hierarchy of components. If multiple class names
      * are specified, one of the class names must match.
@@ -136,8 +151,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByClassName(String... classNames)
     {
-        return selectByCss(
-            Arrays.stream(classNames).map(className -> "." + className).toArray(size -> new String[size]));
+        return selectByCss(Arrays.stream(classNames).map(className -> "." + className).toArray(String[]::new));
     }
 
     /**
@@ -206,12 +220,47 @@ public interface WebElementSelector
      * if the text ist nested in other elements.
      *
      * @param tagName the html tag to select
-     * @param text the text the element should contain
+     * @param partialText the text the element should contain
      * @return the selector
      */
-    static WebElementSelector selectByText(String tagName, String text)
+    static WebElementSelector selectByText(String tagName, String partialText)
     {
-        return selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, text));
+        return selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, partialText));
+    }
+
+    /**
+     * A selector that matches any element with the specified name, that contains the specified text. It does not matter
+     * if the text ist nested in other elements.
+     *
+     * @param className the class name of the element
+     * @param partialText the text the element should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByClassNameAndText(String className, String partialText)
+    {
+        return selectByClassNameAndText("*", className, partialText);
+    }
+
+    /**
+     * A selector that matches the element referenced by the label with the specified text.
+     *
+     * @param partialLabel the text the label should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByLabelFor(String partialLabel)
+    {
+        return selectByXPath(String.format(".//*[@id=//label[contains(text(),'%s')]/@for]", partialLabel));
+    }
+
+    /**
+     * A selector that matches the element referenced by the label with the specified text.
+     *
+     * @param partialLabel the text the label should contain
+     * @return the selector
+     */
+    static WebElementSelector selectByLabelFor(String tagType, String partialLabel)
+    {
+        return selectByXPath(String.format(".//%s[@id=//label[contains(text(),'%s')]/@for]", tagType, partialLabel));
     }
 
     /**
@@ -220,14 +269,14 @@ public interface WebElementSelector
      *
      * @param tagName the html tag to select
      * @param className the class name of the element
-     * @param text the text the element should contain
+     * @param partialText the text the element should contain
      * @return the selector
      */
-    static WebElementSelector selectByClassNameAndText(String tagName, String className, String text)
+    static WebElementSelector selectByClassNameAndText(String tagName, String className, String partialText)
     {
         return selectByXPath(
             String.format(".//%s[contains(concat(' ', @class, ' '), ' %s ') and contains(., '%s')]", tagName, className,
-                text));
+                partialText));
     }
 
     /**
@@ -380,7 +429,7 @@ public interface WebElementSelector
             @Override
             public List<WebElement> findAll(SearchContext context)
             {
-                return Arrays.asList(find(context));
+                return Collections.singletonList(find(context));
             }
 
             @Override
@@ -416,7 +465,7 @@ public interface WebElementSelector
             {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.size() == 0)
+                if (elements.isEmpty())
                 {
                     return null;
                 }
@@ -427,7 +476,7 @@ public interface WebElementSelector
             @Override
             public List<WebElement> findAll(SearchContext context)
             {
-                return Arrays.asList(find(context));
+                return Collections.singletonList(find(context));
             }
 
             @Override
@@ -463,7 +512,7 @@ public interface WebElementSelector
             {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.size() == 0)
+                if (elements.isEmpty())
                 {
                     return null;
                 }
@@ -474,7 +523,7 @@ public interface WebElementSelector
             @Override
             public List<WebElement> findAll(SearchContext context)
             {
-                return Arrays.asList(find(context));
+                return Collections.singletonList(find(context));
             }
 
             @Override
@@ -519,7 +568,7 @@ public interface WebElementSelector
             @Override
             public List<WebElement> findAll(SearchContext context)
             {
-                return Arrays.asList(find(context));
+                return Collections.singletonList(find(context));
             }
 
             private int getColspan(WebElement element)

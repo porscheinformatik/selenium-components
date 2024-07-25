@@ -12,9 +12,26 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class LinkComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static LinkComponent within(SeleniumComponent parent)
+    {
+        return new LinkComponent(parent, selectByTagName("a"));
+    }
+
     public static LinkComponent byTestId(SeleniumComponent parent, String testId)
     {
         return new LinkComponent(parent, WebElementSelector.selectByTestId("a", testId));
+    }
+
+    public static LinkComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new LinkComponent(parent, selectByText("a", partialText));
+    }
+
+    public static LinkComponent byHref(SeleniumComponent parent, String partialHref)
+    {
+        String xpath = String.format(".//a[contains(@href, '%s')]", partialHref);
+
+        return new LinkComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
     public LinkComponent(SeleniumComponent parent)

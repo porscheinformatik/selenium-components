@@ -16,6 +16,10 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class InputComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static InputComponent within(SeleniumComponent parent)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByTagName("input"));
+    }
 
     public static InputComponent byName(SeleniumComponent parent, String name)
     {
@@ -25,6 +29,12 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
     public static InputComponent byTestId(SeleniumComponent parent, String testId)
     {
         return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
+    }
+
+    public static InputComponent byLabel(SeleniumComponent parent, String label)
+    {
+        return new InputComponent(parent, WebElementSelector.selectByXPath(
+            String.format(".//input[@id=//label[contains(text(),'%s')]/@for]", label)));
     }
 
     /**

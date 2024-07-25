@@ -23,8 +23,8 @@ public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends Ab
         DefaultClarityComboboxLabelPillComponent> within(
         SeleniumComponent parent)
     {
-        return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectByTagName("clr-combobox-container"),
-            DefaultClarityComboboxOptionComponent::new, DefaultClarityComboboxLabelPillComponent::new);
+        return within(parent, DefaultClarityComboboxOptionComponent::new,
+            DefaultClarityComboboxLabelPillComponent::new);
     }
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
@@ -40,8 +40,8 @@ public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends Ab
         DefaultClarityComboboxLabelPillComponent> byTestId(
         SeleniumComponent parent, String testId)
     {
-        return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectByTestId(testId),
-            DefaultClarityComboboxOptionComponent::new, DefaultClarityComboboxLabelPillComponent::new);
+        return byTestId(parent, testId, DefaultClarityComboboxOptionComponent::new,
+            DefaultClarityComboboxLabelPillComponent::new);
     }
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
@@ -51,6 +51,23 @@ public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends Ab
     {
         return new ClarityMultiSelectComboboxContainerComponent<>(parent, selectByTestId(testId), optionFactory,
             pillFactory);
+    }
+
+    public static ClarityMultiSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent,
+        DefaultClarityComboboxLabelPillComponent> byLabel(
+        SeleniumComponent parent, String partialLabel)
+    {
+        return byLabel(parent, partialLabel, DefaultClarityComboboxOptionComponent::new,
+            DefaultClarityComboboxLabelPillComponent::new);
+    }
+
+    public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
+        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent> ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> byLabel(
+        SeleniumComponent parent, String partialLabel, SeleniumComponentFactory<OPTION_TYPE> optionFactory,
+        SeleniumComponentFactory<PILL_TYPE> pillFactory)
+    {
+        return new ClarityMultiSelectComboboxContainerComponent<>(parent,
+            selectByTagNameContainingLabel("clr-combobox-container", partialLabel), optionFactory, pillFactory);
     }
 
     /**
@@ -78,6 +95,11 @@ public class ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE extends Ab
     public void clear()
     {
         multiSelect.clear();
+    }
+
+    public void selectByLabel(String partialText)
+    {
+        multiSelect.selectByLabel(partialText);
     }
 
     public PILL_TYPE findLabelPill(Predicate<PILL_TYPE> predicate)

@@ -25,6 +25,11 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
         return new ButtonComponent(parent, selectByTestId("button", testId));
     }
 
+    public static ButtonComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ButtonComponent(parent, selectByText("button", partialText));
+    }
+
     /**
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */

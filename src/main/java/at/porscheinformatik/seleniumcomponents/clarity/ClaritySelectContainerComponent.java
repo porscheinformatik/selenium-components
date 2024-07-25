@@ -18,6 +18,11 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
         return new ClaritySelectContainerComponent(parent, selectByTestId("clr-select-container", testId));
     }
 
+    public static ClaritySelectContainerComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ClaritySelectContainerComponent(parent, selectByText("clr-select-container", partialText));
+    }
+
     /**
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */

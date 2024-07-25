@@ -18,8 +18,7 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     public static ClaritySingleSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent> within(
         SeleniumComponent parent)
     {
-        return new ClaritySingleSelectComboboxContainerComponent<>(parent, selectByTagName("clr-combobox-container"),
-            DefaultClarityComboboxOptionComponent::new);
+        return within(parent, DefaultClarityComboboxOptionComponent::new);
     }
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent> ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> within(
@@ -32,14 +31,26 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     public static ClaritySingleSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent> byTestId(
         SeleniumComponent parent, String testId)
     {
-        return new ClaritySingleSelectComboboxContainerComponent<>(parent, selectByTestId(testId),
-            DefaultClarityComboboxOptionComponent::new);
+        return byTestId(parent, testId, DefaultClarityComboboxOptionComponent::new);
     }
 
     public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent> ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> byTestId(
         SeleniumComponent parent, String testId, SeleniumComponentFactory<OPTION_TYPE> optionFactory)
     {
         return new ClaritySingleSelectComboboxContainerComponent<>(parent, selectByTestId(testId), optionFactory);
+    }
+
+    public static ClaritySingleSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent> byLabel(
+        SeleniumComponent parent, String partialLabel)
+    {
+        return byLabel(parent, partialLabel, DefaultClarityComboboxOptionComponent::new);
+    }
+
+    public static <OPTION_TYPE extends AbstractClarityComboboxOptionComponent> ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> byLabel(
+        SeleniumComponent parent, String partialLabel, SeleniumComponentFactory<OPTION_TYPE> optionFactory)
+    {
+        return new ClaritySingleSelectComboboxContainerComponent<>(parent,
+            selectByTagNameContainingLabel("clr-combobox-container", partialLabel), optionFactory);
     }
 
     /**

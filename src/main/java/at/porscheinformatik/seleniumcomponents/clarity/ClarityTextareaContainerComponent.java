@@ -8,9 +8,6 @@ import at.porscheinformatik.seleniumcomponents.component.TextAreaComponent;
 
 public class ClarityTextareaContainerComponent extends ClarityFormControlContainer
 {
-    public final TextAreaComponent textarea = new TextAreaComponent(this);
-
-    // ---
 
     public static ClarityTextareaContainerComponent within(SeleniumComponent parent)
     {
@@ -20,6 +17,11 @@ public class ClarityTextareaContainerComponent extends ClarityFormControlContain
     public static ClarityTextareaContainerComponent byTestId(SeleniumComponent parent, String testId)
     {
         return new ClarityTextareaContainerComponent(parent, selectByTestId("clr-textarea-container", testId));
+    }
+
+    public static ClarityTextareaContainerComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ClarityTextareaContainerComponent(parent, selectByText("clr-textarea-container", partialText));
     }
 
     /**
@@ -32,7 +34,7 @@ public class ClarityTextareaContainerComponent extends ClarityFormControlContain
             selectBySeleniumKey("clr-textarea-container", seleniumKey));
     }
 
-    // ---
+    public final TextAreaComponent textarea = new TextAreaComponent(this);
 
     public ClarityTextareaContainerComponent(SeleniumComponent parent, WebElementSelector selector)
     {

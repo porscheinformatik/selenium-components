@@ -22,13 +22,29 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  */
 public class ClarityAlertComponent extends AbstractSeleniumComponent
 {
+    public static ClarityAlertComponent within(SeleniumComponent parent)
+    {
+        return new ClarityAlertComponent(parent, selectByTagName("clr-alert"));
+    }
+
+    public static ClarityAlertComponent byTestId(SeleniumComponent parent, String testId)
+    {
+        return new ClarityAlertComponent(parent, selectByTestId("clr-alert", testId));
+    }
+
+    public static ClarityAlertComponent byText(SeleniumComponent parent, String partialText)
+    {
+        return new ClarityAlertComponent(parent, selectByText("clr-alert", partialText));
+    }
+
     private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory =
         new SeleniumComponentListFactory<>(this, selectByTagName("clr-alert-item"), ClarityAlertItem::new);
+
     private final HtmlComponent alertContainer = new HtmlComponent(this, selectByClassName("alert"));
 
     public ClarityAlertComponent(SeleniumComponent parent)
     {
-        this(parent, WebElementSelector.selectByTagName("clr-alert"));
+        this(parent, selectByTagName("clr-alert"));
     }
 
     public ClarityAlertComponent(SeleniumComponent parent, WebElementSelector selector)
@@ -99,6 +115,21 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
      */
     public static class ClarityAlertItem extends AbstractSeleniumComponent
     {
+        public static ClarityAlertItem within(SeleniumComponent parent)
+        {
+            return new ClarityAlertItem(parent, selectByTagName("clr-alert-item"));
+        }
+
+        public static ClarityAlertItem byTestId(SeleniumComponent parent, String testId)
+        {
+            return new ClarityAlertItem(parent, selectByTestId("clr-alert-item", testId));
+        }
+
+        public static ClarityAlertItem byText(SeleniumComponent parent, String partialText)
+        {
+            return new ClarityAlertItem(parent, selectByText("clr-alert-item", partialText));
+        }
+
         private final HtmlComponent alertText = new HtmlComponent(this, selectByClassName("alert-text"));
 
         public ClarityAlertItem(SeleniumComponent parent, WebElementSelector selector)

@@ -15,9 +15,28 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class ImageComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
 {
+    public static ImageComponent within(SeleniumComponent parent)
+    {
+        return new ImageComponent(parent, selectByTagName("img"));
+    }
+
     public static ImageComponent byTestId(SeleniumComponent parent, String testId)
     {
         return new ImageComponent(parent, WebElementSelector.selectByTestId("img", testId));
+    }
+
+    public static ImageComponent byAlt(SeleniumComponent parent, String partialText)
+    {
+        String xpath = String.format(".//img[contains(@alt, '%s')]", partialText);
+
+        return new ImageComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ImageComponent bySrc(SeleniumComponent parent, String partialSrc)
+    {
+        String xpath = String.format(".//img[contains(@src, '%s')]", partialSrc);
+
+        return new ImageComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
     public ImageComponent(SeleniumComponent parent)
