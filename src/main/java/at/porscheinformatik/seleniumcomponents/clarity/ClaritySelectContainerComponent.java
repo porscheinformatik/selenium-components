@@ -23,6 +23,19 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
         return new ClaritySelectContainerComponent(parent, selectByText("clr-select-container", partialText));
     }
 
+    public static ClaritySelectContainerComponent byFormControlName(SeleniumComponent parent, String formControlName)
+    {
+        String xpath = String.format(".//clr-select-container[.//select[@formcontrolname='%s']]", formControlName);
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClaritySelectContainerComponent byLabel(SeleniumComponent parent, String label)
+    {
+        String xpath = String.format(
+            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]", label);
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     /**
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */

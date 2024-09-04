@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.12.2
+
+- Add byFormControlName methode to ClaritySelectContainerComponent
+
 ## selenium-components-0.12.1
 
 - Add selectByLabel* methode to WebElementSelectors
