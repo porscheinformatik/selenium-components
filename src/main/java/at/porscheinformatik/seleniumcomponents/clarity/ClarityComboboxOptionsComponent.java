@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
@@ -64,6 +65,11 @@ public class ClarityComboboxOptionsComponent<OPTION_TYPE extends AbstractClarity
     public void selectOptionByLabel(String label)
     {
         getOptionByLabel(label).click();
+    }
+
+    public List<String> getOptionLabels()
+    {
+        return options.findAll().stream().map(OPTION_TYPE::getText).toList();
     }
 
     public static abstract class AbstractClarityComboboxOptionComponent extends AbstractSeleniumComponent
