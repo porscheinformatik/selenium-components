@@ -35,6 +35,20 @@ public class ClarityRadioContainerComponent extends ClarityFormControlContainer
             WebElementSelector.selectByTagNameContainingLabel("clr-radio-container", partialLabel));
     }
 
+    public static ClarityRadioContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId)
+    {
+        String xpath = String.format(".//clr-radio-container[.//input[@data-testid='%s']]", testId);
+
+        return new ClarityRadioContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityRadioContainerComponent byFormControlName(SeleniumComponent parent, String formControlName)
+    {
+        String xpath = String.format(".//clr-radio-container[.//input[@formcontrolname='%s']]", formControlName);
+
+        return new ClarityRadioContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     private final SeleniumComponentListFactory<ClarityRadioComponent> radios =
         new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("clr-radio-wrapper"),
             ClarityRadioComponent::new);

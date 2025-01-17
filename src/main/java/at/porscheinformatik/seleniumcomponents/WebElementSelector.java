@@ -249,7 +249,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByLabelFor(String partialLabel)
     {
-        return selectByXPath(String.format(".//*[@id=//label[contains(text(),'%s')]/@for]", partialLabel));
+        return selectByXPath(String.format(".//*[@id=//label[contains(.,'%s')]/@for]", partialLabel));
     }
 
     /**
@@ -260,7 +260,7 @@ public interface WebElementSelector
      */
     static WebElementSelector selectByLabelFor(String tagType, String partialLabel)
     {
-        return selectByXPath(String.format(".//%s[@id=//label[contains(text(),'%s')]/@for]", tagType, partialLabel));
+        return selectByXPath(String.format(".//%s[@id=//label[contains(.,'%s')]/@for]", tagType, partialLabel));
     }
 
     /**

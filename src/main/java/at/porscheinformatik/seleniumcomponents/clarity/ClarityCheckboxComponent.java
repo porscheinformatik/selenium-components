@@ -36,6 +36,21 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
         return new ClarityCheckboxComponent(parent, selectByText("clr-checkbox-wrapper", partialText));
     }
 
+    public static ClarityCheckboxComponent byFormControlName(SeleniumComponent parent, String formControlName)
+    {
+        String xpath = String.format(".//clr-checkbox-wrapper[.//input[@formcontrolname='%s']]", formControlName);
+
+        return new ClarityCheckboxComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
+    public static ClarityCheckboxComponent byLabel(SeleniumComponent parent, String label)
+    {
+        String xpath = String.format(
+            ".//clr-checkbox-wrapper[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]", label);
+
+        return new ClarityCheckboxComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
     private final CheckboxComponent checkbox = new CheckboxComponent(this);
 

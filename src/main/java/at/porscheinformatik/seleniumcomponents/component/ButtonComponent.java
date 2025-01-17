@@ -41,9 +41,7 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
 
     public static ButtonComponent byLabel(SeleniumComponent parent, String label)
     {
-        String xpath = String.format(".//button[contains(text(),'%s')]", label);
-
-        return new ButtonComponent(parent, WebElementSelector.selectByXPath(xpath));
+        return new ButtonComponent(parent, WebElementSelector.selectByText("button", label));
     }
 
     public ButtonComponent(SeleniumComponent parent)

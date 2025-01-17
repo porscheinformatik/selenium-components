@@ -33,8 +33,8 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
 
     public static InputComponent byLabel(SeleniumComponent parent, String label)
     {
-        return new InputComponent(parent, WebElementSelector.selectByXPath(
-            String.format(".//input[@id=//label[contains(text(),'%s')]/@for]", label)));
+        return new InputComponent(parent,
+            WebElementSelector.selectByXPath(String.format(".//input[@id=//label[contains(.,'%s')]/@for]", label)));
     }
 
     /**

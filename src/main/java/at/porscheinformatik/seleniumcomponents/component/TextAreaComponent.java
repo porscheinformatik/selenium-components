@@ -10,25 +10,25 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  */
 public class TextAreaComponent extends InputComponent
 {
-    public static InputComponent within(SeleniumComponent parent)
+    public static TextAreaComponent within(SeleniumComponent parent)
     {
-        return new InputComponent(parent, WebElementSelector.selectByTagName("textarea"));
+        return new TextAreaComponent(parent, WebElementSelector.selectByTagName("textarea"));
     }
 
-    public static InputComponent byName(SeleniumComponent parent, String name)
+    public static TextAreaComponent byName(SeleniumComponent parent, String name)
     {
-        return new InputComponent(parent, WebElementSelector.selectByName(name));
+        return new TextAreaComponent(parent, WebElementSelector.selectByName(name));
     }
 
-    public static InputComponent byTestId(SeleniumComponent parent, String testId)
+    public static TextAreaComponent byTestId(SeleniumComponent parent, String testId)
     {
-        return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
+        return new TextAreaComponent(parent, WebElementSelector.selectByTestId(testId));
     }
 
-    public static InputComponent byLabel(SeleniumComponent parent, String label)
+    public static TextAreaComponent byLabel(SeleniumComponent parent, String label)
     {
-        return new InputComponent(parent, WebElementSelector.selectByXPath(
-            String.format(".//textarea[@id=//label[contains(text(),'%s')]/@for]", label)));
+        return new TextAreaComponent(parent,
+            WebElementSelector.selectByXPath(String.format(".//textarea[@id=//label[contains(.,'%s')]/@for]", label)));
     }
 
     public TextAreaComponent(SeleniumComponent parent)

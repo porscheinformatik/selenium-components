@@ -32,7 +32,7 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
     public static ClaritySelectContainerComponent byLabel(SeleniumComponent parent, String label)
     {
         String xpath = String.format(
-            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(text(),'%s')]]", label);
+            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]", label);
         return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 

@@ -58,4 +58,11 @@ public abstract class AbstractClarityModalComponent extends AbstractSeleniumComp
     {
         return modalDialog.isVisible();
     }
+
+    public void clickButtonByLabel(String label)
+    {
+        HtmlComponent button = new HtmlComponent(modalFooter, WebElementSelector.selectByText("button", label));
+
+        button.click();
+    }
 }
