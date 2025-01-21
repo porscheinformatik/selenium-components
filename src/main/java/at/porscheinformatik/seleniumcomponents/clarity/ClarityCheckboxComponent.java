@@ -80,7 +80,7 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
     {
         if (!isSelected())
         {
-            label.click();
+            click();
         }
     }
 
@@ -89,7 +89,7 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
     {
         if (isSelected())
         {
-            label.click();
+            click();
         }
     }
 

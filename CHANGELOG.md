@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.12.5
+
+- Fix selecting/deselecting Clarity checkboxes without label
+
 ## selenium-components-0.12.4
 
 - Quality of Life enhancements for Clarity Components
