@@ -10,19 +10,21 @@ import at.porscheinformatik.seleniumcomponents.component.InputComponent;
 
 public class ClarityInputContainerComponent extends ClarityFormControlContainer
 {
+    private static final String CLR_INPUT_CONTAINER = "clr-input-container";
+
     public static ClarityInputContainerComponent within(SeleniumComponent parent)
     {
-        return new ClarityInputContainerComponent(parent, selectByTagName("clr-input-container"));
+        return new ClarityInputContainerComponent(parent, selectByTagName(CLR_INPUT_CONTAINER));
     }
 
     public static ClarityInputContainerComponent byTestId(SeleniumComponent parent, String testId)
     {
-        return new ClarityInputContainerComponent(parent, selectByTestId("clr-input-container", testId));
+        return new ClarityInputContainerComponent(parent, selectByTestId(CLR_INPUT_CONTAINER, testId));
     }
 
     public static ClarityInputContainerComponent byText(SeleniumComponent parent, String partialText)
     {
-        return new ClarityInputContainerComponent(parent, selectByText("clr-input-container", partialText));
+        return new ClarityInputContainerComponent(parent, selectByText(CLR_INPUT_CONTAINER, partialText));
     }
 
     /**
@@ -31,7 +33,7 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
     @Deprecated(forRemoval = true)
     public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
     {
-        return new ClarityInputContainerComponent(parent, selectBySeleniumKey("clr-input-container", seleniumKey));
+        return new ClarityInputContainerComponent(parent, selectBySeleniumKey(CLR_INPUT_CONTAINER, seleniumKey));
     }
 
     public static ClarityInputContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId)
