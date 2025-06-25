@@ -2,6 +2,7 @@ package at.porscheinformatik.seleniumcomponents;
 
 import static org.hamcrest.Matchers.*;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,36 @@ import org.openqa.selenium.WebElement;
  */
 public interface ActiveSeleniumComponent extends SeleniumComponent
 {
+    /**
+     * Returns true if a {@link WebElement} described by this component is visible. By default it checks, if the element
+     * is visible and has a size where both x and y dimensions are greater than 0. The latter has to be checked to
+     * prevent an "ElementNotInteractableException: element not interactable: element has zero size" when trying to
+     * interact with the element.<br>
+     * <br>
+     * This method has no timeout, it does not wait for the component to become existent.
+     *
+     * @return true if the component is visible and has a size greater than 0
+     */
+    @Override
+    default boolean isVisible()
+    {
+        try
+        {
+            return SeleniumUtils.retryOnStale(() -> {
+                if(!element().isDisplayed()) {
+                    return false;
+                }
+
+                Dimension size = element().getSize();
+                return size.getWidth() > 0 && size.getHeight() > 0;
+            });
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+    }
+
     /**
      * Returns true if the component is enabled.
      *
