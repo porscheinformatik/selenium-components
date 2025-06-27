@@ -1,7 +1,8 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,33 @@ import org.openqa.selenium.WebElement;
  */
 public interface ActiveSeleniumComponent extends SeleniumComponent
 {
+    /**
+     * Returns true if the component has a size that can be interacted with. Necessary for preventing
+     * `ElementNotInteractableException: element not interactable: element has zero size` errors.
+     * 
+     * @return True if the element has a size that can be interacted with.
+     */
+    default boolean isInteractable() {
+        try {
+            return SeleniumUtils.retryOnStale(() -> {
+                Dimension size = element().getSize();
+                int width = size.getWidth();
+                int height = size.getHeight();
+
+                if (width == 0 || height == 0) {
+                    LOG.error("Element %s has size %dw x %dh. This is not interactable.", describe(), width, height);
+                    return false;
+                }
+
+                return true;
+            });
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }
+    }
+
     /**
      * Returns true if the component is enabled.
      *

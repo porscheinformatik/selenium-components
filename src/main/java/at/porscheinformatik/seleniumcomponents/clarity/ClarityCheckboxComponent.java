@@ -82,7 +82,7 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
         {
             LOG.interaction("Selecting %s", describe());
 
-            if (label.isClickable())
+            if (label.isInteractable() && label.isClickable())
             {
                 label.click();
             }
@@ -104,7 +104,7 @@ public class ClarityCheckboxComponent extends AbstractSeleniumComponent implemen
         {
             LOG.interaction("Unselecting %s", describe());
 
-            if (label.isClickable())
+            if (label.isInteractable() && label.isClickable())
             {
                 label.click();
             }
