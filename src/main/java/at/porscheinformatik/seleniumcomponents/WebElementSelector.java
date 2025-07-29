@@ -6,8 +6,12 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -84,7 +88,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectById(String id) {
-        return selectByCss("#" + id);
+        return WebElementSelector.selectByCss("#" + id);
     }
 
     /**
@@ -95,7 +99,17 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByName(String name) {
-        return selectBy(String.format("*[name='%s']", name), By.name(name));
+        return WebElementSelector.selectBy(String.format("*[name='%s']", name), By.name(name));
+    }
+
+    /**
+     * A selector that uses the value of the "formControlName" attribute of an element. This selector respects the
+     * hierarchy of components.
+     * @param name the expected value of the "formControlName" attribute of the element
+     * @return the selector
+     */
+    static WebElementSelector selectByFormControlName(String name) {
+        return WebElementSelector.selectByAttribute("input", "formControlName", name);
     }
 
     /**
@@ -106,7 +120,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByTagName(String... tagNames) {
-        return selectByCss(tagNames);
+        return WebElementSelector.selectByCss(tagNames);
     }
 
     /**
@@ -119,7 +133,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByTagNameContainingLabel(String tagName, String partialLabel) {
-        return selectByXPath(String.format(".//%s[.//label[contains(.,'%s')]]", tagName, partialLabel));
+        return WebElementSelector.selectByXPath(String.format(".//%s[.//label[contains(.,'%s')]]", tagName, partialLabel));
     }
 
     /**
@@ -131,7 +145,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByClassName(String... classNames) {
-        return selectByCss(
+        return WebElementSelector.selectByCss(
             Arrays.stream(classNames)
                 .map(className -> "." + className)
                 .toArray(String[]::new)
@@ -157,7 +171,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByAttribute(String attributeName, String attributeValue) {
-        return selectByAttribute("*", attributeName, attributeValue);
+        return WebElementSelector.selectByAttribute("*", attributeName, attributeValue);
     }
 
     /**
@@ -170,10 +184,10 @@ public interface WebElementSelector {
      */
     static WebElementSelector selectByAttribute(String tagName, String attributeName, @Nullable String attributeValue) {
         if (attributeValue == null) {
-            return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
+            return WebElementSelector.selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
 
-        return selectByXPath(String.format(".//%s[@%s='%s']", tagName, attributeName, attributeValue));
+        return WebElementSelector.selectByXPath(String.format(".//%s[@%s='%s']", tagName, attributeName, attributeValue));
     }
 
     /**
@@ -190,10 +204,10 @@ public interface WebElementSelector {
         @Nullable String attributeValue
     ) {
         if (attributeValue == null) {
-            return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
+            return WebElementSelector.selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
 
-        return selectByXPath(String.format(".//%s[contains(@%s, '%s')]", tagName, attributeName, attributeValue));
+        return WebElementSelector.selectByXPath(String.format(".//%s[contains(@%s, '%s')]", tagName, attributeName, attributeValue));
     }
 
     /**
@@ -205,7 +219,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByText(String tagName, String partialText) {
-        return selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, partialText));
+        return WebElementSelector.selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, partialText));
     }
 
     /**
@@ -217,7 +231,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByClassNameAndText(String className, String partialText) {
-        return selectByClassNameAndText("*", className, partialText);
+        return WebElementSelector.selectByClassNameAndText("*", className, partialText);
     }
 
     /**
@@ -227,7 +241,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByLabelFor(String partialLabel) {
-        return selectByXPath(String.format(".//*[@id=//label[contains(.,'%s')]/@for]", partialLabel));
+        return WebElementSelector.selectByXPath(String.format(".//*[@id=//label[contains(.,'%s')]/@for]", partialLabel));
     }
 
     /**
@@ -237,7 +251,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByLabelFor(String tagType, String partialLabel) {
-        return selectByXPath(String.format(".//%s[@id=//label[contains(.,'%s')]/@for]", tagType, partialLabel));
+        return WebElementSelector.selectByXPath(String.format(".//%s[@id=//label[contains(.,'%s')]/@for]", tagType, partialLabel));
     }
 
     /**
@@ -250,7 +264,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByClassNameAndText(String tagName, String className, String partialText) {
-        return selectByXPath(
+        return WebElementSelector.selectByXPath(
             String.format(
                 ".//%s[contains(concat(' ', @class, ' '), ' %s ') and contains(., '%s')]",
                 tagName,
@@ -268,7 +282,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByTestId(String testId) {
-        return selectByTestId("*", testId);
+        return WebElementSelector.selectByTestId("*", testId);
     }
 
     /**
@@ -280,7 +294,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByTestId(String tagName, String testId) {
-        return selectByAttribute(tagName, "data-testid", testId);
+        return WebElementSelector.selectByAttribute(tagName, "data-testid", testId);
     }
 
     /**
@@ -293,7 +307,7 @@ public interface WebElementSelector {
      */
     @Deprecated(forRemoval = true)
     static WebElementSelector selectByTestIdOrSeleniumKey(String key) {
-        return selectByTestIdOrSeleniumKey("*", key);
+        return WebElementSelector.selectByTestIdOrSeleniumKey("*", key);
     }
 
     /**
@@ -307,7 +321,7 @@ public interface WebElementSelector {
      */
     @Deprecated(forRemoval = true)
     static WebElementSelector selectByTestIdOrSeleniumKey(String tagName, String key) {
-        return selectByXPath(String.format(".//%s[@data-testid='%s' or @selenium-key='%s']", tagName, key, key));
+        return WebElementSelector.selectByXPath(String.format(".//%s[@data-testid='%s' or @selenium-key='%s']", tagName, key, key));
     }
 
     /**
@@ -320,7 +334,7 @@ public interface WebElementSelector {
      */
     @Deprecated(forRemoval = true)
     static WebElementSelector selectBySeleniumKey(String key) {
-        return selectBySeleniumKey("*", key);
+        return WebElementSelector.selectBySeleniumKey("*", key);
     }
 
     /**
@@ -334,7 +348,7 @@ public interface WebElementSelector {
      */
     @Deprecated(forRemoval = true)
     static WebElementSelector selectBySeleniumKey(String tagName, String key) {
-        return selectByAttribute(tagName, "selenium-key", key);
+        return WebElementSelector.selectByAttribute(tagName, "selenium-key", key);
     }
 
     /**
@@ -345,7 +359,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByXPath(String xpath) {
-        return selectBy(String.format("{%s}", xpath), By.xpath(xpath));
+        return WebElementSelector.selectBy(String.format("{%s}", xpath), By.xpath(xpath));
     }
 
     /**
@@ -355,7 +369,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByIndex(int index) {
-        return selectByIndex((String) null, index);
+        return WebElementSelector.selectByIndex((String) null, index);
     }
 
     /**
@@ -366,7 +380,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByIndex(String tagName, int index) {
-        return selectByXPath(String.format("(.//%s)[%d]", tagName, index + 1));
+        return WebElementSelector.selectByXPath(String.format("(.//%s)[%d]", tagName, index + 1));
     }
 
     /**
@@ -411,7 +425,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectLast() {
-        return selectLast(selectChildren());
+        return WebElementSelector.selectLast(WebElementSelector.selectChildren());
     }
 
     /**
@@ -451,7 +465,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectFirst() {
-        return selectFirst(selectChildren());
+        return WebElementSelector.selectFirst(WebElementSelector.selectChildren());
     }
 
     /**
@@ -543,7 +557,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectSelf() {
-        return selectBy("", By.xpath("."));
+        return WebElementSelector.selectBy("", By.xpath("."));
     }
 
     /**
@@ -552,7 +566,7 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectChildren() {
-        return selectBy("*", By.xpath("./*"));
+        return WebElementSelector.selectBy("*", By.xpath("./*"));
     }
 
     /**
@@ -629,7 +643,7 @@ public interface WebElementSelector {
      */
     @Deprecated
     default WebElementSelector ancestor(String xpath) {
-        WebElementSelector parent = selectByXPath("ancestor::" + xpath);
+        WebElementSelector parent = WebElementSelector.selectByXPath("ancestor::" + xpath);
         WebElementSelector that = this;
 
         return new WebElementSelector() {

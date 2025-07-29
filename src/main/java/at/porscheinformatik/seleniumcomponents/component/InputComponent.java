@@ -23,6 +23,10 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
         return new InputComponent(parent, WebElementSelector.selectByName(name));
     }
 
+    public static InputComponent byFormControlName(SeleniumComponent parent, String name) {
+        return new InputComponent(parent, WebElementSelector.selectByFormControlName(name));
+    }
+
     public static InputComponent byTestId(SeleniumComponent parent, String testId) {
         return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
     }

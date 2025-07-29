@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
-import static org.hamcrest.Matchers.is;
-
+import org.hamcrest.Matchers;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -27,7 +26,12 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
                 int height = size.getHeight();
 
                 if (width == 0 || height == 0) {
-                    LOG.error("Element %s has size %dw x %dh. This is not interactable.", describe(), width, height);
+                    SeleniumComponent.LOG.error(
+                        "Element %s has size %dw x %dh. This is not interactable.",
+                        describe(),
+                        width,
+                        height
+                    );
                     return false;
                 }
 
@@ -354,7 +358,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      * @param timeoutInSeconds the amount of time to wait until the operation fails
      */
     default void click(double timeoutInSeconds) {
-        LOG.interaction("Clicking on %s", describe());
+        SeleniumComponent.LOG.interaction("Clicking on %s", describe());
 
         waitUntilClickable(timeoutInSeconds);
 
@@ -374,7 +378,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      * @param timeoutInSeconds the amount of time to wait until the operation fails
      */
     default void scrollIntoView(double timeoutInSeconds) {
-        LOG.interaction("Scrolling %s into view", describe());
+        SeleniumComponent.LOG.interaction("Scrolling %s into view", describe());
 
         ((JavascriptExecutor) environment().getDriver()).executeScript(
             "arguments[0].scrollIntoViewIfNeeded()",
@@ -389,7 +393,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      * become available.
      */
     default void clear() {
-        String description = LOG.interaction("Clearing %s", describe());
+        String description = SeleniumComponent.LOG.interaction("Clearing %s", describe());
 
         SeleniumAsserts.assertThatSoon(description, () -> this, SeleniumMatchers.isEditable());
         SeleniumUtils.retryOnStale(() -> element().clear());
@@ -402,7 +406,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      * @param keysToSend the keys to send (multiple)
      */
     default void sendKeys(CharSequence... keysToSend) {
-        String description = LOG.interaction(
+        String description = SeleniumComponent.LOG.interaction(
             "Sending \"%s\" to %s",
             Utils.escapeJava(String.join("", keysToSend)),
             describe()
@@ -424,7 +428,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
 
                 return false;
             },
-            is(true)
+            Matchers.is(true)
         );
     }
 
@@ -433,7 +437,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      */
     default void select() {
         if (!isSelected()) {
-            LOG.interaction("Selecting %s", describe());
+            SeleniumComponent.LOG.interaction("Selecting %s", describe());
 
             click();
         }
@@ -444,7 +448,7 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
      */
     default void unselect() {
         if (isSelected()) {
-            LOG.interaction("Deselecting %s", describe());
+            SeleniumComponent.LOG.interaction("Deselecting %s", describe());
 
             click();
         }

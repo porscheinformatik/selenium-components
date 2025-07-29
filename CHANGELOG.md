@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.13.0
+
+- Introduce Prettier for formatting code (company standard) and reformat all code.
+- Add some utility methods to Button/Checkbox/InputComponents.
+
 ## selenium-components-0.12.6
 
 - Improve the fix for selecting/deselecting Clarity checkboxes without label
