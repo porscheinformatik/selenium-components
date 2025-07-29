@@ -9,9 +9,6 @@ import java.util.function.Supplier;
  * @param <T> the type of the supplied value
  */
 @FunctionalInterface
-public interface FailableSupplier<T>
-{
-
+public interface FailableSupplier<T> {
     T get() throws Exception;
-
 }

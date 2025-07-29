@@ -5,9 +5,6 @@ package at.porscheinformatik.seleniumcomponents;
  *
  * @author ham
  */
-public abstract class AbstractWebDriverFactory implements WebDriverFactory
-{
-
+public abstract class AbstractWebDriverFactory implements WebDriverFactory {
     // intentionally left blank
-
 }

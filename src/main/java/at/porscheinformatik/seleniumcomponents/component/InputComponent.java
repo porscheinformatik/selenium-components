@@ -1,58 +1,52 @@
 package at.porscheinformatik.seleniumcomponents.component;
 
-import org.hamcrest.Matchers;
-
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.Utils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
+import org.hamcrest.Matchers;
 
 /**
  * An (text) input field.
  *
  * @author cet
  */
-public class InputComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
-{
-    public static InputComponent within(SeleniumComponent parent)
-    {
+public class InputComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+
+    public static InputComponent within(SeleniumComponent parent) {
         return new InputComponent(parent, WebElementSelector.selectByTagName("input"));
     }
 
-    public static InputComponent byName(SeleniumComponent parent, String name)
-    {
+    public static InputComponent byName(SeleniumComponent parent, String name) {
         return new InputComponent(parent, WebElementSelector.selectByName(name));
     }
 
-    public static InputComponent byTestId(SeleniumComponent parent, String testId)
-    {
+    public static InputComponent byTestId(SeleniumComponent parent, String testId) {
         return new InputComponent(parent, WebElementSelector.selectByTestId(testId));
     }
 
-    public static InputComponent byLabel(SeleniumComponent parent, String label)
-    {
-        return new InputComponent(parent,
-            WebElementSelector.selectByXPath(String.format(".//input[@id=//label[contains(.,'%s')]/@for]", label)));
+    public static InputComponent byLabel(SeleniumComponent parent, String label) {
+        return new InputComponent(
+            parent,
+            WebElementSelector.selectByXPath(String.format(".//input[@id=//label[contains(.,'%s')]/@for]", label))
+        );
     }
 
     /**
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */
     @Deprecated(forRemoval = true)
-    public static InputComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
-    {
+    public static InputComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
         return new InputComponent(parent, WebElementSelector.selectBySeleniumKey(seleniumKey));
     }
 
-    public InputComponent(SeleniumComponent parent)
-    {
+    public InputComponent(SeleniumComponent parent) {
         this(parent, WebElementSelector.selectByTagName("input"));
     }
 
-    public InputComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public InputComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
@@ -63,15 +57,17 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
      *
      * @param values one or more values to enter
      */
-    public void enter(CharSequence... values)
-    {
+    public void enter(CharSequence... values) {
         clear();
         sendKeys(values);
 
         String jointValues = String.join("", values);
 
-        SeleniumAsserts.assertThatSoon(String.format("Enter \"%s\"", jointValues), () -> Utils.simplify(getValue()),
-            Matchers.is(Utils.simplify(jointValues)));
+        SeleniumAsserts.assertThatSoon(
+            String.format("Enter \"%s\"", jointValues),
+            () -> Utils.simplify(getValue()),
+            Matchers.is(Utils.simplify(jointValues))
+        );
     }
 
     /**
@@ -79,19 +75,15 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
      *
      * @param values one or more values to enter
      */
-    public void type(CharSequence... values)
-    {
+    public void type(CharSequence... values) {
         sendKeys(values);
     }
 
-    public String getValue()
-    {
+    public String getValue() {
         return getAttribute("value");
     }
 
-    public String getPlaceholder()
-    {
+    public String getPlaceholder() {
         return getAttribute("placeholder");
     }
-
 }

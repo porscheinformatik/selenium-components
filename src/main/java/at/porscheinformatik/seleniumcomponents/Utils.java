@@ -12,14 +12,12 @@ import java.util.Map;
  *
  * @author ham
  */
-public final class Utils
-{
+public final class Utils {
 
     private static final boolean IS_DEBUGGING =
         java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0;
 
-    private Utils()
-    {
+    private Utils() {
         super();
     }
 
@@ -29,8 +27,7 @@ public final class Utils
      * @param s the string
      * @return true if empty
      */
-    public static boolean isEmpty(String s)
-    {
+    public static boolean isEmpty(String s) {
         return s == null || s.trim().length() == 0;
     }
 
@@ -41,8 +38,7 @@ public final class Utils
      * @param array the array
      * @return true if null or empty
      */
-    public static <Any> boolean isEmpty(Any[] array)
-    {
+    public static <Any> boolean isEmpty(Any[] array) {
         return array == null || Array.getLength(array) <= 0;
     }
 
@@ -52,8 +48,7 @@ public final class Utils
      * @param collection the collection
      * @return true if null or empty
      */
-    public static boolean isEmpty(Collection<?> collection)
-    {
+    public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
 
@@ -63,17 +58,14 @@ public final class Utils
      * @param map the maps
      * @return true if null or empty
      */
-    public static boolean isEmpty(Map<?, ?> map)
-    {
+    public static boolean isEmpty(Map<?, ?> map) {
         return map == null || map.isEmpty();
     }
 
-    public static String repeat(String s, int length)
-    {
+    public static String repeat(String s, int length) {
         StringBuilder builder = new StringBuilder();
 
-        while (builder.length() < length)
-        {
+        while (builder.length() < length) {
             builder.append(s);
         }
 
@@ -86,57 +78,46 @@ public final class Utils
      * @param type the class, may be null
      * @return the name
      */
-    public static String toClassName(Class<?> type)
-    {
-        if (type == null)
-        {
+    public static String toClassName(Class<?> type) {
+        if (type == null) {
             return "?";
         }
 
         String name = "";
 
-        while (type.isArray())
-        {
+        while (type.isArray()) {
             name = "[]" + name;
             type = type.getComponentType();
         }
 
-        if (type.isPrimitive())
-        {
+        if (type.isPrimitive()) {
             name = type.getName() + name;
-        }
-        else
-        {
+        } else {
             name = Utils.getShortName(type.getName()) + name;
         }
 
         return name;
     }
 
-    private static String getShortName(String currentName)
-    {
+    private static String getShortName(String currentName) {
         int beginIndex = currentName.lastIndexOf('.');
 
-        if (beginIndex >= 0)
-        {
+        if (beginIndex >= 0) {
             currentName = currentName.substring(beginIndex + 1);
         }
 
         return currentName;
     }
 
-    public static String simplify(String s)
-    {
-        if (s == null)
-        {
+    public static String simplify(String s) {
+        if (s == null) {
             return null;
         }
 
         return s.replaceAll("[^\\p{IsLatin}^\\d]", "").toLowerCase();
     }
 
-    public static double simplifiedLevenshteinDistance(String lhs, String rhs)
-    {
+    public static double simplifiedLevenshteinDistance(String lhs, String rhs) {
         return levenshteinDistance(simplify(lhs), simplify(rhs));
     }
 
@@ -148,15 +129,12 @@ public final class Utils
      * @param rhs right string
      * @return the distance
      */
-    public static double levenshteinDistance(String lhs, String rhs)
-    {
-        if (lhs == null)
-        {
+    public static double levenshteinDistance(String lhs, String rhs) {
+        if (lhs == null) {
             lhs = "";
         }
 
-        if (rhs == null)
-        {
+        if (rhs == null) {
             rhs = "";
         }
 
@@ -168,22 +146,19 @@ public final class Utils
         int[] newcost = new int[len0];
 
         // initial cost of skipping prefix in String s0
-        for (int i = 0; i < len0; i++)
-        {
+        for (int i = 0; i < len0; i++) {
             cost[i] = i;
         }
 
         // dynamically computing the array of distances
 
         // transformation cost for each letter in s1
-        for (int j = 1; j < len1; j++)
-        {
+        for (int j = 1; j < len1; j++) {
             // initial cost of skipping prefix in String s1
             newcost[0] = j;
 
             // transformation cost for each letter in s0
-            for (int i = 1; i < len0; i++)
-            {
+            for (int i = 1; i < len0; i++) {
                 // matching current letters in both strings
                 int match = (lhs.charAt(i - 1) == rhs.charAt(j - 1)) ? 0 : 1;
 
@@ -211,32 +186,24 @@ public final class Utils
      *
      * @return true if in debug mode
      */
-    public static boolean isDebugging()
-    {
+    public static boolean isDebugging() {
         return IS_DEBUGGING;
     }
 
-    public static String getStackTrace(Throwable throwable)
-    {
-        try (StringWriter stringWriter = new StringWriter())
-        {
-            try (PrintWriter printWriter = new PrintWriter(stringWriter, true))
-            {
+    public static String getStackTrace(Throwable throwable) {
+        try (StringWriter stringWriter = new StringWriter()) {
+            try (PrintWriter printWriter = new PrintWriter(stringWriter, true)) {
                 throwable.printStackTrace(printWriter);
             }
 
             return stringWriter.getBuffer().toString();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new IllegalArgumentException("Failed to write stack trace", e);
         }
     }
 
-    public static String escapeJava(String s)
-    {
-        if (s == null)
-        {
+    public static String escapeJava(String s) {
+        if (s == null) {
             return null;
         }
 
@@ -252,14 +219,11 @@ public final class Utils
             .replace("\0", "\\0");
     }
 
-    public static String escapeXPath(String s)
-    {
-        if (s == null)
-        {
+    public static String escapeXPath(String s) {
+        if (s == null) {
             return null;
         }
 
         return s.replace("\"", "\"\"");
     }
-
 }

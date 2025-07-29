@@ -9,9 +9,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface WebElementContainer
-{
-
+public interface WebElementContainer {
     /**
      * Selects and returns the {@link WebElement} of this container from the DOM. If you use this method outside of your
      * container, it is generally considered a bad idea, and you should switch to use a {@link SeleniumComponent}
@@ -28,8 +26,7 @@ public interface WebElementContainer
      *
      * @return the {@link SearchContext}, never null
      */
-    default SearchContext searchContext()
-    {
+    default SearchContext searchContext() {
         return element();
     }
 
@@ -39,5 +36,4 @@ public interface WebElementContainer
      * @return the description of the selector
      */
     String describe();
-
 }

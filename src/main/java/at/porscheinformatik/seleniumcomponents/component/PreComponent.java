@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents.component;
 
@@ -12,21 +12,17 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 /**
  * @author Daniel Furtlehner
  */
-public class PreComponent extends AbstractSeleniumComponent
-{
+public class PreComponent extends AbstractSeleniumComponent {
 
-    public PreComponent(SeleniumComponent parent)
-    {
+    public PreComponent(SeleniumComponent parent) {
         super(parent, selectByTagName("pre"));
     }
 
-    public PreComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public PreComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public String getContent()
-    {
+    public String getContent() {
         return getText();
     }
 }

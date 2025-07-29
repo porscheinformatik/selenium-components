@@ -6,14 +6,11 @@ package at.porscheinformatik.seleniumcomponents;
  * @author ham
  * @param <AnyChildComponent> the type of the children
  */
-public interface SeleniumContainer<AnyChildComponent extends SeleniumComponent> extends SeleniumComponent
-{
-
+public interface SeleniumContainer<AnyChildComponent extends SeleniumComponent> extends SeleniumComponent {
     /**
      * Returns a {@link SeleniumComponentList} of all childs.
      *
      * @return a list, never null
      */
     SeleniumComponentList<AnyChildComponent> findAllChilds();
-
 }

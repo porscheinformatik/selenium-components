@@ -8,9 +8,7 @@ import org.openqa.selenium.WebDriver;
  * @author ham
  */
 @FunctionalInterface
-public interface WebDriverFactory
-{
-
+public interface WebDriverFactory {
     /**
      * Create the {@link WebDriver}.
      *
@@ -18,5 +16,4 @@ public interface WebDriverFactory
      * @return the {@link WebDriver}.
      */
     WebDriver createWebDriver(String sessionName);
-
 }

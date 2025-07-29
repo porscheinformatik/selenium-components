@@ -9,19 +9,21 @@ import java.util.function.Predicate;
  * @param <AnyChildComponent> the type of the child components
  */
 public abstract class AbstractSeleniumContainer<AnyChildComponent extends SeleniumComponent>
-    extends AbstractSeleniumComponent implements SeleniumContainer<AnyChildComponent>
-{
+    extends AbstractSeleniumComponent
+    implements SeleniumContainer<AnyChildComponent> {
 
     private final SeleniumComponentListFactory<AnyChildComponent> childListFactory;
 
     protected WebElementSelector childSelector;
     protected SeleniumComponentFactory<AnyChildComponent> childFactory;
 
-    protected AbstractSeleniumContainer(SeleniumComponent parent, WebElementSelector selector,
-        WebElementSelector childSelector, SeleniumComponentFactory<AnyChildComponent> childFactory)
-    {
+    protected AbstractSeleniumContainer(
+        SeleniumComponent parent,
+        WebElementSelector selector,
+        WebElementSelector childSelector,
+        SeleniumComponentFactory<AnyChildComponent> childFactory
+    ) {
         super(parent, selector);
-
         this.childSelector = childSelector;
         this.childFactory = childFactory;
 
@@ -29,13 +31,11 @@ public abstract class AbstractSeleniumContainer<AnyChildComponent extends Seleni
     }
 
     @Override
-    public SeleniumComponentList<AnyChildComponent> findAllChilds()
-    {
+    public SeleniumComponentList<AnyChildComponent> findAllChilds() {
         return childListFactory.findAll();
     }
 
-    protected AnyChildComponent findChild(Predicate<AnyChildComponent> predicate)
-    {
+    protected AnyChildComponent findChild(Predicate<AnyChildComponent> predicate) {
         return childListFactory.find(predicate);
     }
 }

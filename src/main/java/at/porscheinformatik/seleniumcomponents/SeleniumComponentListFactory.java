@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
  * @author ham
  * @param <CHILD_TYPE> the type of the child components
  */
-public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
-{
+public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent> {
 
     /**
      * Creates a {@link SeleniumComponentListFactory}, that uses the specified component as template.
@@ -22,9 +21,9 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @param template the template
      * @return a list factory
      */
-    public static <CHILD_TYPE extends SeleniumComponent & SeleniumComponentTemplate<CHILD_TYPE>> SeleniumComponentListFactory<CHILD_TYPE> of(
-        CHILD_TYPE template)
-    {
+    public static <
+        CHILD_TYPE extends SeleniumComponent & SeleniumComponentTemplate<CHILD_TYPE>
+    > SeleniumComponentListFactory<CHILD_TYPE> of(CHILD_TYPE template) {
         return of(template.parent(), template.selector(), template::create);
     }
 
@@ -37,8 +36,9 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @return a list factory
      */
     public static <CHILD_TYPE extends SeleniumComponent> SeleniumComponentListFactory<CHILD_TYPE> of(
-        SeleniumComponent parent, SeleniumComponentTemplate<CHILD_TYPE> template)
-    {
+        SeleniumComponent parent,
+        SeleniumComponentTemplate<CHILD_TYPE> template
+    ) {
         return of(parent, template.selector(), template::create);
     }
 
@@ -53,8 +53,10 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @return the factory
      */
     public static <CHILD_TYPE extends SeleniumComponent> SeleniumComponentListFactory<CHILD_TYPE> of(
-        SeleniumComponent parent, WebElementSelector childSelector, SeleniumComponentFactory<CHILD_TYPE> childFactory)
-    {
+        SeleniumComponent parent,
+        WebElementSelector childSelector,
+        SeleniumComponentFactory<CHILD_TYPE> childFactory
+    ) {
         return new SeleniumComponentListFactory<>(parent, childSelector, childFactory);
     }
 
@@ -69,11 +71,12 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @param childSelector the selector for the child components
      * @param childFactory the factory for the child components
      */
-    public SeleniumComponentListFactory(SeleniumComponent parent, WebElementSelector childSelector,
-        SeleniumComponentFactory<CHILD_TYPE> childFactory)
-    {
+    public SeleniumComponentListFactory(
+        SeleniumComponent parent,
+        WebElementSelector childSelector,
+        SeleniumComponentFactory<CHILD_TYPE> childFactory
+    ) {
         super();
-
         this.parent = parent;
         this.childSelector = childSelector;
         this.childFactory = childFactory;
@@ -87,8 +90,7 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @param selector the selector
      * @return the child
      */
-    public CHILD_TYPE select(WebElementSelector selector)
-    {
+    public CHILD_TYPE select(WebElementSelector selector) {
         return childFactory.create(parent, selector);
     }
 
@@ -100,8 +102,7 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      * @param predicate the predicate
      * @return the child, null if not found
      */
-    public CHILD_TYPE find(Predicate<CHILD_TYPE> predicate)
-    {
+    public CHILD_TYPE find(Predicate<CHILD_TYPE> predicate) {
         return retryOnStale(() -> findAll().find(predicate));
     }
 
@@ -110,19 +111,19 @@ public class SeleniumComponentListFactory<CHILD_TYPE extends SeleniumComponent>
      *
      * @return the list, never null
      */
-    public SeleniumComponentList<CHILD_TYPE> findAll()
-    {
-        if (!parent.isReady())
-        {
+    public SeleniumComponentList<CHILD_TYPE> findAll() {
+        if (!parent.isReady()) {
             return new SeleniumComponentList<>(Collections.emptyList());
         }
 
-        return new SeleniumComponentList<>(childSelector
-            .findAll(parent.element())
-            .stream()
-            .map(element -> childFactory
-                .create(parent, WebElementSelector.selectElement(childSelector.toString(), element)))
-            .collect(Collectors.toList()));
+        return new SeleniumComponentList<>(
+            childSelector
+                .findAll(parent.element())
+                .stream()
+                .map(element ->
+                    childFactory.create(parent, WebElementSelector.selectElement(childSelector.toString(), element))
+                )
+                .collect(Collectors.toList())
+        );
     }
-
 }

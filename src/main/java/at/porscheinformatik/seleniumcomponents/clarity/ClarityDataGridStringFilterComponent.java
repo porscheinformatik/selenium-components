@@ -16,19 +16,17 @@ import at.porscheinformatik.seleniumcomponents.component.InputComponent;
 /**
  * @author Daniel Furtlehner
  */
-public class ClarityDataGridStringFilterComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
-{
+public class ClarityDataGridStringFilterComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+
     private final HtmlComponent filterContainer = new HtmlComponent(root(this), selectByClassName("datagrid-filter"));
     private final InputComponent input = new InputComponent(filterContainer);
     private final ButtonComponent closeButton = new ButtonComponent(filterContainer);
 
-    public ClarityDataGridStringFilterComponent(SeleniumComponent parent)
-    {
+    public ClarityDataGridStringFilterComponent(SeleniumComponent parent) {
         super(parent, selectByTagName("clr-dg-filter"));
     }
 
-    public void filter(String filterQuery)
-    {
+    public void filter(String filterQuery) {
         click();
 
         input.clear();

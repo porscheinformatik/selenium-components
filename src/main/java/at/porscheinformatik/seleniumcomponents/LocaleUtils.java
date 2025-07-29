@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package at.porscheinformatik.seleniumcomponents;
 
@@ -8,11 +8,9 @@ import java.util.Locale;
 /**
  * @author Daniel Furtlehner
  */
-public final class LocaleUtils
-{
+public final class LocaleUtils {
 
-    private LocaleUtils()
-    {
+    private LocaleUtils() {
         super();
     }
 
@@ -23,22 +21,18 @@ public final class LocaleUtils
      * @param value the string
      * @return the locale
      */
-    public static Locale toLocale(String value)
-    {
-        if (value == null || value.trim().length() == 0)
-        {
+    public static Locale toLocale(String value) {
+        if (value == null || value.trim().length() == 0) {
             return Locale.ROOT;
         }
 
         String[] values = value.split("[_-]");
 
-        if (values.length >= 3)
-        {
+        if (values.length >= 3) {
             return new Locale(values[0], values[1], values[2]);
         }
 
-        if (values.length == 2)
-        {
+        if (values.length == 2) {
             return new Locale(values[0], values[1]);
         }
 

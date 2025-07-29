@@ -10,9 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  * @param <AnySeleniumComponent> the type of {@link SeleniumComponent}
  */
 @FunctionalInterface
-public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumComponent>
-{
-
+public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumComponent> {
     /**
      * Creates a {@link SeleniumComponentFactory}, that uses the specified type as component. The component must provide
      * the {@link AbstractSeleniumComponent#AbstractSeleniumComponent(SeleniumComponent, WebElementSelector)}
@@ -24,29 +22,32 @@ public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumC
      */
     @SuppressWarnings("unchecked")
     static <AnySeleniumComponent extends SeleniumComponent> SeleniumComponentFactory<AnySeleniumComponent> of(
-        Class<? extends SeleniumComponent> type)
-    {
+        Class<? extends SeleniumComponent> type
+    ) {
         Constructor<? extends SeleniumComponent> constructor;
 
-        try
-        {
+        try {
             constructor = type.getConstructor(SeleniumComponent.class, WebElementSelector.class);
-        }
-        catch (NoSuchMethodException | SecurityException e1)
-        {
-            throw new SeleniumException(String.format("The $s has no constructor with types (%s, %s)", type,
-                Utils.toClassName(SeleniumComponent.class),
-                Utils.toClassName(WebElementSelector.class)));
+        } catch (NoSuchMethodException | SecurityException e1) {
+            throw new SeleniumException(
+                String.format(
+                    "The $s has no constructor with types (%s, %s)",
+                    type,
+                    Utils.toClassName(SeleniumComponent.class),
+                    Utils.toClassName(WebElementSelector.class)
+                )
+            );
         }
 
         return (parent, selector) -> {
-            try
-            {
+            try {
                 return (AnySeleniumComponent) constructor.newInstance(parent, selector);
-            }
-            catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e)
-            {
+            } catch (
+                InstantiationException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e
+            ) {
                 throw new SeleniumException("Failed to create clone", e);
             }
         };
@@ -60,5 +61,4 @@ public interface SeleniumComponentFactory<AnySeleniumComponent extends SeleniumC
      * @return the component
      */
     AnySeleniumComponent create(SeleniumComponent parent, WebElementSelector selector);
-
 }

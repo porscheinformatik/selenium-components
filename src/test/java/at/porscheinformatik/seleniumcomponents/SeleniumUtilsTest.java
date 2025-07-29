@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,69 +13,58 @@ import org.junit.jupiter.api.Test;
  *
  * @author ham
  */
-public class SeleniumUtilsTest
-{
+public class SeleniumUtilsTest {
 
     @Test
-    public void callWithoutTimeout()
-    {
+    public void callWithoutTimeout() {
         assertThat(SeleniumUtils.callWithTimeout(0, () -> 42), is(42));
 
-        assertThat(SeleniumUtils.callWithTimeout(0, () -> {
-            SeleniumUtils.waitForSeconds(0.2);
-            return 42;
-        }), is(42));
+        assertThat(
+            SeleniumUtils.callWithTimeout(0, () -> {
+                SeleniumUtils.waitForSeconds(0.2);
+                return 42;
+            }),
+            is(42)
+        );
     }
 
     @Test
-    public void callWithTimeout()
-    {
+    public void callWithTimeout() {
         assertThat(SeleniumUtils.callWithTimeout(0.1, () -> 42), is(42));
 
-        try
-        {
+        try {
             int result = SeleniumUtils.callWithTimeout(0.1, () -> {
                 SeleniumUtils.waitForSeconds(0.2);
                 return 42;
             });
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumTimeoutException.class));
         }
     }
 
     @Test
-    public void callWithTimeoutAndException()
-    {
-        try
-        {
+    public void callWithTimeoutAndException() {
+        try {
             int result = SeleniumUtils.callWithTimeout(0.1, () -> {
                 throw new NullPointerException();
             });
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumException.class));
             assertThat(e.getCause(), instanceOf(NullPointerException.class));
         }
     }
 
     @Test
-    public void keepTryingWithoutTimeout()
-    {
-        try
-        {
+    public void keepTryingWithoutTimeout() {
+        try {
             int result = SeleniumUtils.keepTrying(0, () -> null);
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumFailException.class));
         }
 
@@ -84,34 +72,30 @@ public class SeleniumUtilsTest
 
         assertThat(SeleniumUtils.keepTrying(0, () -> Optional.of(42)).get(), is(42));
 
-        try
-        {
+        try {
             boolean result = SeleniumUtils.keepTrying(0, () -> Optional.empty()).isPresent();
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumFailException.class));
         }
 
-        assertThat(SeleniumUtils.keepTrying(0, () -> {
-            SeleniumUtils.waitForSeconds(0.2);
-            return 42;
-        }), is(42));
+        assertThat(
+            SeleniumUtils.keepTrying(0, () -> {
+                SeleniumUtils.waitForSeconds(0.2);
+                return 42;
+            }),
+            is(42)
+        );
     }
 
     @Test
-    public void keepTryingWithTimeout()
-    {
-        try
-        {
+    public void keepTryingWithTimeout() {
+        try {
             int result = SeleniumUtils.keepTrying(0.1, () -> null);
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumFailException.class));
         }
 
@@ -119,26 +103,23 @@ public class SeleniumUtilsTest
 
         assertThat(SeleniumUtils.keepTrying(0.1, () -> Optional.of(42)).get(), is(42));
 
-        try
-        {
+        try {
             boolean result = SeleniumUtils.keepTrying(0.1, () -> Optional.empty()).isPresent();
 
             fail("Exception expected, but got " + result);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumFailException.class));
         }
 
-        try
-        {
-            assertThat(SeleniumUtils.keepTrying(0.1, () -> {
-                SeleniumUtils.waitForSeconds(0.2);
-                return 42;
-            }), is(42));
-        }
-        catch (Exception e)
-        {
+        try {
+            assertThat(
+                SeleniumUtils.keepTrying(0.1, () -> {
+                    SeleniumUtils.waitForSeconds(0.2);
+                    return 42;
+                }),
+                is(42)
+            );
+        } catch (Exception e) {
             assertThat(e, instanceOf(SeleniumFailException.class));
         }
 
@@ -146,5 +127,4 @@ public class SeleniumUtilsTest
 
         assertThat(SeleniumUtils.keepTrying(1, () -> count.decrementAndGet() > 0 ? null : 42), is(42));
     }
-
 }

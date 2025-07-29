@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-
 import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.WebElement;
 
@@ -10,16 +9,12 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface AnimatedSeleniumComponent extends SeleniumComponent
-{
-
-    default void waitUntilAnimationFinished()
-    {
+public interface AnimatedSeleniumComponent extends SeleniumComponent {
+    default void waitUntilAnimationFinished() {
         SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
             WebElement element = element();
 
-            if (element.isDisplayed())
-            {
+            if (element.isDisplayed()) {
                 return false;
             }
 
@@ -30,5 +25,4 @@ public interface AnimatedSeleniumComponent extends SeleniumComponent
             return Objects.equals(element.getRect(), bounds) ? true : null;
         });
     }
-
 }

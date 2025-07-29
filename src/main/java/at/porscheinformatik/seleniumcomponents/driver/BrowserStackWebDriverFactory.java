@@ -1,59 +1,48 @@
 package at.porscheinformatik.seleniumcomponents.driver;
 
+import at.porscheinformatik.seleniumcomponents.AbstractWebDriverFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import at.porscheinformatik.seleniumcomponents.AbstractWebDriverFactory;
 
 /**
  * Default driver for BrowserStack
  *
  * @author ham
  */
-public class BrowserStackWebDriverFactory extends AbstractWebDriverFactory
-{
+public class BrowserStackWebDriverFactory extends AbstractWebDriverFactory {
 
     private final String projectName;
     private final String username;
     private final String automateKey;
 
-    public BrowserStackWebDriverFactory(String projectName, String username, String automateKey)
-    {
+    public BrowserStackWebDriverFactory(String projectName, String username, String automateKey) {
         super();
-
         this.projectName = projectName;
         this.username = username;
         this.automateKey = automateKey;
     }
 
     @Override
-    public WebDriver createWebDriver(String sessionName)
-    {
+    public WebDriver createWebDriver(String sessionName) {
         return new RemoteWebDriver(createCapabilities(sessionName));
     }
 
-    protected URL getBrowserStackUrl()
-    {
+    protected URL getBrowserStackUrl() {
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(String.format("https://%s:%s@hub-cloud.browserstack.com/wd/hub", username, automateKey));
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             throw new IllegalArgumentException(e);
         }
 
         return url;
     }
 
-    protected DesiredCapabilities createCapabilities(String sessionName)
-    {
+    protected DesiredCapabilities createCapabilities(String sessionName) {
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability("browser", "Firefox");
@@ -71,5 +60,4 @@ public class BrowserStackWebDriverFactory extends AbstractWebDriverFactory
 
         return caps;
     }
-
 }

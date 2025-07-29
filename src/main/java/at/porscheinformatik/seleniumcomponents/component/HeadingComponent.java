@@ -12,22 +12,18 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 /**
  * @author Daniel Furtlehner
  */
-public class HeadingComponent extends AbstractSeleniumComponent
-{
-    public HeadingComponent(SeleniumComponent parent, int level)
-    {
+public class HeadingComponent extends AbstractSeleniumComponent {
+
+    public HeadingComponent(SeleniumComponent parent, int level) {
         super(parent, selectByTagName("h" + level));
     }
 
-    public HeadingComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public HeadingComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
     @Override
-    public String getText()
-    {
+    public String getText() {
         return super.getText();
     }
-
 }

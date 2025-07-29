@@ -12,15 +12,13 @@ import java.util.regex.Pattern;
  *
  * @author ham
  */
-public final class ThreadUtils
-{
+public final class ThreadUtils {
 
     private static final ThreadLocal<Supplier<String>> PARENT_THREAD_CALL_LINE_SUPPLIER = new ThreadLocal<>();
     private static final List<Pattern> INCLUDED_CALL_ELEMENTS = new ArrayList<>();
     private static final List<Pattern> EXCLUDED_CALL_ELEMENTS = new ArrayList<>();
 
-    private ThreadUtils()
-    {
+    private ThreadUtils() {
         super();
     }
 
@@ -31,10 +29,8 @@ public final class ThreadUtils
      *
      * @param pattern the pattern
      */
-    public static void includeCallElement(Pattern pattern)
-    {
-        if (INCLUDED_CALL_ELEMENTS.contains(pattern))
-        {
+    public static void includeCallElement(Pattern pattern) {
+        if (INCLUDED_CALL_ELEMENTS.contains(pattern)) {
             return;
         }
 
@@ -47,8 +43,7 @@ public final class ThreadUtils
      *
      * @return the patterns
      */
-    public static List<Pattern> getIncludeCallElements()
-    {
+    public static List<Pattern> getIncludeCallElements() {
         return INCLUDED_CALL_ELEMENTS;
     }
 
@@ -59,10 +54,8 @@ public final class ThreadUtils
      *
      * @param pattern the pattern
      */
-    public static void excludeCallElement(Pattern pattern)
-    {
-        if (EXCLUDED_CALL_ELEMENTS.contains(pattern))
-        {
+    public static void excludeCallElement(Pattern pattern) {
+        if (EXCLUDED_CALL_ELEMENTS.contains(pattern)) {
             return;
         }
 
@@ -75,8 +68,7 @@ public final class ThreadUtils
      *
      * @return the patterns
      */
-    public static List<Pattern> getExcludedCallElements()
-    {
+    public static List<Pattern> getExcludedCallElements() {
         return EXCLUDED_CALL_ELEMENTS;
     }
 
@@ -89,8 +81,7 @@ public final class ThreadUtils
      * @param callable the callable
      * @return the enhanced callable
      */
-    public static <T> Callable<T> persistCallLine(Callable<T> callable)
-    {
+    public static <T> Callable<T> persistCallLine(Callable<T> callable) {
         Thread parentThread = Thread.currentThread();
 
         return () -> {
@@ -98,12 +89,9 @@ public final class ThreadUtils
 
             PARENT_THREAD_CALL_LINE_SUPPLIER.set(() -> describeCallLine(parentThread));
 
-            try
-            {
+            try {
                 return callable.call();
-            }
-            finally
-            {
+            } finally {
                 PARENT_THREAD_CALL_LINE_SUPPLIER.set(callLineSupplierBackup);
             }
         };
@@ -114,21 +102,17 @@ public final class ThreadUtils
      *
      * @return the call line
      */
-    public static String describeCallLine()
-    {
+    public static String describeCallLine() {
         return describeCallLine(Thread.currentThread());
     }
 
-    private static String describeCallLine(Thread thread)
-    {
+    private static String describeCallLine(Thread thread) {
         String result = toCallLine(findCallElement(thread, INCLUDED_CALL_ELEMENTS, EXCLUDED_CALL_ELEMENTS));
 
-        if ("(?:?)".equals(result))
-        {
+        if ("(?:?)".equals(result)) {
             Supplier<String> supplier = PARENT_THREAD_CALL_LINE_SUPPLIER.get();
 
-            if (supplier != null)
-            {
+            if (supplier != null) {
                 result = supplier.get();
             }
         }
@@ -136,44 +120,38 @@ public final class ThreadUtils
         return result;
     }
 
-    private static StackTraceElement findCallElement(Thread thread, List<Pattern> includedCallElements,
-        List<Pattern> excludedCallElements)
-    {
+    private static StackTraceElement findCallElement(
+        Thread thread,
+        List<Pattern> includedCallElements,
+        List<Pattern> excludedCallElements
+    ) {
         StackTraceElement[] stackTrace = thread.getStackTrace();
 
-        outerLoop: for (StackTraceElement element : stackTrace)
-        {
+        outerLoop: for (StackTraceElement element : stackTrace) {
             String methodName = element.getClassName() + "." + element.getMethodName();
 
-            if (methodName.startsWith(SeleniumUtils.class.getName()))
-            {
+            if (methodName.startsWith(SeleniumUtils.class.getName())) {
                 // skip myself
                 continue;
             }
 
-            if (includedCallElements != null && includedCallElements.size() > 0)
-            {
+            if (includedCallElements != null && includedCallElements.size() > 0) {
                 boolean hit = false;
 
-                for (Pattern pattern : includedCallElements)
-                {
-                    if (pattern.matcher(methodName).matches())
-                    {
+                for (Pattern pattern : includedCallElements) {
+                    if (pattern.matcher(methodName).matches()) {
                         hit = true;
                         break;
                     }
                 }
 
-                if (!hit)
-                {
+                if (!hit) {
                     continue;
                 }
             }
 
-            for (Pattern pattern : excludedCallElements)
-            {
-                if (pattern.matcher(methodName).matches())
-                {
+            for (Pattern pattern : excludedCallElements) {
+                if (pattern.matcher(methodName).matches()) {
                     continue outerLoop;
                 }
             }
@@ -184,16 +162,16 @@ public final class ThreadUtils
         return null;
     }
 
-    private static String toCallLine(StackTraceElement element)
-    {
-        return element != null ? element.getClassName()
-            + "."
-            + element.getMethodName()
-            + "("
-            + element.getFileName()
-            + ":"
-            + element.getLineNumber()
-            + ")" : "(?:?)";
+    private static String toCallLine(StackTraceElement element) {
+        return element != null
+            ? element.getClassName() +
+            "." +
+            element.getMethodName() +
+            "(" +
+            element.getFileName() +
+            ":" +
+            element.getLineNumber() +
+            ")"
+            : "(?:?)";
     }
-
 }

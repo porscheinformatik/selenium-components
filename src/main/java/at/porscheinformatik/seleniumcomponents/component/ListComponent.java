@@ -12,13 +12,14 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @param <AnySeleniumComponent> the type of child
  */
 public class ListComponent<AnySeleniumComponent extends SeleniumComponent>
-    extends AbstractSeleniumContainer<AnySeleniumComponent>
-{
+    extends AbstractSeleniumContainer<AnySeleniumComponent> {
 
-    public ListComponent(SeleniumComponent parent, WebElementSelector selector, WebElementSelector childSelector,
-        SeleniumComponentFactory<AnySeleniumComponent> childFactory)
-    {
+    public ListComponent(
+        SeleniumComponent parent,
+        WebElementSelector selector,
+        WebElementSelector childSelector,
+        SeleniumComponentFactory<AnySeleniumComponent> childFactory
+    ) {
         super(parent, selector, childSelector, childFactory);
     }
-
 }

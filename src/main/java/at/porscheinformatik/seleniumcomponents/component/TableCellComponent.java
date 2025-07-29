@@ -12,36 +12,28 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author ham
  */
-public class TableCellComponent extends AbstractSeleniumComponent
-{
+public class TableCellComponent extends AbstractSeleniumComponent {
 
-    public TableCellComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public TableCellComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public int getColSpan()
-    {
+    public int getColSpan() {
         String colspan = getAttribute("colspan");
 
-        if (Utils.isEmpty(colspan))
-        {
+        if (Utils.isEmpty(colspan)) {
             return 1;
         }
 
-        try
-        {
+        try {
             return Integer.parseInt(colspan);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             throw new SeleniumException("Failed to parse colspan: " + colspan, e);
         }
     }
 
     @Override
-    public String getText()
-    {
+    public String getText() {
         return SeleniumUtils.getText(this);
     }
 }

@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
@@ -14,84 +13,70 @@ import org.openqa.selenium.WebElement;
  * @author Manfred Hantschel
  * @author Daniel Furtlehner
  */
-public abstract class AbstractSeleniumPage implements SeleniumComponent
-{
+public abstract class AbstractSeleniumPage implements SeleniumComponent {
+
     private final SeleniumEnvironment environment;
     private final WebElementSelector selector = WebElementSelector.selectByTagName("body");
 
-    protected AbstractSeleniumPage(SeleniumEnvironment environment)
-    {
+    protected AbstractSeleniumPage(SeleniumEnvironment environment) {
         super();
-
         this.environment = Objects.requireNonNull(environment, "Context is null");
     }
 
     @Override
-    public final SeleniumComponent parent()
-    {
+    public final SeleniumComponent parent() {
         return null;
     }
 
     @Override
-    public final SeleniumEnvironment environment()
-    {
+    public final SeleniumEnvironment environment() {
         return environment;
     }
 
     @Override
-    public final WebElement element() throws NoSuchElementException
-    {
-        try
-        {
-            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(),
-                () -> selector.find(environment.getDriver()));
-        }
-        catch (Exception e)
-        {
+    public final WebElement element() throws NoSuchElementException {
+        try {
+            return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () ->
+                selector.find(environment.getDriver())
+            );
+        } catch (Exception e) {
             throw new NoSuchElementException(selector.decribe(null), e);
         }
     }
 
     @Override
-    public SearchContext searchContext()
-    {
+    public SearchContext searchContext() {
         return environment.getDriver();
     }
 
     @Override
-    public boolean isReady()
-    {
+    public boolean isReady() {
         JavascriptExecutor e = (JavascriptExecutor) environment.getDriver();
         Object readyState = e.executeScript("return document.readyState");
 
         return readyState.equals("complete");
     }
 
-    public final WebElementSelector getSelector()
-    {
+    public final WebElementSelector getSelector() {
         return selector;
     }
 
-    public String takeScreenshot()
-    {
+    public String takeScreenshot() {
         return environment.takeScreenshot();
     }
 
     @Override
-    public final void waitUntilReady()
-    {
+    public final void waitUntilReady() {
         assertReadySoon(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
     @Override
-    public final void assertReadySoon()
-    {
+    public final void assertReadySoon() {
         assertReadySoon(SeleniumGlobals.getLongTimeoutInSeconds());
     }
 
     @Override
-    public String describe()
-    {
+    public String describe() {
         return "";
     }
 }

@@ -1,9 +1,7 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-
 import javax.annotation.Nonnull;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -12,8 +10,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public abstract class AbstractSeleniumComponent implements SeleniumComponent
-{
+public abstract class AbstractSeleniumComponent implements SeleniumComponent {
 
     private final SeleniumComponent parent;
     private final @Nonnull WebElementSelector selector;
@@ -24,42 +21,32 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
      * @param parent the mandatory parent
      * @param selector the mandatory selector
      */
-    public AbstractSeleniumComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public AbstractSeleniumComponent(SeleniumComponent parent, WebElementSelector selector) {
         super();
-
         this.parent = Objects.requireNonNull(parent, "Parent is null");
         this.selector = Objects.requireNonNull(selector, "Selector is null");
     }
 
     @Override
-    public final SeleniumComponent parent()
-    {
+    public final SeleniumComponent parent() {
         return parent;
     }
 
     @Override
-    public WebElement element() throws NoSuchElementException
-    {
-        try
-        {
+    public WebElement element() throws NoSuchElementException {
+        try {
             return element(selector);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new NoSuchElementException(selector.decribe(parent.describe()), e);
         }
     }
 
-    protected WebElement element(@Nonnull WebElementSelector selector)
-    {
-        if (parent instanceof AbstractSeleniumComponent)
-        {
+    protected WebElement element(@Nonnull WebElementSelector selector) {
+        if (parent instanceof AbstractSeleniumComponent) {
             AbstractSeleniumComponent seleniumP = (AbstractSeleniumComponent) parent;
             WebElementSelector combinedSelector = seleniumP.getSelector().combine(selector);
 
-            if (combinedSelector != null)
-            {
+            if (combinedSelector != null) {
                 return seleniumP.element(combinedSelector);
             }
         }
@@ -68,58 +55,45 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent
     }
 
     @Override
-    public boolean isReady()
-    {
-        try
-        {
+    public boolean isReady() {
+        try {
             return SeleniumUtils.retryOnStale(() -> selector.find(parent.searchContext()) != null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    protected final WebElementSelector getSelector()
-    {
+    protected final WebElementSelector getSelector() {
         return selector;
     }
 
-    protected String getTagName()
-    {
+    protected String getTagName() {
         return SeleniumUtils.getTagName(this);
     }
 
-    protected String getAttribute(String name)
-    {
+    protected String getAttribute(String name) {
         return SeleniumUtils.getAttribute(this, name);
     }
 
-    protected String getClassAttribute()
-    {
+    protected String getClassAttribute() {
         return SeleniumUtils.getClassAttribute(this);
     }
 
-    protected boolean containsClassName(String className)
-    {
+    protected boolean containsClassName(String className) {
         return SeleniumUtils.containsClassName(this, className);
     }
 
-    protected String getText()
-    {
+    protected String getText() {
         return SeleniumUtils.getText(this);
     }
 
     @Override
-    public String describe()
-    {
+    public String describe() {
         return selector.decribe(parent.describe());
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("%s(%s)", Utils.toClassName(getClass()), describe());
     }
-
 }

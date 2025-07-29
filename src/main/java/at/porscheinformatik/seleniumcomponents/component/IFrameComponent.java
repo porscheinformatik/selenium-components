@@ -8,15 +8,13 @@ import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.SubFrame;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
-public class IFrameComponent extends AbstractSeleniumComponent
-{
-    public IFrameComponent(SeleniumComponent parent)
-    {
+public class IFrameComponent extends AbstractSeleniumComponent {
+
+    public IFrameComponent(SeleniumComponent parent) {
         this(parent, WebElementSelector.selectByTagName("iframe"));
     }
 
-    public IFrameComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public IFrameComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
@@ -26,9 +24,9 @@ public class IFrameComponent extends AbstractSeleniumComponent
      *
      * @return an {@link AutoCloseable} to reset the environment
      */
-    public SubFrame inFrame()
-    {
-        return SeleniumUtils
-            .keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> environment().switchToFrame(element()));
+    public SubFrame inFrame() {
+        return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () ->
+            environment().switchToFrame(element())
+        );
     }
 }

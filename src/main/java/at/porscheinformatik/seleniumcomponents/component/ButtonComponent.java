@@ -13,20 +13,17 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 /**
  * @author Daniel Furtlehner
  */
-public class ButtonComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
-{
-    public static ButtonComponent within(SeleniumComponent parent)
-    {
+public class ButtonComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+
+    public static ButtonComponent within(SeleniumComponent parent) {
         return new ButtonComponent(parent, selectByTagName("button"));
     }
 
-    public static ButtonComponent byTestId(SeleniumComponent parent, String testId)
-    {
+    public static ButtonComponent byTestId(SeleniumComponent parent, String testId) {
         return new ButtonComponent(parent, selectByTestId("button", testId));
     }
 
-    public static ButtonComponent byText(SeleniumComponent parent, String partialText)
-    {
+    public static ButtonComponent byText(SeleniumComponent parent, String partialText) {
         return new ButtonComponent(parent, selectByText("button", partialText));
     }
 
@@ -34,18 +31,15 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */
     @Deprecated(forRemoval = true)
-    public static ButtonComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
-    {
+    public static ButtonComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
         return new ButtonComponent(parent, selectBySeleniumKey("button", seleniumKey));
     }
 
-    public static ButtonComponent byLabel(SeleniumComponent parent, String label)
-    {
+    public static ButtonComponent byLabel(SeleniumComponent parent, String label) {
         return new ButtonComponent(parent, WebElementSelector.selectByText("button", label));
     }
 
-    public ButtonComponent(SeleniumComponent parent)
-    {
+    public ButtonComponent(SeleniumComponent parent) {
         super(parent, selectByTagName("button"));
     }
 
@@ -53,18 +47,15 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */
     @Deprecated(forRemoval = true)
-    public ButtonComponent(SeleniumComponent parent, String seleniumKey)
-    {
+    public ButtonComponent(SeleniumComponent parent, String seleniumKey) {
         this(parent, selectByTestIdOrSeleniumKey("button", seleniumKey));
     }
 
-    public ButtonComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public ButtonComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public String getLabel()
-    {
+    public String getLabel() {
         return getText();
     }
 }

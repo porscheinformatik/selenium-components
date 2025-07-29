@@ -9,8 +9,8 @@ import org.hamcrest.StringDescription;
  *
  * @author HAM
  */
-public final class SeleniumAsserts
-{
+public final class SeleniumAsserts {
+
     //    private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumAsserts.class);
 
     /**
@@ -19,45 +19,38 @@ public final class SeleniumAsserts
      * @author ham
      * @param <Any> the type of the value
      */
-    private static class Result<Any>
-    {
+    private static class Result<Any> {
+
         private Any value = null;
         private Throwable exception = null;
 
-        public Any aquire() throws Throwable
-        {
-            if (exception != null)
-            {
+        public Any aquire() throws Throwable {
+            if (exception != null) {
                 throw exception;
             }
 
             return value;
         }
 
-        public Any getValue()
-        {
+        public Any getValue() {
             return value;
         }
 
-        public void setValue(Any value)
-        {
+        public void setValue(Any value) {
             this.value = value;
             exception = null;
         }
 
-        public Throwable getException()
-        {
+        public Throwable getException() {
             return exception;
         }
 
-        public void setException(Throwable exception)
-        {
+        public void setException(Throwable exception) {
             this.exception = exception;
         }
     }
 
-    private SeleniumAsserts()
-    {
+    private SeleniumAsserts() {
         super();
     }
 
@@ -71,8 +64,7 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatSoon(FailableSupplier<Any> supplier, Matcher<? super Any> matcher) {
         return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds() + 1, "", supplier, matcher);
     }
 
@@ -86,8 +78,7 @@ public final class SeleniumAsserts
      * @see #assertThatSoon(FailableSupplier, Matcher)
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatLater(FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatLater(FailableSupplier<Any> supplier, Matcher<? super Any> matcher) {
         return assertThatSoon(SeleniumGlobals.getLongTimeoutInSeconds(), "", supplier, matcher);
     }
 
@@ -101,9 +92,11 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(double timeoutInSeconds, FailableSupplier<Any> supplier,
-        Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatSoon(
+        double timeoutInSeconds,
+        FailableSupplier<Any> supplier,
+        Matcher<? super Any> matcher
+    ) {
         return assertThatSoon(timeoutInSeconds, "", supplier, matcher);
     }
 
@@ -118,8 +111,11 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(String reason, FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatSoon(
+        String reason,
+        FailableSupplier<Any> supplier,
+        Matcher<? super Any> matcher
+    ) {
         return assertThatSoon(SeleniumGlobals.getShortTimeoutInSeconds() + 1, reason, supplier, matcher);
     }
 
@@ -134,8 +130,11 @@ public final class SeleniumAsserts
      * @see #assertThatSoon(String, FailableSupplier, Matcher)
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatLater(String reason, FailableSupplier<Any> supplier, Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatLater(
+        String reason,
+        FailableSupplier<Any> supplier,
+        Matcher<? super Any> matcher
+    ) {
         return assertThatSoon(SeleniumGlobals.getLongTimeoutInSeconds(), reason, supplier, matcher);
     }
 
@@ -150,27 +149,25 @@ public final class SeleniumAsserts
      * @param matcher the matcher for the tested value
      * @return the result of the supplier
      */
-    public static <Any> Any assertThatSoon(double timeoutInSeconds, String reason, FailableSupplier<Any> supplier,
-        Matcher<? super Any> matcher)
-    {
+    public static <Any> Any assertThatSoon(
+        double timeoutInSeconds,
+        String reason,
+        FailableSupplier<Any> supplier,
+        Matcher<? super Any> matcher
+    ) {
         Result<Any> result = new Result<>();
 
-        try
-        {
+        try {
             SeleniumUtils.keepTrying(timeoutInSeconds, () -> {
-                try
-                {
+                try {
                     Any actual = supplier.get();
 
                     result.setValue(actual);
 
-                    if (matcher.matches(actual))
-                    {
+                    if (matcher.matches(actual)) {
                         return true;
                     }
-                }
-                catch (Throwable e)
-                {
+                } catch (Throwable e) {
                     result.setException(e);
                 }
 
@@ -178,13 +175,10 @@ public final class SeleniumAsserts
             });
 
             return result.aquire();
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
             Object actual = result.getException();
 
-            if (actual == null)
-            {
+            if (actual == null) {
                 actual = result.getValue();
             }
 
@@ -202,13 +196,10 @@ public final class SeleniumAsserts
 
             AssertionError error;
 
-            if (result.getException() != null)
-            {
+            if (result.getException() != null) {
                 error = new AssertionError(description.toString(), result.getException());
                 error.addSuppressed(e);
-            }
-            else
-            {
+            } else {
                 error = new AssertionError(description.toString(), e);
             }
 

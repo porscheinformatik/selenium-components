@@ -2,13 +2,6 @@ package at.porscheinformatik.seleniumcomponents.component;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
-import java.util.function.Predicate;
-
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Quotes;
-import org.openqa.selenium.support.ui.Select;
-
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
@@ -17,6 +10,11 @@ import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumMatchers;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
+import java.util.function.Predicate;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Quotes;
+import org.openqa.selenium.support.ui.Select;
 
 /**
  * A &lt;select&gt;
@@ -24,31 +22,33 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author HAM
  * @author Daniel Furtlehner
  */
-public class SelectComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
-{
-    protected final SeleniumComponentListFactory<OptionComponent> optionsFactory =
-        new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("option"), OptionComponent::new);
+public class SelectComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+
+    protected final SeleniumComponentListFactory<OptionComponent> optionsFactory = new SeleniumComponentListFactory<>(
+        this,
+        WebElementSelector.selectByTagName("option"),
+        OptionComponent::new
+    );
 
     protected final SeleniumComponentListFactory<OptionGroupComponent> optionGroupsFactory =
-        new SeleniumComponentListFactory<>(this, WebElementSelector.selectByTagName("optgroup"),
-            OptionGroupComponent::new);
+        new SeleniumComponentListFactory<>(
+            this,
+            WebElementSelector.selectByTagName("optgroup"),
+            OptionGroupComponent::new
+        );
 
     private Select select;
 
-    public SelectComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public SelectComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public SelectComponent(SeleniumComponent parent)
-    {
+    public SelectComponent(SeleniumComponent parent) {
         this(parent, selectByTagName("select"));
     }
 
-    protected Select getSelect()
-    {
-        if (select == null)
-        {
+    protected Select getSelect() {
+        if (select == null) {
             select = new Select(element());
         }
 
@@ -58,16 +58,12 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
     /**
      * @return the (first) selected value
      */
-    public String getValue()
-    {
-        try
-        {
+    public String getValue() {
+        try {
             WebElement option = getSelect().getFirstSelectedOption();
 
             return option != null ? option.getAttribute("value") : null;
-        }
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             return null;
         }
     }
@@ -75,131 +71,143 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
     /**
      * @return the (first) selected label
      */
-    public String getSelectedLabel()
-    {
+    public String getSelectedLabel() {
         WebElement option = getSelect().getFirstSelectedOption();
 
         return option != null ? option.getText() : null;
     }
 
-    public OptionComponent getSelectedOption()
-    {
-        return new OptionComponent(this,
-            WebElementSelector.selectElement("option[@selected]", getSelect().getFirstSelectedOption()));
+    public OptionComponent getSelectedOption() {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectElement("option[@selected]", getSelect().getFirstSelectedOption())
+        );
     }
 
-    public OptionComponent optionByIndex(int index)
-    {
+    public OptionComponent optionByIndex(int index) {
         return new OptionComponent(this, WebElementSelector.selectByIndex("option", index));
     }
 
-    public OptionComponent optionByValue(String value)
-    {
-        return new OptionComponent(this,
-            WebElementSelector.selectByXPath(".//option[@value = " + Quotes.escape(value) + "]"));
+    public OptionComponent optionByValue(String value) {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectByXPath(".//option[@value = " + Quotes.escape(value) + "]")
+        );
     }
 
-    public OptionComponent optionByValueContains(String value)
-    {
-        return new OptionComponent(this,
-            WebElementSelector.selectByXPath(".//option[contains(@value, " + Quotes.escape(value) + ")]"));
+    public OptionComponent optionByValueContains(String value) {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectByXPath(".//option[contains(@value, " + Quotes.escape(value) + ")]")
+        );
     }
 
-    public OptionComponent optionByLabel(String label)
-    {
-        return new OptionComponent(this,
-            WebElementSelector.selectByXPath(".//option[normalize-space(.) = " + Quotes.escape(label) + "]"));
+    public OptionComponent optionByLabel(String label) {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectByXPath(".//option[normalize-space(.) = " + Quotes.escape(label) + "]")
+        );
     }
 
-    public void selectByIndex(int index)
-    {
+    public void selectByIndex(int index) {
         LOG.interaction("Selecting item of %s by index: %s", describe(), index);
 
-        SeleniumAsserts.assertThatSoon("Select item at index: " + index, () -> {
-            optionByIndex(index).select();
+        SeleniumAsserts.assertThatSoon(
+            "Select item at index: " + index,
+            () -> {
+                optionByIndex(index).select();
 
-            // it's intended, that the option is searched again (the element may change on select an become stale)
-            return optionByIndex(index);
-        }, SeleniumMatchers.isSelected());
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionByIndex(index);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
-    public void selectByValue(String value)
-    {
+    public void selectByValue(String value) {
         LOG.interaction("Selecting item of %s by value: %s", describe(), value);
 
-        SeleniumAsserts.assertThatSoon("Select item by value: " + value, () -> {
-            optionByValue(value).select();
+        SeleniumAsserts.assertThatSoon(
+            "Select item by value: " + value,
+            () -> {
+                optionByValue(value).select();
 
-            // it's intended, that the option is searched again (the element may change on select an become stale)
-            return optionByValue(value);
-        }, SeleniumMatchers.isSelected());
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionByValue(value);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
-    public void selectByValueContains(String value)
-    {
+    public void selectByValueContains(String value) {
         LOG.interaction("Selecting item of %s by value: %s", describe(), value);
 
-        SeleniumAsserts.assertThatSoon("Select item by value: " + value, () -> {
-            optionByValueContains(value).select();
+        SeleniumAsserts.assertThatSoon(
+            "Select item by value: " + value,
+            () -> {
+                optionByValueContains(value).select();
 
-            // it's intended, that the option is searched again (the element may change on select an become stale)
-            return optionByValueContains(value);
-        }, SeleniumMatchers.isSelected());
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionByValueContains(value);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
-    public void selectByValue(Predicate<String> valuePredicate)
-    {
+    public void selectByValue(Predicate<String> valuePredicate) {
         select(option -> valuePredicate.test(option.getValue()));
     }
 
-    public void selectByLabel(String label)
-    {
+    public void selectByLabel(String label) {
         LOG.interaction("Selecting item of %s by label: %s", describe(), label);
 
-        SeleniumAsserts.assertThatSoon("Select item by label: " + label, () -> {
-            optionByLabel(label).select();
+        SeleniumAsserts.assertThatSoon(
+            "Select item by label: " + label,
+            () -> {
+                optionByLabel(label).select();
 
-            // it's intended, that the option is searched again (the element may change on select an become stale)
-            return optionByLabel(label);
-        }, SeleniumMatchers.isSelected());
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionByLabel(label);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
-    public void selectByLabel(Predicate<String> labelPredicate)
-    {
+    public void selectByLabel(Predicate<String> labelPredicate) {
         select(option -> labelPredicate.test(option.getLabel()));
     }
 
-    public void select(Predicate<OptionComponent> predicate)
-    {
+    public void select(Predicate<OptionComponent> predicate) {
         LOG.interaction("Selecting item of %s by predicate", describe());
 
-        SeleniumAsserts.assertThatSoon("Select item by predicate", () -> {
-            click();
+        SeleniumAsserts.assertThatSoon(
+            "Select item by predicate",
+            () -> {
+                click();
 
-            OptionComponent option = optionsFactory.find(predicate);
+                OptionComponent option = optionsFactory.find(predicate);
 
-            if (option == null)
-            {
-                throw new AssertionError(String.format("Matching option not found"));
-            }
+                if (option == null) {
+                    throw new AssertionError(String.format("Matching option not found"));
+                }
 
-            option.click();
+                option.click();
 
-            // it's intended, that the option is searched again (the element may change on select an become stale)
-            return optionsFactory.find(predicate);
-        }, SeleniumMatchers.isSelected());
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionsFactory.find(predicate);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
     /**
      * @return all the options this select component contains
      */
-    public SeleniumComponentList<OptionComponent> getOptions()
-    {
+    public SeleniumComponentList<OptionComponent> getOptions() {
         return optionsFactory.findAll();
     }
 
-    public SeleniumComponentList<OptionGroupComponent> getOptionGroups()
-    {
+    public SeleniumComponentList<OptionGroupComponent> getOptionGroups() {
         return optionGroupsFactory.findAll();
     }
 }

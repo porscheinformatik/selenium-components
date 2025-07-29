@@ -5,10 +5,9 @@ package at.porscheinformatik.seleniumcomponents;
  *
  * @author Daniel Furtlehner
  */
-public abstract class AbstractSeleniumStandalonePage extends AbstractSeleniumPage
-{
-    public AbstractSeleniumStandalonePage(SeleniumEnvironment environment)
-    {
+public abstract class AbstractSeleniumStandalonePage extends AbstractSeleniumPage {
+
+    public AbstractSeleniumStandalonePage(SeleniumEnvironment environment) {
         super(environment);
     }
 
@@ -19,19 +18,16 @@ public abstract class AbstractSeleniumStandalonePage extends AbstractSeleniumPag
      */
     protected abstract String getUrl();
 
-    public void open()
-    {
+    public void open() {
         environment().open(getUrl(), this);
     }
 
-    public void close()
-    {
+    public void close() {
         environment().quit();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(getUrl());
     }
 }

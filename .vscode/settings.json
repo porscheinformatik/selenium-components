@@ -1,0 +1,37 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/dist": true
+    },
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "[java]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "sonarqube-porscheinformatik-com",
+        "projectKey": "at.porscheinformatik.pnet:pnet-data-api"
+    },
+    "editor.formatOnSave": true,
+    "java.cleanup.actions": [
+        "renameFileToType",
+        "qualifyStaticMembers",
+        "addOverride",
+        "addDeprecated",
+        "invertEquals",
+        "instanceofPatternMatch",
+        "lambdaExpressionFromAnonymousClass",
+        "lambdaExpression",
+        "switchExpression",
+        "tryWithResource",
+        "organizeImports",
+        "useSwitchForInstanceofPattern",
+        "redundantSuperCall",
+        "redundantModifiers",
+        "redundantIfCondition",
+        "redundantComparisonStatement"
+    ],
+    "java.sources.organizeImports.staticStarThreshold": 1,
+    "java.saveActions.organizeImports": true
+}

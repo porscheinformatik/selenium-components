@@ -5,73 +5,65 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Compnent for https://vmware.github.io/clarity/documentation/v0.11/alerts
  *
  * @author Daniel Furtlehner
  */
-public class ClarityAlertComponent extends AbstractSeleniumComponent
-{
-    public static ClarityAlertComponent within(SeleniumComponent parent)
-    {
+public class ClarityAlertComponent extends AbstractSeleniumComponent {
+
+    public static ClarityAlertComponent within(SeleniumComponent parent) {
         return new ClarityAlertComponent(parent, selectByTagName("clr-alert"));
     }
 
-    public static ClarityAlertComponent byTestId(SeleniumComponent parent, String testId)
-    {
+    public static ClarityAlertComponent byTestId(SeleniumComponent parent, String testId) {
         return new ClarityAlertComponent(parent, selectByTestId("clr-alert", testId));
     }
 
-    public static ClarityAlertComponent byText(SeleniumComponent parent, String partialText)
-    {
+    public static ClarityAlertComponent byText(SeleniumComponent parent, String partialText) {
         return new ClarityAlertComponent(parent, selectByText("clr-alert", partialText));
     }
 
-    private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory =
-        new SeleniumComponentListFactory<>(this, selectByTagName("clr-alert-item"), ClarityAlertItem::new);
+    private final SeleniumComponentListFactory<ClarityAlertItem> entryFactory = new SeleniumComponentListFactory<>(
+        this,
+        selectByTagName("clr-alert-item"),
+        ClarityAlertItem::new
+    );
 
     private final HtmlComponent alertContainer = new HtmlComponent(this, selectByClassName("alert"));
 
-    public ClarityAlertComponent(SeleniumComponent parent)
-    {
+    public ClarityAlertComponent(SeleniumComponent parent) {
         this(parent, selectByTagName("clr-alert"));
     }
 
-    public ClarityAlertComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public ClarityAlertComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public SeleniumComponentList<ClarityAlertItem> getItems()
-    {
+    public SeleniumComponentList<ClarityAlertItem> getItems() {
         return entryFactory.findAll();
     }
 
-    public List<String> getAlertTexts()
-    {
+    public List<String> getAlertTexts() {
         return getItems().map(ClarityAlertItem::getAlertText).collect(Collectors.toList());
     }
 
-    public ClarityAlertType getType()
-    {
+    public ClarityAlertType getType() {
         String containerClasses = alertContainer.getAttribute("class");
         String[] classNames = containerClasses.split(" ");
         String attributeValue = null;
 
-        for (String className : classNames)
-        {
-            if (className.startsWith("alert-"))
-            {
+        for (String className : classNames) {
+            if (className.startsWith("alert-")) {
                 attributeValue = className;
             }
         }
@@ -82,8 +74,7 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
     /**
      * Alert types for clarity
      */
-    public enum ClarityAlertType
-    {
+    public enum ClarityAlertType {
         DANGER("alert-danger"),
         WARNING("alert-warning"),
         INFO("alert-info"),
@@ -91,17 +82,13 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
 
         private final String className;
 
-        ClarityAlertType(String className)
-        {
+        ClarityAlertType(String className) {
             this.className = className;
         }
 
-        public static ClarityAlertType forClassName(String className)
-        {
-            for (ClarityAlertType type : values())
-            {
-                if (type.className.equals(className))
-                {
+        public static ClarityAlertType forClassName(String className) {
+            for (ClarityAlertType type : values()) {
+                if (type.className.equals(className)) {
                     return type;
                 }
             }
@@ -113,32 +100,27 @@ public class ClarityAlertComponent extends AbstractSeleniumComponent
     /**
      * Alert items for Clarity
      */
-    public static class ClarityAlertItem extends AbstractSeleniumComponent
-    {
-        public static ClarityAlertItem within(SeleniumComponent parent)
-        {
+    public static class ClarityAlertItem extends AbstractSeleniumComponent {
+
+        public static ClarityAlertItem within(SeleniumComponent parent) {
             return new ClarityAlertItem(parent, selectByTagName("clr-alert-item"));
         }
 
-        public static ClarityAlertItem byTestId(SeleniumComponent parent, String testId)
-        {
+        public static ClarityAlertItem byTestId(SeleniumComponent parent, String testId) {
             return new ClarityAlertItem(parent, selectByTestId("clr-alert-item", testId));
         }
 
-        public static ClarityAlertItem byText(SeleniumComponent parent, String partialText)
-        {
+        public static ClarityAlertItem byText(SeleniumComponent parent, String partialText) {
             return new ClarityAlertItem(parent, selectByText("clr-alert-item", partialText));
         }
 
         private final HtmlComponent alertText = new HtmlComponent(this, selectByClassName("alert-text"));
 
-        public ClarityAlertItem(SeleniumComponent parent, WebElementSelector selector)
-        {
+        public ClarityAlertItem(SeleniumComponent parent, WebElementSelector selector) {
             super(parent, selector);
         }
 
-        public String getAlertText()
-        {
+        public String getAlertText() {
             return alertText.getText();
         }
     }

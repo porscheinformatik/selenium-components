@@ -10,18 +10,15 @@ import org.junit.jupiter.api.Test;
  *
  * @author ham
  */
-public class UtilsTest
-{
+public class UtilsTest {
 
     @Test
-    public void simplify()
-    {
+    public void simplify() {
         assertThat(Utils.simplify("Fo1+-\n\tä"), is("fo1ä"));
     }
 
     @Test
-    public void levenshteinDistanceTest()
-    {
+    public void levenshteinDistanceTest() {
         assertThat(Utils.levenshteinDistance("Hannah", "Hannah"), is(0.0));
         assertThat(Utils.levenshteinDistance("Hannah", "Hanah"), closeTo(0.15, 0.01));
         assertThat(Utils.levenshteinDistance("Hannah", "Johannah"), closeTo(0.333, 0.01));
@@ -29,17 +26,23 @@ public class UtilsTest
     }
 
     @Test
-    public void simplifiedLevenshteinDistanceTest()
-    {
-        assertThat(Utils
-            .simplifiedLevenshteinDistance( //
-                "\tThe quick\nbrown fox\njumps over the lazy dog!", "the quick brown fox jumps over the lazy dog"),
-            is(0.0));
+    public void simplifiedLevenshteinDistanceTest() {
+        assertThat(
+            Utils.simplifiedLevenshteinDistance(
+                //
+                "\tThe quick\nbrown fox\njumps over the lazy dog!",
+                "the quick brown fox jumps over the lazy dog"
+            ),
+            is(0.0)
+        );
 
-        assertThat(Utils
-            .simplifiedLevenshteinDistance( //
-                "\tThe quick\nbrown fox!", "the quick brown fox jumps over the lazy dog"),
-            greaterThan(0.5));
+        assertThat(
+            Utils.simplifiedLevenshteinDistance(
+                //
+                "\tThe quick\nbrown fox!",
+                "the quick brown fox jumps over the lazy dog"
+            ),
+            greaterThan(0.5)
+        );
     }
-
 }

@@ -22,7 +22,7 @@
 
 ## selenium-components-0.12.1
 
-- Add selectByLabel* methode to WebElementSelectors
+- Add selectByLabel\* methode to WebElementSelectors
 - Add byText and byLabel factory methods to some components
 
 ## selenium-components-0.12.0
@@ -66,7 +66,7 @@
 
 ## selenium-components-0.10.1
 
-- Additional waitFor* methods
+- Additional waitFor\* methods
 - scrollIntoView for ActiveSeleniumComponents
 
 ## selenium-components-0.10.0

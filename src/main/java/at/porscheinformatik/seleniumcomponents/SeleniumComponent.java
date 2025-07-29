@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -12,8 +11,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author ham
  */
-public interface SeleniumComponent extends WebElementContainer
-{
+public interface SeleniumComponent extends WebElementContainer {
     SeleniumLogger LOG = new SeleniumLogger(SeleniumComponent.class);
 
     /**
@@ -29,16 +27,18 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @return the environment, never null
      */
-    default SeleniumEnvironment environment()
-    {
+    default SeleniumEnvironment environment() {
         SeleniumComponent parent = parent();
 
-        Objects.requireNonNull(parent,
-            "The parent is null which means, that this component is root. Implement this method by supplying a valid "
-                + "environment");
+        Objects.requireNonNull(
+            parent,
+            "The parent is null which means, that this component is root. Implement this method by supplying a valid " +
+            "environment"
+        );
 
-        return Objects.requireNonNull(parent.environment(),
-            () -> String.format("The environment of the component defined by %s is null", parent.getClass()));
+        return Objects.requireNonNull(parent.environment(), () ->
+            String.format("The environment of the component defined by %s is null", parent.getClass())
+        );
     }
 
     /**
@@ -52,16 +52,14 @@ public interface SeleniumComponent extends WebElementContainer
     /**
      * Waits until the component becomes ready.
      */
-    default void waitUntilReady()
-    {
+    default void waitUntilReady() {
         assertReadySoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
     /**
      * Waits until the component becomes ready.
      */
-    default void assertReadySoon()
-    {
+    default void assertReadySoon() {
         assertReadySoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
@@ -70,8 +68,7 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void waitUntilReady(double timeoutInSeconds)
-    {
+    default void waitUntilReady(double timeoutInSeconds) {
         assertReadySoon(timeoutInSeconds);
     }
 
@@ -80,10 +77,13 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void assertReadySoon(double timeoutInSeconds)
-    {
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes ready: " + describe(), () -> this,
-            SeleniumMatchers.isReady());
+    default void assertReadySoon(double timeoutInSeconds) {
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Component becomes ready: " + describe(),
+            () -> this,
+            SeleniumMatchers.isReady()
+        );
     }
 
     /**
@@ -95,14 +95,10 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @return true if the component is visible
      */
-    default boolean isVisible()
-    {
-        try
-        {
+    default boolean isVisible() {
+        try {
             return SeleniumUtils.retryOnStale(() -> element().isDisplayed());
-        }
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
@@ -110,16 +106,14 @@ public interface SeleniumComponent extends WebElementContainer
     /**
      * Waits until the component becomes ready.
      */
-    default void waitUntilVisible()
-    {
+    default void waitUntilVisible() {
         assertVisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
     /**
      * Waits until the component becomes ready.
      */
-    default void assertVisibleSoon()
-    {
+    default void assertVisibleSoon() {
         assertVisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
@@ -128,8 +122,7 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void waitUntilVisible(double timeoutInSeconds)
-    {
+    default void waitUntilVisible(double timeoutInSeconds) {
         assertVisibleSoon(timeoutInSeconds);
     }
 
@@ -138,10 +131,13 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void assertVisibleSoon(double timeoutInSeconds)
-    {
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes visible: " + describe(), () -> this,
-            SeleniumMatchers.isVisible());
+    default void assertVisibleSoon(double timeoutInSeconds) {
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Component becomes visible: " + describe(),
+            () -> this,
+            SeleniumMatchers.isVisible()
+        );
     }
 
     /**
@@ -153,8 +149,7 @@ public interface SeleniumComponent extends WebElementContainer
      * <br>
      * The method compensates the fact, that when using debug mode, this call would wait forever.
      */
-    default void waitUntilInvisible()
-    {
+    default void waitUntilInvisible() {
         assertInvisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
@@ -167,8 +162,7 @@ public interface SeleniumComponent extends WebElementContainer
      * <br>
      * The method compensates the fact, that when using debug mode, this call would wait forever.
      */
-    default void assertInvisibleSoon()
-    {
+    default void assertInvisibleSoon() {
         assertInvisibleSoon(SeleniumGlobals.getShortTimeoutInSeconds());
     }
 
@@ -183,8 +177,7 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void waitUntilInvisible(double timeoutInSeconds)
-    {
+    default void waitUntilInvisible(double timeoutInSeconds) {
         assertInvisibleSoon(timeoutInSeconds);
     }
 
@@ -199,10 +192,13 @@ public interface SeleniumComponent extends WebElementContainer
      *
      * @param timeoutInSeconds the timeout in seconds
      */
-    default void assertInvisibleSoon(double timeoutInSeconds)
-    {
-        SeleniumAsserts.assertThatSoon(timeoutInSeconds, "Component becomes invisible: " + describe(), () -> this,
-            SeleniumMatchers.isNotVisible());
+    default void assertInvisibleSoon(double timeoutInSeconds) {
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Component becomes invisible: " + describe(),
+            () -> this,
+            SeleniumMatchers.isNotVisible()
+        );
     }
 
     /**
@@ -223,12 +219,14 @@ public interface SeleniumComponent extends WebElementContainer
      * <code>document.querySelectorAll('[highlighted]')</code>
      * </p>
      */
-    default void highlight()
-    {
+    default void highlight() {
         JavascriptExecutor executor = (JavascriptExecutor) environment().getDriver();
 
-        executor.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;'); "
-            + "arguments[0].setAttribute('highlighted', 'true')", element());
+        executor.executeScript(
+            "arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;'); " +
+            "arguments[0].setAttribute('highlighted', 'true')",
+            element()
+        );
     }
 
     @Override

@@ -5,19 +5,15 @@ package at.porscheinformatik.seleniumcomponents;
  *
  * @author Family
  */
-public class SeleniumFailException extends SeleniumException
-{
+public class SeleniumFailException extends SeleniumException {
 
     private static final long serialVersionUID = -8794168869932496290L;
 
-    public SeleniumFailException(String message, Throwable t)
-    {
+    public SeleniumFailException(String message, Throwable t) {
         super(message, t);
     }
 
-    public SeleniumFailException(String s)
-    {
+    public SeleniumFailException(String s) {
         super(s);
     }
-
 }

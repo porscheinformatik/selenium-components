@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -35,9 +34,7 @@ import org.openqa.selenium.remote.html5.RemoteWebStorage;
  *
  * @author HAM
  */
-public interface SeleniumEnvironment
-{
-
+public interface SeleniumEnvironment {
     SeleniumLogger LOG = new SeleniumLogger(SeleniumEnvironment.class);
 
     /**
@@ -52,8 +49,7 @@ public interface SeleniumEnvironment
      *
      * @param url the URL
      */
-    default void url(String url)
-    {
+    default void url(String url) {
         LOG.callUrl(url);
 
         getDriver().get(url);
@@ -62,8 +58,7 @@ public interface SeleniumEnvironment
     /**
      * @return the current URL
      */
-    default String url()
-    {
+    default String url() {
         return getDriver().getCurrentUrl();
     }
 
@@ -75,8 +70,7 @@ public interface SeleniumEnvironment
      * @param pageFactory the factory for the page
      * @return the page
      */
-    default <T extends AbstractSeleniumPage> T open(String url, Function<SeleniumEnvironment, T> pageFactory)
-    {
+    default <T extends AbstractSeleniumPage> T open(String url, Function<SeleniumEnvironment, T> pageFactory) {
         return open(url, pageFactory.apply(this));
     }
 
@@ -88,8 +82,7 @@ public interface SeleniumEnvironment
      * @param page an instance of the page
      * @return the page
      */
-    default <T extends AbstractSeleniumPage> T open(String url, T page)
-    {
+    default <T extends AbstractSeleniumPage> T open(String url, T page) {
         url(url);
 
         page.assertReadySoon();
@@ -104,26 +97,19 @@ public interface SeleniumEnvironment
      * @param outputType the type of screenshot
      * @return the screenshot, null if not possible
      */
-    default <T> T takeScreenshot(OutputType<T> outputType)
-    {
+    default <T> T takeScreenshot(OutputType<T> outputType) {
         WebDriver driver = getDriver();
 
-        if (!(driver instanceof TakesScreenshot))
-        {
+        if (!(driver instanceof TakesScreenshot)) {
             return null;
         }
 
-        try
-        {
+        try {
             return ((TakesScreenshot) driver).getScreenshotAs(outputType);
-        }
-        catch (NoSuchWindowException e)
-        {
+        } catch (NoSuchWindowException e) {
             // failed to take screenshot because window has been closed already
             return null;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             LOG.warn("Failed to take screenshot", e);
 
             return null;
@@ -136,8 +122,7 @@ public interface SeleniumEnvironment
      * @return the screenshot, depending on {@link SeleniumGlobals#getScreenshotOutputType()} it either returns a Base64
      * image or the path to the file. May be null if screenshots are not possible.
      */
-    default String takeScreenshot()
-    {
+    default String takeScreenshot() {
         ScreenshotOutputType screenshotOutputType = SeleniumGlobals.getScreenshotOutputType();
 
         return takeScreenshot(screenshotOutputType);
@@ -149,18 +134,14 @@ public interface SeleniumEnvironment
      * @param screenshotOutputType the type of screenshot
      * @return either a Base64 image or the path to the file. May be null if screenshots are not possible.
      */
-    default String takeScreenshot(ScreenshotOutputType screenshotOutputType)
-    {
-        switch (screenshotOutputType)
-        {
+    default String takeScreenshot(ScreenshotOutputType screenshotOutputType) {
+        switch (screenshotOutputType) {
             case BASE64:
                 return takeScreenshotAsBase64();
-
             case FILE:
                 File file = takeScreenshotAsFile();
 
                 return file != null ? file.toURI().toString() : null;
-
             default:
                 throw new UnsupportedOperationException("ScreenshotOutputType not supported: " + screenshotOutputType);
         }
@@ -171,8 +152,7 @@ public interface SeleniumEnvironment
      *
      * @return path to the file, null if screenshots are not possible
      */
-    default File takeScreenshotAsFile()
-    {
+    default File takeScreenshotAsFile() {
         return takeScreenshot(SeleniumGlobals.PERSISTENT_FILE);
     }
 
@@ -181,8 +161,7 @@ public interface SeleniumEnvironment
      *
      * @return a Base64 image, null if screenshots are not possible
      */
-    default String takeScreenshotAsBase64()
-    {
+    default String takeScreenshotAsBase64() {
         return takeScreenshot(SeleniumGlobals.LOW_QUALITY_BASE64);
     }
 
@@ -191,18 +170,14 @@ public interface SeleniumEnvironment
      *
      * @return the locale
      */
-    default Locale getLanguage()
-    {
-        try
-        {
+    default Locale getLanguage() {
+        try {
             WebElement htmlElement = getDriver().findElement(By.tagName("html"));
 
             String languageTag = assertThatSoon(() -> htmlElement.getAttribute("lang"), not(emptyString()));
 
             return LocaleUtils.toLocale(languageTag);
-        }
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             throw new NoSuchElementException("No html tag found. Maybe the page was not loaded yet?", e);
         }
     }
@@ -213,8 +188,7 @@ public interface SeleniumEnvironment
      * @param dateAsString the date to parse
      * @return the parsed date
      */
-    default LocalDate parseDate(String dateAsString)
-    {
+    default LocalDate parseDate(String dateAsString) {
         return parseDate(dateAsString, FormatStyle.MEDIUM);
     }
 
@@ -225,10 +199,8 @@ public interface SeleniumEnvironment
      * @param style the date style
      * @return the parsed date
      */
-    default LocalDate parseDate(String dateAsString, FormatStyle style)
-    {
-        if (dateAsString == null || dateAsString.trim().length() == 0)
-        {
+    default LocalDate parseDate(String dateAsString, FormatStyle style) {
+        if (dateAsString == null || dateAsString.trim().length() == 0) {
             return null;
         }
 
@@ -243,8 +215,7 @@ public interface SeleniumEnvironment
      * @param date the date to format
      * @return the formatted date
      */
-    default String formatDate(LocalDate date)
-    {
+    default String formatDate(LocalDate date) {
         return formatDate(date, FormatStyle.MEDIUM);
     }
 
@@ -255,10 +226,8 @@ public interface SeleniumEnvironment
      * @param style the date style
      * @return the formatted date
      */
-    default String formatDate(LocalDate date, FormatStyle style)
-    {
-        if (date == null)
-        {
+    default String formatDate(LocalDate date, FormatStyle style) {
+        if (date == null) {
             return null;
         }
 
@@ -267,8 +236,7 @@ public interface SeleniumEnvironment
         return date.format(formatter);
     }
 
-    default DateTimeFormatter getDateTimeFormatter(FormatStyle style)
-    {
+    default DateTimeFormatter getDateTimeFormatter(FormatStyle style) {
         Locale language = getLanguage();
 
         return DateTimeFormatter.ofLocalizedDate(style).withLocale(language);
@@ -290,8 +258,7 @@ public interface SeleniumEnvironment
      * @param args the args
      * @return the message, never null
      */
-    default String getMessageOrKey(String key, Object... args)
-    {
+    default String getMessageOrKey(String key, Object... args) {
         String message = getMessage(key, args);
 
         return message != null ? message : key;
@@ -300,14 +267,10 @@ public interface SeleniumEnvironment
     /**
      * @return the window handle, a string to uniquly identify a browser window
      */
-    default String getWindowHandle()
-    {
-        try
-        {
+    default String getWindowHandle() {
+        try {
             return getDriver().getWindowHandle();
-        }
-        catch (NoSuchWindowException e)
-        {
+        } catch (NoSuchWindowException e) {
             // current window has been closed
             return null;
         }
@@ -321,34 +284,30 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToWindow(String windowHandle) throws IllegalArgumentException
-    {
+    default SubWindow switchToWindow(String windowHandle) throws IllegalArgumentException {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
 
-        if (windowHandle == null)
-        {
+        if (windowHandle == null) {
             Iterator<String> handles = driver.getWindowHandles().iterator();
 
-            if (!handles.hasNext())
-            {
+            if (!handles.hasNext()) {
                 throw new IllegalArgumentException("There is no open window");
             }
 
             windowHandle = handles.next();
         }
-        try
-        {
+        try {
             driver.switchTo().window(windowHandle);
 
             SeleniumAsserts.assertThatSoon(this::getWindowHandle, Matchers.is(windowHandle));
 
             return new SubWindow(this, originalHandle, windowHandle);
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException(
-                String.format("There is no matching window. Known windows are: %s", driver.getWindowHandles()), e);
+                String.format("There is no matching window. Known windows are: %s", driver.getWindowHandles()),
+                e
+            );
         }
     }
 
@@ -361,8 +320,7 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToWindowByTitle(String title) throws IllegalArgumentException
-    {
+    default SubWindow switchToWindowByTitle(String title) throws IllegalArgumentException {
         return switchToWindowByTitle(StringPredicate.equalTo(title));
     }
 
@@ -374,28 +332,24 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToOtherWindow() throws IllegalArgumentException
-    {
+    default SubWindow switchToOtherWindow() throws IllegalArgumentException {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
 
-        try
-        {
+        try {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 Set<String> windowHandles = driver.getWindowHandles();
 
-                if (windowHandles.size() != 2)
-                {
+                if (windowHandles.size() != 2) {
                     throw new IllegalArgumentException(
-                        "Could not switch to other window. There should be exactly two windows, "
-                            + "but these windows where found: "
-                            + windowHandles);
+                        "Could not switch to other window. There should be exactly two windows, " +
+                        "but these windows where found: " +
+                        windowHandles
+                    );
                 }
 
-                for (String windowHandle : windowHandles)
-                {
-                    if (Objects.equals(originalHandle, windowHandle))
-                    {
+                for (String windowHandle : windowHandles) {
+                    if (Objects.equals(originalHandle, windowHandle)) {
                         continue;
                     }
 
@@ -408,9 +362,7 @@ public interface SeleniumEnvironment
 
                 return null;
             });
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException("Could not switch to other window", e);
         }
     }
@@ -423,23 +375,19 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToWindowByTitle(Predicate<String> titlePredicate) throws IllegalArgumentException
-    {
+    default SubWindow switchToWindowByTitle(Predicate<String> titlePredicate) throws IllegalArgumentException {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
         Collection<String> titles = new HashSet<>();
 
-        try
-        {
+        try {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 Set<String> windowHandles = driver.getWindowHandles();
 
-                for (String windowHandle : windowHandles)
-                {
+                for (String windowHandle : windowHandles) {
                     String currentTitle = driver.switchTo().window(windowHandle).getTitle();
 
-                    if (titlePredicate.test(currentTitle))
-                    {
+                    if (titlePredicate.test(currentTitle)) {
                         return new SubWindow(this, originalHandle, windowHandle);
                     }
 
@@ -448,11 +396,11 @@ public interface SeleniumEnvironment
 
                 return null;
             });
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException(
-                String.format("There is no matching window. Known window titles are: %s", titles), e);
+                String.format("There is no matching window. Known window titles are: %s", titles),
+                e
+            );
         }
     }
 
@@ -464,8 +412,7 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToWindowByUrl(String url)
-    {
+    default SubWindow switchToWindowByUrl(String url) {
         return switchToWindowByUrl(StringPredicate.equalTo(url));
     }
 
@@ -477,25 +424,21 @@ public interface SeleniumEnvironment
      * @return the handle for the window
      * @throws IllegalArgumentException if the window was not found
      */
-    default SubWindow switchToWindowByUrl(Predicate<String> urlPredicate)
-    {
+    default SubWindow switchToWindowByUrl(Predicate<String> urlPredicate) {
         WebDriver driver = getDriver();
         String originalHandle = getWindowHandle();
         Collection<String> urls = new HashSet<>();
 
-        try
-        {
+        try {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 urls.clear();
 
                 Set<String> windowHandles = driver.getWindowHandles();
 
-                for (String windowHandle : windowHandles)
-                {
+                for (String windowHandle : windowHandles) {
                     String currentUrl = driver.switchTo().window(windowHandle).getCurrentUrl();
 
-                    if (urlPredicate.test(currentUrl))
-                    {
+                    if (urlPredicate.test(currentUrl)) {
                         return new SubWindow(this, originalHandle, windowHandle);
                     }
 
@@ -504,11 +447,11 @@ public interface SeleniumEnvironment
 
                 return null;
             });
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException(
-                String.format("There is no matching window. Known window URLs are: %s", urls), e);
+                String.format("There is no matching window. Known window URLs are: %s", urls),
+                e
+            );
         }
     }
 
@@ -520,20 +463,16 @@ public interface SeleniumEnvironment
      * @return the handle for the frame
      * @throws IllegalArgumentException if there is no frame with the specified name or id
      */
-    default SubFrame switchToFrameByNameOrId(String nameOrId) throws IllegalArgumentException
-    {
+    default SubFrame switchToFrameByNameOrId(String nameOrId) throws IllegalArgumentException {
         WebDriver driver = getDriver();
 
-        try
-        {
+        try {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 driver.switchTo().frame(nameOrId);
 
                 return new SubFrame(this);
             });
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException(String.format("There is no frame with name or id \"%s\"", nameOrId), e);
         }
     }
@@ -546,20 +485,16 @@ public interface SeleniumEnvironment
      * @return the handle for the frame
      * @throws IllegalArgumentException if there is no frame with the specified name or id
      */
-    default SubFrame switchToFrame(WebElement frameElement)
-    {
+    default SubFrame switchToFrame(WebElement frameElement) {
         WebDriver driver = getDriver();
 
-        try
-        {
+        try {
             return SeleniumUtils.keepTrying(SeleniumGlobals.getLongTimeoutInSeconds(), () -> {
                 driver.switchTo().frame(frameElement);
 
                 return new SubFrame(this);
             });
-        }
-        catch (SeleniumException e)
-        {
+        } catch (SeleniumException e) {
             throw new IllegalArgumentException("Failed to switch to the specified frame", e);
         }
     }
@@ -567,8 +502,7 @@ public interface SeleniumEnvironment
     /**
      * @return all cookies
      */
-    default Set<Cookie> getAllCookies()
-    {
+    default Set<Cookie> getAllCookies() {
         return getDriver().manage().getCookies();
     }
 
@@ -577,8 +511,7 @@ public interface SeleniumEnvironment
      *
      * @param cookie the cookie
      */
-    default void addCookie(Cookie cookie)
-    {
+    default void addCookie(Cookie cookie) {
         getDriver().manage().addCookie(cookie);
     }
 
@@ -588,16 +521,14 @@ public interface SeleniumEnvironment
      * @param cookieName the name
      * @return the cookie, null if not found
      */
-    default Cookie getCookieByName(String cookieName)
-    {
+    default Cookie getCookieByName(String cookieName) {
         return getDriver().manage().getCookieNamed(cookieName);
     }
 
     /**
      * Deletes all cookies.
      */
-    default void deleteAllCookies()
-    {
+    default void deleteAllCookies() {
         getDriver().manage().deleteAllCookies();
     }
 
@@ -606,8 +537,7 @@ public interface SeleniumEnvironment
      *
      * @param cookie the cookie
      */
-    default void deleteCookie(Cookie cookie)
-    {
+    default void deleteCookie(Cookie cookie) {
         getDriver().manage().deleteCookie(cookie);
     }
 
@@ -616,24 +546,19 @@ public interface SeleniumEnvironment
      *
      * @param cookieName the name
      */
-    default void deleteCookieByName(String cookieName)
-    {
+    default void deleteCookieByName(String cookieName) {
         getDriver().manage().deleteCookieNamed(cookieName);
     }
 
-    default LocalStorage localStorage()
-    {
+    default LocalStorage localStorage() {
         WebDriver driver = getDriver();
 
-        if (driver instanceof RemoteWebDriver remoteWebDriver)
-        {
+        if (driver instanceof RemoteWebDriver remoteWebDriver) {
             RemoteExecuteMethod executeMethod = new RemoteExecuteMethod(remoteWebDriver);
             RemoteWebStorage webStorage = new RemoteWebStorage(executeMethod);
 
             return webStorage.getLocalStorage();
-        }
-        else
-        {
+        } else {
             throw new UnsupportedOperationException("Unsupported driver: " + driver.getClass().getName());
         }
     }
@@ -644,16 +569,14 @@ public interface SeleniumEnvironment
      * @deprecated use {@link #localStorage()}.clear() instead
      */
     @Deprecated(forRemoval = true)
-    default void clearLocalStorage()
-    {
+    default void clearLocalStorage() {
         localStorage().clear();
     }
 
     /**
      * Quits the Selenium driver.
      */
-    default void quit()
-    {
+    default void quit() {
         getDriver().quit();
     }
 
@@ -661,5 +584,4 @@ public interface SeleniumEnvironment
      * Restarts the driver.
      */
     void restart();
-
 }

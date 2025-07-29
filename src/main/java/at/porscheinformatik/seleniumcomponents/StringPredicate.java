@@ -8,7 +8,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
@@ -18,35 +17,28 @@ import org.hamcrest.Description;
  *
  * @author ham
  */
-public abstract class StringPredicate extends BaseMatcher<String> implements Predicate<String>
-{
+public abstract class StringPredicate extends BaseMatcher<String> implements Predicate<String> {
 
-    private static final StringPredicate ANY = new StringPredicate()
-    {
+    private static final StringPredicate ANY = new StringPredicate() {
         @Override
-        public boolean test(String value)
-        {
+        public boolean test(String value) {
             return true;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "any";
         }
     };
 
-    private static final StringPredicate NONE = new StringPredicate()
-    {
+    private static final StringPredicate NONE = new StringPredicate() {
         @Override
-        public boolean test(String value)
-        {
+        public boolean test(String value) {
             return false;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "none";
         }
     };
@@ -56,8 +48,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      *
      * @return the predicate
      */
-    public static StringPredicate any()
-    {
+    public static StringPredicate any() {
         return ANY;
     }
 
@@ -66,8 +57,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      *
      * @return the predicate
      */
-    public static StringPredicate none()
-    {
+    public static StringPredicate none() {
         return NONE;
     }
 
@@ -77,27 +67,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param predicates the predicates
      * @return the predicate
      */
-    public static StringPredicate and(StringPredicate... predicates)
-    {
-        if ((predicates == null) || (predicates.length == 0))
-        {
+    public static StringPredicate and(StringPredicate... predicates) {
+        if ((predicates == null) || (predicates.length == 0)) {
             return none();
         }
 
-        if (predicates.length == 1)
-        {
+        if (predicates.length == 1) {
             return predicates[0];
         }
 
-        return new StringPredicate()
-        {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (StringPredicate predicate : predicates)
-                {
-                    if (!predicate.test(value))
-                    {
+            public boolean test(String value) {
+                for (StringPredicate predicate : predicates) {
+                    if (!predicate.test(value)) {
                         return false;
                     }
                 }
@@ -106,8 +89,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "and" + Arrays.toString(predicates);
             }
         };
@@ -119,27 +101,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param predicates the predicates
      * @return the predicate
      */
-    public static StringPredicate or(StringPredicate... predicates)
-    {
-        if ((predicates == null) || (predicates.length == 0))
-        {
+    public static StringPredicate or(StringPredicate... predicates) {
+        if ((predicates == null) || (predicates.length == 0)) {
             return none();
         }
 
-        if (predicates.length == 1)
-        {
+        if (predicates.length == 1) {
             return predicates[0];
         }
 
-        return new StringPredicate()
-        {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (StringPredicate predicate : predicates)
-                {
-                    if (predicate.test(value))
-                    {
+            public boolean test(String value) {
+                for (StringPredicate predicate : predicates) {
+                    if (predicate.test(value)) {
                         return true;
                     }
                 }
@@ -148,8 +123,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "or" + Arrays.toString(predicates);
             }
         };
@@ -161,19 +135,15 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param predicate the predicate
      * @return the predicate
      */
-    public static StringPredicate not(StringPredicate predicate)
-    {
-        return new StringPredicate()
-        {
+    public static StringPredicate not(StringPredicate predicate) {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
+            public boolean test(String value) {
                 return !predicate.test(value);
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("not[%s]", predicate);
             }
         };
@@ -185,8 +155,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate equalTo(String... patterns)
-    {
+    public static StringPredicate equalTo(String... patterns) {
         return equalTo(false, patterns);
     }
 
@@ -197,27 +166,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate equalTo(boolean caseSensitive, String... patterns)
-    {
-        return new StringPredicate()
-        {
+    public static StringPredicate equalTo(boolean caseSensitive, String... patterns) {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (String pattern : patterns)
-                {
-                    if (value == pattern)
-                    {
+            public boolean test(String value) {
+                for (String pattern : patterns) {
+                    if (value == pattern) {
                         return true;
                     }
 
-                    if (value == null || pattern == null)
-                    {
+                    if (value == null || pattern == null) {
                         return false;
                     }
 
-                    if (caseSensitive ? pattern.equals(value) : pattern.equalsIgnoreCase(value))
-                    {
+                    if (caseSensitive ? pattern.equals(value) : pattern.equalsIgnoreCase(value)) {
                         return true;
                     }
                 }
@@ -226,8 +188,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("is%s", Arrays.toString(patterns));
             }
         };
@@ -239,8 +200,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate contains(String... patterns)
-    {
+    public static StringPredicate contains(String... patterns) {
         return equalTo(false, patterns);
     }
 
@@ -251,27 +211,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate contains(boolean caseSensitive, String... patterns)
-    {
-        return new StringPredicate()
-        {
+    public static StringPredicate contains(boolean caseSensitive, String... patterns) {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (String pattern : patterns)
-                {
-                    if (value == pattern)
-                    {
+            public boolean test(String value) {
+                for (String pattern : patterns) {
+                    if (value == pattern) {
                         return true;
                     }
 
-                    if (value == null || pattern == null)
-                    {
+                    if (value == null || pattern == null) {
                         return false;
                     }
 
-                    if (caseSensitive ? value.contains(value) : value.toLowerCase().contains(value.toLowerCase()))
-                    {
+                    if (caseSensitive ? value.contains(value) : value.toLowerCase().contains(value.toLowerCase())) {
                         return true;
                     }
                 }
@@ -280,24 +233,18 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("is%s", Arrays.toString(patterns));
             }
         };
     }
 
-    public static StringPredicate wildcard(boolean caseSensitive, String... patterns)
-    {
-        return new StringPredicate()
-        {
+    public static StringPredicate wildcard(boolean caseSensitive, String... patterns) {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (String pattern : patterns)
-                {
-                    if (matchesUsingWildcards(caseSensitive, pattern, value))
-                    {
+            public boolean test(String value) {
+                for (String pattern : patterns) {
+                    if (matchesUsingWildcards(caseSensitive, pattern, value)) {
                         return true;
                     }
                 }
@@ -306,8 +253,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("wildcard%s", Arrays.toString(patterns));
             }
         };
@@ -320,18 +266,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the expressions
      * @return the predicate
      */
-    public static StringPredicate regExp(boolean caseSensitive, String... patterns)
-    {
-        return regExp(Arrays.stream(patterns).map(pattern -> {
-            int flags = Pattern.DOTALL;
+    public static StringPredicate regExp(boolean caseSensitive, String... patterns) {
+        return regExp(
+            Arrays.stream(patterns)
+                .map(pattern -> {
+                    int flags = Pattern.DOTALL;
 
-            if (!caseSensitive)
-            {
-                flags |= Pattern.CASE_INSENSITIVE;
-            }
+                    if (!caseSensitive) {
+                        flags |= Pattern.CASE_INSENSITIVE;
+                    }
 
-            return Pattern.compile(pattern, flags);
-        }).toArray(size -> new Pattern[size]));
+                    return Pattern.compile(pattern, flags);
+                })
+                .toArray(size -> new Pattern[size])
+        );
     }
 
     /**
@@ -340,27 +288,20 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the expressions
      * @return the predicate
      */
-    public static StringPredicate regExp(Pattern... patterns)
-    {
-        return new StringPredicate()
-        {
+    public static StringPredicate regExp(Pattern... patterns) {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (Pattern pattern : patterns)
-                {
-                    if (value == null && pattern == null)
-                    {
+            public boolean test(String value) {
+                for (Pattern pattern : patterns) {
+                    if (value == null && pattern == null) {
                         return true;
                     }
 
-                    if (value == null || pattern == null)
-                    {
+                    if (value == null || pattern == null) {
                         return false;
                     }
 
-                    if (pattern.matcher(value).matches())
-                    {
+                    if (pattern.matcher(value).matches()) {
                         return true;
                     }
                 }
@@ -369,8 +310,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("regExp%s", Arrays.toString(patterns));
             }
         };
@@ -384,8 +324,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate like(String... patterns)
-    {
+    public static StringPredicate like(String... patterns) {
         return like(false, patterns);
     }
 
@@ -398,59 +337,44 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param patterns the patterns
      * @return the predicate
      */
-    public static StringPredicate like(boolean caseSensitive, String... patterns)
-    {
+    public static StringPredicate like(boolean caseSensitive, String... patterns) {
         List<Pattern> regExpPatterns = new ArrayList<>();
 
-        for (String pattern : patterns)
-        {
-            if (pattern != null)
-            {
-                try
-                {
+        for (String pattern : patterns) {
+            if (pattern != null) {
+                try {
                     int flags = Pattern.DOTALL;
 
-                    if (!caseSensitive)
-                    {
+                    if (!caseSensitive) {
                         flags |= Pattern.CASE_INSENSITIVE;
                     }
 
                     regExpPatterns.add(Pattern.compile(pattern, flags));
-                }
-                catch (PatternSyntaxException e)
-                {
+                } catch (PatternSyntaxException e) {
                     // ignore
                 }
             }
         }
 
-        return new StringPredicate()
-        {
+        return new StringPredicate() {
             @Override
-            public boolean test(String value)
-            {
-                for (String pattern : patterns)
-                {
-                    if (matchesUsingWildcards(caseSensitive, pattern, value))
-                    {
+            public boolean test(String value) {
+                for (String pattern : patterns) {
+                    if (matchesUsingWildcards(caseSensitive, pattern, value)) {
                         return true;
                     }
                 }
 
-                for (Pattern regExpPattern : regExpPatterns)
-                {
-                    if (value == null && regExpPattern == null)
-                    {
+                for (Pattern regExpPattern : regExpPatterns) {
+                    if (value == null && regExpPattern == null) {
                         return true;
                     }
 
-                    if (value == null || regExpPattern == null)
-                    {
+                    if (value == null || regExpPattern == null) {
                         return false;
                     }
 
-                    if (regExpPattern.matcher(value).matches())
-                    {
+                    if (regExpPattern.matcher(value).matches()) {
                         return true;
                     }
                 }
@@ -459,8 +383,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("like%s", Arrays.toString(patterns));
             }
         };
@@ -477,8 +400,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param s the string to parse
      * @return the predicate
      */
-    public static StringPredicate parse(String s)
-    {
+    public static StringPredicate parse(String s) {
         return parse(false, s);
     }
 
@@ -494,10 +416,8 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param s the string to parse
      * @return the predicate
      */
-    public static StringPredicate parse(boolean caseSensitive, String s)
-    {
-        if (Utils.isEmpty(s))
-        {
+    public static StringPredicate parse(boolean caseSensitive, String s) {
+        if (Utils.isEmpty(s)) {
             return any();
         }
 
@@ -515,8 +435,7 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param values the list of values, may be null or empty
      * @return the predicate
      */
-    public static StringPredicate parse(List<String> values)
-    {
+    public static StringPredicate parse(List<String> values) {
         return parse(true, values);
     }
 
@@ -532,77 +451,64 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
      * @param values the list of values, may be null or empty
      * @return the predicate
      */
-    public static StringPredicate parse(boolean caseSensitive, List<String> values)
-    {
-        if (Utils.isEmpty(values))
-        {
+    public static StringPredicate parse(boolean caseSensitive, List<String> values) {
+        if (Utils.isEmpty(values)) {
             return any();
         }
 
         List<StringPredicate> positivePredicates = new ArrayList<>();
         List<StringPredicate> negativePredicates = new ArrayList<>();
 
-        for (String value : values)
-        {
+        for (String value : values) {
             value = value.trim();
 
-            if (value.startsWith("!"))
-            {
+            if (value.startsWith("!")) {
                 negativePredicates.add(not(like(caseSensitive, value.substring(1))));
-            }
-            else
-            {
+            } else {
                 positivePredicates.add(like(caseSensitive, value));
             }
         }
 
-        if (positivePredicates.isEmpty())
-        {
+        if (positivePredicates.isEmpty()) {
             return and(negativePredicates.toArray(new StringPredicate[negativePredicates.size()]));
         }
 
-        if (negativePredicates.isEmpty())
-        {
+        if (negativePredicates.isEmpty()) {
             return or(positivePredicates.toArray(new StringPredicate[positivePredicates.size()]));
         }
 
-        return and(and(negativePredicates.toArray(new StringPredicate[negativePredicates.size()])),
-            or(positivePredicates.toArray(new StringPredicate[positivePredicates.size()])));
+        return and(
+            and(negativePredicates.toArray(new StringPredicate[negativePredicates.size()])),
+            or(positivePredicates.toArray(new StringPredicate[positivePredicates.size()]))
+        );
     }
 
     @Override
-    public boolean matches(Object actual)
-    {
+    public boolean matches(Object actual) {
         return actual == null ? test(null) : test(String.valueOf(actual));
     }
 
     @Override
-    public void describeTo(Description description)
-    {
+    public void describeTo(Description description) {
         description.appendValue(toString());
     }
 
     @Override
-    public void describeMismatch(Object actual, Description mismatchDescription)
-    {
+    public void describeMismatch(Object actual, Description mismatchDescription) {
         mismatchDescription.appendValue(actual).appendText(" does not match ").appendDescriptionOf(this);
     }
 
     @Override
-    public boolean test(String t)
-    {
+    public boolean test(String t) {
         return false;
     }
 
-    public <T> Predicate<T> of(Function<T, String> accessor)
-    {
+    public <T> Predicate<T> of(Function<T, String> accessor) {
         return t -> test(t != null ? accessor.apply(t) : null);
     }
 
-    private static boolean matchesUsingWildcards(boolean caseSensitive, String pattern, String value)
-    {
-        if (!caseSensitive)
-        {
+    private static boolean matchesUsingWildcards(boolean caseSensitive, String pattern, String value) {
+        if (!caseSensitive) {
             pattern = pattern.toLowerCase();
             value = value.toLowerCase();
         }
@@ -611,71 +517,53 @@ public abstract class StringPredicate extends BaseMatcher<String> implements Pre
     }
 
     // CHECKSTYLE:OFF
-    private static boolean matchesUsingWildcards(String pattern, int patternIndex, String value, int valueIndex)
-    {
-        if (pattern == null && value == null)
-        {
+    private static boolean matchesUsingWildcards(String pattern, int patternIndex, String value, int valueIndex) {
+        if (pattern == null && value == null) {
             return true;
         }
 
-        if (pattern == null || value == null)
-        {
+        if (pattern == null || value == null) {
             return false;
         }
 
-        if (Objects.equals(pattern, value))
-        {
+        if (Objects.equals(pattern, value)) {
             return true;
         }
 
         int tmpPatternIndex = patternIndex;
         int tmpValueIndex = valueIndex;
 
-        while (tmpPatternIndex < pattern.length())
-        {
-            if ('?' == pattern.charAt(tmpPatternIndex))
-            {
+        while (tmpPatternIndex < pattern.length()) {
+            if ('?' == pattern.charAt(tmpPatternIndex)) {
                 tmpPatternIndex += 1;
 
-                if (tmpValueIndex < value.length())
-                {
+                if (tmpValueIndex < value.length()) {
                     tmpValueIndex += 1;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else if ('*' == pattern.charAt(tmpPatternIndex))
-            {
-                while ((tmpPatternIndex < pattern.length()) && ('*' == pattern.charAt(tmpPatternIndex)))
-                {
+            } else if ('*' == pattern.charAt(tmpPatternIndex)) {
+                while ((tmpPatternIndex < pattern.length()) && ('*' == pattern.charAt(tmpPatternIndex))) {
                     tmpPatternIndex += 1;
                 }
 
-                if (tmpPatternIndex >= pattern.length())
-                {
+                if (tmpPatternIndex >= pattern.length()) {
                     return true;
                 }
 
-                while (tmpValueIndex < value.length())
-                {
-                    if (matchesUsingWildcards(pattern, tmpPatternIndex, value, tmpValueIndex))
-                    {
+                while (tmpValueIndex < value.length()) {
+                    if (matchesUsingWildcards(pattern, tmpPatternIndex, value, tmpValueIndex)) {
                         return true;
                     }
 
                     tmpValueIndex += 1;
                 }
-            }
-            else if ((tmpValueIndex < value.length())
-                && (pattern.charAt(tmpPatternIndex) == value.charAt(tmpValueIndex)))
-            {
+            } else if (
+                (tmpValueIndex < value.length()) && (pattern.charAt(tmpPatternIndex) == value.charAt(tmpValueIndex))
+            ) {
                 tmpPatternIndex += 1;
                 tmpValueIndex += 1;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }

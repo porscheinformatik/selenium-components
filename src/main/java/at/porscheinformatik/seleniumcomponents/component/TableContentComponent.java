@@ -10,18 +10,18 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  *
  * @author ham
  */
-public class TableContentComponent extends AbstractSeleniumContainer<TableRowComponent>
-{
+public class TableContentComponent extends AbstractSeleniumContainer<TableRowComponent> {
 
-    public TableContentComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public TableContentComponent(SeleniumComponent parent, WebElementSelector selector) {
         this(parent, selector, WebElementSelector.selectByTagName("tr"), TableRowComponent::new);
     }
 
-    public TableContentComponent(SeleniumComponent parent, WebElementSelector selector,
-        WebElementSelector childSelector, SeleniumComponentFactory<TableRowComponent> childFactory)
-    {
+    public TableContentComponent(
+        SeleniumComponent parent,
+        WebElementSelector selector,
+        WebElementSelector childSelector,
+        SeleniumComponentFactory<TableRowComponent> childFactory
+    ) {
         super(parent, selector, childSelector, childFactory);
     }
-
 }

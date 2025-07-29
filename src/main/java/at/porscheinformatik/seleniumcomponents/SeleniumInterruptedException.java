@@ -5,19 +5,15 @@ package at.porscheinformatik.seleniumcomponents;
  *
  * @author Family
  */
-public class SeleniumInterruptedException extends SeleniumException
-{
+public class SeleniumInterruptedException extends SeleniumException {
 
     private static final long serialVersionUID = -8852863537587389106L;
 
-    public SeleniumInterruptedException(String message, Throwable t)
-    {
+    public SeleniumInterruptedException(String message, Throwable t) {
         super(message, t);
     }
 
-    public SeleniumInterruptedException(String s)
-    {
+    public SeleniumInterruptedException(String s) {
         super(s);
     }
-
 }

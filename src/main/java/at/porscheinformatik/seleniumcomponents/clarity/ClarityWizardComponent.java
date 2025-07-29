@@ -23,44 +23,48 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  *
  * @author Daniel Furtlehner
  */
-public abstract class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent
-{
+public abstract class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent {
+
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
     private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("modal-title-text"));
 
-    private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav =
-        new SeleniumComponentListFactory<>(this, WebElementSelector.selectByClassName("clr-wizard-stepnav-item"),
-            ClarityWizardStepnavEntry::new);
+    private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav = new SeleniumComponentListFactory<>(
+        this,
+        WebElementSelector.selectByClassName("clr-wizard-stepnav-item"),
+        ClarityWizardStepnavEntry::new
+    );
 
     private final HtmlComponent wizardContent = new HtmlComponent(this, selectByClassName("clr-wizard-content"));
 
-    protected final HtmlComponent buttonWrapper =
-        new HtmlComponent(this, selectByClassName("clr-wizard-footer-buttons-wrapper"));
+    protected final HtmlComponent buttonWrapper = new HtmlComponent(
+        this,
+        selectByClassName("clr-wizard-footer-buttons-wrapper")
+    );
 
     private final ButtonComponent nextButton = new ButtonComponent(buttonWrapper, selectByAttribute("type", "next"));
-    private final ButtonComponent prevButton =
-        new ButtonComponent(buttonWrapper, selectByAttribute("type", "previous"));
-    private final ButtonComponent finishButton =
-        new ButtonComponent(buttonWrapper, selectByAttribute("type", "finish"));
+    private final ButtonComponent prevButton = new ButtonComponent(
+        buttonWrapper,
+        selectByAttribute("type", "previous")
+    );
+    private final ButtonComponent finishButton = new ButtonComponent(
+        buttonWrapper,
+        selectByAttribute("type", "finish")
+    );
 
-    public ClarityWizardComponent(SeleniumComponent parent)
-    {
+    public ClarityWizardComponent(SeleniumComponent parent) {
         this(parent, selectByTagName("clr-wizard"));
     }
 
-    public ClarityWizardComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public ClarityWizardComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return wizardTitle.getText();
     }
 
     @Override
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         // Have to override the visible method. The host element is visible before the modal gets rendered.
         return wizardTitle.isVisible();
     }
@@ -68,16 +72,14 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * @return the list of navigation steps for this component
      */
-    public SeleniumComponentList<ClarityWizardStepnavEntry> getStepNavItems()
-    {
+    public SeleniumComponentList<ClarityWizardStepnavEntry> getStepNavItems() {
         return stepNav.findAll();
     }
 
     /**
      * Click the "next" button and expect the page title to change.
      */
-    public void next()
-    {
+    public void next() {
         String pageTitle = getPageTitle();
 
         clickNext();
@@ -88,16 +90,14 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * Click the "next" button.
      */
-    public void clickNext()
-    {
+    public void clickNext() {
         nextButton.click();
     }
 
     /**
      * Click the "previous" button and expect the page title to change.
      */
-    public void previous()
-    {
+    public void previous() {
         String pageTitle = getPageTitle();
 
         clickPrevious();
@@ -108,16 +108,14 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * Click the "previous" button.
      */
-    public void clickPrevious()
-    {
+    public void clickPrevious() {
         prevButton.click();
     }
 
     /**
      * Click the "finish" button and expect the wizard to close itself.
      */
-    public void finish()
-    {
+    public void finish() {
         clickFinish();
 
         SeleniumAsserts.assertThatSoon("Wizard should be closed", () -> this, SeleniumMatchers.isNotVisible());
@@ -126,38 +124,32 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * Click the "finish" button.
      */
-    public void clickFinish()
-    {
+    public void clickFinish() {
         finishButton.click();
     }
 
-    public boolean isNextClickable()
-    {
+    public boolean isNextClickable() {
         return nextButton.isClickable();
     }
 
-    public boolean isPreviousClickable()
-    {
+    public boolean isPreviousClickable() {
         return prevButton.isClickable();
     }
 
-    public boolean isFinishClickable()
-    {
+    public boolean isFinishClickable() {
         return finishButton.isClickable();
     }
 
-    public String getPageTitle()
-    {
+    public String getPageTitle() {
         return pageTitle.getText();
     }
 
     /**
      * page component
      */
-    public static class ClarityWizardPageComponent extends AbstractSeleniumComponent
-    {
-        public static ClarityWizardPageComponent byTestId(ClarityWizardComponent wizard, String testId)
-        {
+    public static class ClarityWizardPageComponent extends AbstractSeleniumComponent {
+
+        public static ClarityWizardPageComponent byTestId(ClarityWizardComponent wizard, String testId) {
             return new ClarityWizardPageComponent(wizard, selectByTestId(testId));
         }
 
@@ -167,25 +159,20 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
          * @deprecated Use {@link #ClarityWizardPageComponent(ClarityWizardComponent, WebElementSelector)} instead
          */
         @Deprecated(forRemoval = true)
-        public ClarityWizardPageComponent(ClarityWizardComponent wizard, String seleniumKey)
-        {
+        public ClarityWizardPageComponent(ClarityWizardComponent wizard, String seleniumKey) {
             this(wizard, WebElementSelector.selectByTestIdOrSeleniumKey(seleniumKey));
         }
 
-        public ClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector)
-        {
+        public ClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector) {
             super(wizard.wizardContent, selector);
-
             this.wizard = wizard;
         }
 
-        public ClarityWizardComponent getWizard()
-        {
+        public ClarityWizardComponent getWizard() {
             return wizard;
         }
 
-        public boolean isActive()
-        {
+        public boolean isActive() {
             return containsClassName("active");
         }
     }
@@ -193,24 +180,23 @@ public abstract class ClarityWizardComponent extends AbstractSeleniumComponent i
     /**
      * stepnav entry
      */
-    public static class ClarityWizardStepnavEntry extends AbstractSeleniumComponent
-    {
-        private final ButtonComponent button = new ButtonComponent(this);
-        private final HtmlComponent label =
-            new HtmlComponent(button, selectByClassName("clr-wizard-stepnav-link-title"));
+    public static class ClarityWizardStepnavEntry extends AbstractSeleniumComponent {
 
-        public ClarityWizardStepnavEntry(SeleniumComponent parent, WebElementSelector selector)
-        {
+        private final ButtonComponent button = new ButtonComponent(this);
+        private final HtmlComponent label = new HtmlComponent(
+            button,
+            selectByClassName("clr-wizard-stepnav-link-title")
+        );
+
+        public ClarityWizardStepnavEntry(SeleniumComponent parent, WebElementSelector selector) {
             super(parent, selector);
         }
 
-        public String getLabel()
-        {
+        public String getLabel() {
             return label.getText();
         }
 
-        public void click()
-        {
+        public void click() {
             button.click();
         }
     }

@@ -1,13 +1,11 @@
 package at.porscheinformatik.seleniumcomponents.angular;
 
-import java.util.function.Predicate;
-
-import org.openqa.selenium.support.ui.Quotes;
-
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.OptionComponent;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
+import java.util.function.Predicate;
+import org.openqa.selenium.support.ui.Quotes;
 
 /**
  * This component differs to the {@link SelectComponent} by the way, it interprets the value. Angular tends to add ids
@@ -16,40 +14,37 @@ import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
  *
  * @author HAM
  */
-public class AngularSelectComponent extends SelectComponent
-{
+public class AngularSelectComponent extends SelectComponent {
 
-    public AngularSelectComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public AngularSelectComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public AngularSelectComponent(SeleniumComponent parent)
-    {
+    public AngularSelectComponent(SeleniumComponent parent) {
         super(parent);
     }
 
     @Override
-    public String getValue()
-    {
+    public String getValue() {
         return sanitizeValue(super.getValue());
     }
 
     @Override
-    public OptionComponent optionByValue(String value)
-    {
-        return new OptionComponent(this,
-            WebElementSelector
-                .selectByXPath(".//option[@value = "
-                    + Quotes.escape(value)
-                    + "]|.//option[contains(@value, "
-                    + Quotes.escape(": " + value)
-                    + ")]"));
+    public OptionComponent optionByValue(String value) {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectByXPath(
+                ".//option[@value = " +
+                Quotes.escape(value) +
+                "]|.//option[contains(@value, " +
+                Quotes.escape(": " + value) +
+                ")]"
+            )
+        );
     }
 
     @Override
-    public void selectByValue(Predicate<String> valuePredicate)
-    {
+    public void selectByValue(Predicate<String> valuePredicate) {
         select(option -> {
             String value = option.getValue();
 
@@ -57,10 +52,8 @@ public class AngularSelectComponent extends SelectComponent
         });
     }
 
-    public static String sanitizeValue(String value)
-    {
-        if (value == null)
-        {
+    public static String sanitizeValue(String value) {
+        if (value == null) {
             return value;
         }
 

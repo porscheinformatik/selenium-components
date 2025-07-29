@@ -6,10 +6,8 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -19,9 +17,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Daniel Furtlehner
  */
-public interface WebElementSelector
-{
-
+public interface WebElementSelector {
     /**
      * Creates a selector that always uses the specified element. This selector ignores the {@link SearchContext}.
      *
@@ -30,31 +26,25 @@ public interface WebElementSelector
      * @param element the element to return
      * @return the selector
      */
-    static WebElementSelector selectElement(String description, WebElement element)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectElement(String description, WebElement element) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 return element;
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return Collections.singletonList(element);
             }
 
             @Override
-            public String decribe(String contextDescription)
-            {
+            public String decribe(String contextDescription) {
                 return "$" + description;
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return description;
             }
         };
@@ -68,25 +58,20 @@ public interface WebElementSelector
      * @param by the Selenium selector
      * @return the {@link WebElementSelector} for the given Selenium selector
      */
-    static WebElementSelector selectBy(String description, By by)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectBy(String description, By by) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 return context.findElement(by);
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return context.findElements(by);
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return description;
             }
         };
@@ -98,8 +83,7 @@ public interface WebElementSelector
      * @param id the id of the element
      * @return the selector
      */
-    static WebElementSelector selectById(String id)
-    {
+    static WebElementSelector selectById(String id) {
         return selectByCss("#" + id);
     }
 
@@ -110,8 +94,7 @@ public interface WebElementSelector
      * @param name the expected value of the "name" attribute of the element
      * @return the selector
      */
-    static WebElementSelector selectByName(String name)
-    {
+    static WebElementSelector selectByName(String name) {
         return selectBy(String.format("*[name='%s']", name), By.name(name));
     }
 
@@ -122,8 +105,7 @@ public interface WebElementSelector
      * @param tagNames the tag name of the element
      * @return the selector
      */
-    static WebElementSelector selectByTagName(String... tagNames)
-    {
+    static WebElementSelector selectByTagName(String... tagNames) {
         return selectByCss(tagNames);
     }
 
@@ -136,8 +118,7 @@ public interface WebElementSelector
      * @param partialLabel the text the label should contain
      * @return the selector
      */
-    static WebElementSelector selectByTagNameContainingLabel(String tagName, String partialLabel)
-    {
+    static WebElementSelector selectByTagNameContainingLabel(String tagName, String partialLabel) {
         return selectByXPath(String.format(".//%s[.//label[contains(.,'%s')]]", tagName, partialLabel));
     }
 
@@ -149,9 +130,12 @@ public interface WebElementSelector
      * @param classNames the tag class of the element
      * @return the selector
      */
-    static WebElementSelector selectByClassName(String... classNames)
-    {
-        return selectByCss(Arrays.stream(classNames).map(className -> "." + className).toArray(String[]::new));
+    static WebElementSelector selectByClassName(String... classNames) {
+        return selectByCss(
+            Arrays.stream(classNames)
+                .map(className -> "." + className)
+                .toArray(String[]::new)
+        );
     }
 
     /**
@@ -161,8 +145,7 @@ public interface WebElementSelector
      * @param queries the CSS selector query
      * @return the selector
      */
-    static WebElementSelector selectByCss(String... queries)
-    {
+    static WebElementSelector selectByCss(String... queries) {
         return new CombinableWebElementSelector(queries);
     }
 
@@ -173,8 +156,7 @@ public interface WebElementSelector
      * @param attributeValue the value of the attribute
      * @return the selector
      */
-    static WebElementSelector selectByAttribute(String attributeName, String attributeValue)
-    {
+    static WebElementSelector selectByAttribute(String attributeName, String attributeValue) {
         return selectByAttribute("*", attributeName, attributeValue);
     }
 
@@ -186,10 +168,8 @@ public interface WebElementSelector
      * @param attributeValue the value of the attribute. When null only the attribute name must match
      * @return the selector
      */
-    static WebElementSelector selectByAttribute(String tagName, String attributeName, @Nullable String attributeValue)
-    {
-        if (attributeValue == null)
-        {
+    static WebElementSelector selectByAttribute(String tagName, String attributeName, @Nullable String attributeValue) {
+        if (attributeValue == null) {
             return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
 
@@ -204,11 +184,12 @@ public interface WebElementSelector
      * @param attributeValue the value the attribute should contain. When null only the attribute name must match
      * @return the selector
      */
-    static WebElementSelector selectByAttributeContains(String tagName, String attributeName,
-        @Nullable String attributeValue)
-    {
-        if (attributeValue == null)
-        {
+    static WebElementSelector selectByAttributeContains(
+        String tagName,
+        String attributeName,
+        @Nullable String attributeValue
+    ) {
+        if (attributeValue == null) {
             return selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
 
@@ -223,8 +204,7 @@ public interface WebElementSelector
      * @param partialText the text the element should contain
      * @return the selector
      */
-    static WebElementSelector selectByText(String tagName, String partialText)
-    {
+    static WebElementSelector selectByText(String tagName, String partialText) {
         return selectByXPath(String.format(".//%s[contains(., '%s')]", tagName, partialText));
     }
 
@@ -236,8 +216,7 @@ public interface WebElementSelector
      * @param partialText the text the element should contain
      * @return the selector
      */
-    static WebElementSelector selectByClassNameAndText(String className, String partialText)
-    {
+    static WebElementSelector selectByClassNameAndText(String className, String partialText) {
         return selectByClassNameAndText("*", className, partialText);
     }
 
@@ -247,8 +226,7 @@ public interface WebElementSelector
      * @param partialLabel the text the label should contain
      * @return the selector
      */
-    static WebElementSelector selectByLabelFor(String partialLabel)
-    {
+    static WebElementSelector selectByLabelFor(String partialLabel) {
         return selectByXPath(String.format(".//*[@id=//label[contains(.,'%s')]/@for]", partialLabel));
     }
 
@@ -258,8 +236,7 @@ public interface WebElementSelector
      * @param partialLabel the text the label should contain
      * @return the selector
      */
-    static WebElementSelector selectByLabelFor(String tagType, String partialLabel)
-    {
+    static WebElementSelector selectByLabelFor(String tagType, String partialLabel) {
         return selectByXPath(String.format(".//%s[@id=//label[contains(.,'%s')]/@for]", tagType, partialLabel));
     }
 
@@ -272,11 +249,15 @@ public interface WebElementSelector
      * @param partialText the text the element should contain
      * @return the selector
      */
-    static WebElementSelector selectByClassNameAndText(String tagName, String className, String partialText)
-    {
+    static WebElementSelector selectByClassNameAndText(String tagName, String className, String partialText) {
         return selectByXPath(
-            String.format(".//%s[contains(concat(' ', @class, ' '), ' %s ') and contains(., '%s')]", tagName, className,
-                partialText));
+            String.format(
+                ".//%s[contains(concat(' ', @class, ' '), ' %s ') and contains(., '%s')]",
+                tagName,
+                className,
+                partialText
+            )
+        );
     }
 
     /**
@@ -286,8 +267,7 @@ public interface WebElementSelector
      * @param testId the expected value of the "data-testid" attribute of the element
      * @return the selector
      */
-    static WebElementSelector selectByTestId(String testId)
-    {
+    static WebElementSelector selectByTestId(String testId) {
         return selectByTestId("*", testId);
     }
 
@@ -299,8 +279,7 @@ public interface WebElementSelector
      * @param testId the expected value of the "data-testid" attribute of the element
      * @return the selector
      */
-    static WebElementSelector selectByTestId(String tagName, String testId)
-    {
+    static WebElementSelector selectByTestId(String tagName, String testId) {
         return selectByAttribute(tagName, "data-testid", testId);
     }
 
@@ -313,8 +292,7 @@ public interface WebElementSelector
      * @deprecated use {@link #selectByTestId(String)} instead
      */
     @Deprecated(forRemoval = true)
-    static WebElementSelector selectByTestIdOrSeleniumKey(String key)
-    {
+    static WebElementSelector selectByTestIdOrSeleniumKey(String key) {
         return selectByTestIdOrSeleniumKey("*", key);
     }
 
@@ -328,8 +306,7 @@ public interface WebElementSelector
      * @deprecated use {@link #selectByTestId(String, String)} instead
      */
     @Deprecated(forRemoval = true)
-    static WebElementSelector selectByTestIdOrSeleniumKey(String tagName, String key)
-    {
+    static WebElementSelector selectByTestIdOrSeleniumKey(String tagName, String key) {
         return selectByXPath(String.format(".//%s[@data-testid='%s' or @selenium-key='%s']", tagName, key, key));
     }
 
@@ -342,8 +319,7 @@ public interface WebElementSelector
      * @deprecated use {@link #selectByTestId(String)} instead
      */
     @Deprecated(forRemoval = true)
-    static WebElementSelector selectBySeleniumKey(String key)
-    {
+    static WebElementSelector selectBySeleniumKey(String key) {
         return selectBySeleniumKey("*", key);
     }
 
@@ -357,8 +333,7 @@ public interface WebElementSelector
      * @deprecated use {@link #selectByTestId(String, String)} instead
      */
     @Deprecated(forRemoval = true)
-    static WebElementSelector selectBySeleniumKey(String tagName, String key)
-    {
+    static WebElementSelector selectBySeleniumKey(String tagName, String key) {
         return selectByAttribute(tagName, "selenium-key", key);
     }
 
@@ -369,8 +344,7 @@ public interface WebElementSelector
      * @param xpath the XPath query
      * @return the selector
      */
-    static WebElementSelector selectByXPath(String xpath)
-    {
+    static WebElementSelector selectByXPath(String xpath) {
         return selectBy(String.format("{%s}", xpath), By.xpath(xpath));
     }
 
@@ -380,8 +354,7 @@ public interface WebElementSelector
      * @param index the index (0-based)
      * @return the selector
      */
-    static WebElementSelector selectByIndex(int index)
-    {
+    static WebElementSelector selectByIndex(int index) {
         return selectByIndex((String) null, index);
     }
 
@@ -392,8 +365,7 @@ public interface WebElementSelector
      * @param index the index (0-based)
      * @return the selector
      */
-    static WebElementSelector selectByIndex(String tagName, int index)
-    {
+    static WebElementSelector selectByIndex(String tagName, int index) {
         return selectByXPath(String.format("(.//%s)[%d]", tagName, index + 1));
     }
 
@@ -404,22 +376,17 @@ public interface WebElementSelector
      * @param index the index (0-based)
      * @return the selector
      */
-    static WebElementSelector selectByIndex(WebElementSelector selector, int index)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectByIndex(WebElementSelector selector, int index) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
-                if (index < 0)
-                {
+            public WebElement find(SearchContext context) {
+                if (index < 0) {
                     return null;
                 }
 
                 List<WebElement> elements = selector.findAll(context);
 
-                if (index >= elements.size())
-                {
+                if (index >= elements.size()) {
                     return null;
                 }
 
@@ -427,14 +394,12 @@ public interface WebElementSelector
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return Collections.singletonList(find(context));
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format(":nth-child(%d of %s)", index + 1, selector);
             }
         };
@@ -445,8 +410,7 @@ public interface WebElementSelector
      *
      * @return the selector
      */
-    static WebElementSelector selectLast()
-    {
+    static WebElementSelector selectLast() {
         return selectLast(selectChildren());
     }
 
@@ -456,17 +420,13 @@ public interface WebElementSelector
      * @param selector the selector for the child elements
      * @return the selector
      */
-    static WebElementSelector selectLast(WebElementSelector selector)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectLast(WebElementSelector selector) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.isEmpty())
-                {
+                if (elements.isEmpty()) {
                     return null;
                 }
 
@@ -474,14 +434,12 @@ public interface WebElementSelector
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return Collections.singletonList(find(context));
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("%s:last-child", selector);
             }
         };
@@ -492,8 +450,7 @@ public interface WebElementSelector
      *
      * @return the selector
      */
-    static WebElementSelector selectFirst()
-    {
+    static WebElementSelector selectFirst() {
         return selectFirst(selectChildren());
     }
 
@@ -503,17 +460,13 @@ public interface WebElementSelector
      * @param selector the selector for the child elements
      * @return the selector
      */
-    static WebElementSelector selectFirst(WebElementSelector selector)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectFirst(WebElementSelector selector) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 List<WebElement> elements = selector.findAll(context);
 
-                if (elements.isEmpty())
-                {
+                if (elements.isEmpty()) {
                     return null;
                 }
 
@@ -521,14 +474,12 @@ public interface WebElementSelector
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return Collections.singletonList(find(context));
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("%s:first-child", selector);
             }
         };
@@ -542,22 +493,17 @@ public interface WebElementSelector
      * @param column the column (1-based)
      * @return the selector
      */
-    static WebElementSelector selectByColumn(int column)
-    {
-        return new WebElementSelector()
-        {
+    static WebElementSelector selectByColumn(int column) {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 List<WebElement> elements = By.xpath("./*").findElements(context);
                 int currentIndex = 1;
 
-                for (WebElement element : elements)
-                {
+                for (WebElement element : elements) {
                     currentIndex += getColspan(element);
 
-                    if (currentIndex > column)
-                    {
+                    if (currentIndex > column) {
                         return element;
                     }
                 }
@@ -566,33 +512,26 @@ public interface WebElementSelector
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return Collections.singletonList(find(context));
             }
 
-            private int getColspan(WebElement element)
-            {
+            private int getColspan(WebElement element) {
                 String colspan = element.getAttribute("colspan");
 
-                if (Utils.isEmpty(colspan))
-                {
+                if (Utils.isEmpty(colspan)) {
                     return 1;
                 }
 
-                try
-                {
+                try {
                     return Integer.parseInt(colspan);
-                }
-                catch (NumberFormatException e)
-                {
+                } catch (NumberFormatException e) {
                     throw new SeleniumException("Failed to parse colspan: " + colspan, e);
                 }
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("*:nth-column(%d)", column);
             }
         };
@@ -603,8 +542,7 @@ public interface WebElementSelector
      *
      * @return the selector
      */
-    static WebElementSelector selectSelf()
-    {
+    static WebElementSelector selectSelf() {
         return selectBy("", By.xpath("."));
     }
 
@@ -613,8 +551,7 @@ public interface WebElementSelector
      *
      * @return the selector
      */
-    static WebElementSelector selectChildren()
-    {
+    static WebElementSelector selectChildren() {
         return selectBy("*", By.xpath("./*"));
     }
 
@@ -640,8 +577,7 @@ public interface WebElementSelector
      * @param contextDescription the description of the context
      * @return the description
      */
-    default String decribe(String contextDescription)
-    {
+    default String decribe(String contextDescription) {
         return Utils.isEmpty(contextDescription) ? toString() : contextDescription + " " + toString();
     }
 
@@ -659,34 +595,28 @@ public interface WebElementSelector
      * @param selector the selector
      * @return the new selector instance
      */
-    default WebElementSelector descendant(WebElementSelector selector)
-    {
+    default WebElementSelector descendant(WebElementSelector selector) {
         // I could never imagine a situation for needing the following in Java
         WebElementSelector that = this;
 
-        return new WebElementSelector()
-        {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 return selector.find(that.find(context));
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return selector.findAll(that.find(context));
             }
 
             @Override
-            public String decribe(String contextDescription)
-            {
+            public String decribe(String contextDescription) {
                 return selector.decribe(that.decribe(contextDescription));
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("%s %s", that, selector);
             }
         };
@@ -698,34 +628,28 @@ public interface WebElementSelector
      * @deprecated I think this is too complex. It should not be used.
      */
     @Deprecated
-    default WebElementSelector ancestor(String xpath)
-    {
+    default WebElementSelector ancestor(String xpath) {
         WebElementSelector parent = selectByXPath("ancestor::" + xpath);
         WebElementSelector that = this;
 
-        return new WebElementSelector()
-        {
+        return new WebElementSelector() {
             @Override
-            public WebElement find(SearchContext context)
-            {
+            public WebElement find(SearchContext context) {
                 return parent.find(that.find(context));
             }
 
             @Override
-            public List<WebElement> findAll(SearchContext context)
-            {
+            public List<WebElement> findAll(SearchContext context) {
                 return parent.findAll(that.find(context));
             }
 
             @Override
-            public String decribe(String contextDescription)
-            {
+            public String decribe(String contextDescription) {
                 return parent.decribe(that.decribe(contextDescription));
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return String.format("%s %s", that, parent);
             }
         };
@@ -736,8 +660,7 @@ public interface WebElementSelector
      * @return the combined selector or null if one of the selectors is not combinable
      */
     @Nullable
-    default WebElementSelector combine(@Nonnull WebElementSelector selector)
-    {
+    default WebElementSelector combine(@Nonnull WebElementSelector selector) {
         return null;
     }
 }

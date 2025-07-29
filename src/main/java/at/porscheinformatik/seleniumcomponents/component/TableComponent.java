@@ -12,36 +12,29 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author ham
  * @author Daniel Furtlehner
  */
-public class TableComponent extends AbstractSeleniumComponent
-{
+public class TableComponent extends AbstractSeleniumComponent {
 
     private final TableContentComponent headComponent = new TableContentComponent(this, selectByTagName("thead"));
     private final TableContentComponent bodyComponent = new TableContentComponent(this, selectByTagName("tbody"));
     private final TableContentComponent footComponent = new TableContentComponent(this, selectByTagName("tfoot"));
 
-    public TableComponent(SeleniumComponent parent)
-    {
+    public TableComponent(SeleniumComponent parent) {
         super(parent, selectByTagName("table"));
     }
 
-    public TableComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public TableComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public TableContentComponent getHeadComponent()
-    {
+    public TableContentComponent getHeadComponent() {
         return headComponent;
     }
 
-    public TableContentComponent getBodyComponent()
-    {
+    public TableContentComponent getBodyComponent() {
         return bodyComponent;
     }
 
-    public TableContentComponent getFootComponent()
-    {
+    public TableContentComponent getFootComponent() {
         return footComponent;
     }
-
 }

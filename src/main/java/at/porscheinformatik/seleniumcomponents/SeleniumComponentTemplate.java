@@ -7,9 +7,7 @@ package at.porscheinformatik.seleniumcomponents;
  * @param <AnySeleniumComponent> the type of Selenium components to create
  */
 public interface SeleniumComponentTemplate<AnySeleniumComponent extends SeleniumComponent>
-    extends SeleniumComponentFactory<AnySeleniumComponent>
-{
-
+    extends SeleniumComponentFactory<AnySeleniumComponent> {
     /**
      * Creates a {@link SeleniumComponentTemplate} of the specified selector and the specified factory.
      *
@@ -19,19 +17,17 @@ public interface SeleniumComponentTemplate<AnySeleniumComponent extends Selenium
      * @return the template
      */
     static <AnySeleniumComponent extends SeleniumComponent> SeleniumComponentTemplate<AnySeleniumComponent> of(
-        WebElementSelector selector, SeleniumComponentFactory<AnySeleniumComponent> factory)
-    {
-        return new SeleniumComponentTemplate<AnySeleniumComponent>()
-        {
+        WebElementSelector selector,
+        SeleniumComponentFactory<AnySeleniumComponent> factory
+    ) {
+        return new SeleniumComponentTemplate<AnySeleniumComponent>() {
             @Override
-            public WebElementSelector selector()
-            {
+            public WebElementSelector selector() {
                 return selector;
             }
 
             @Override
-            public AnySeleniumComponent create(SeleniumComponent parent, WebElementSelector selector)
-            {
+            public AnySeleniumComponent create(SeleniumComponent parent, WebElementSelector selector) {
                 return factory.create(parent, selector);
             }
         };
@@ -43,5 +39,4 @@ public interface SeleniumComponentTemplate<AnySeleniumComponent extends Selenium
      * @return the selector
      */
     WebElementSelector selector();
-
 }

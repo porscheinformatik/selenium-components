@@ -13,51 +13,46 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
  * @author ham
  * @author Daniel Furtlehner
  */
-public final class HtmlComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent
-{
-    public static HtmlComponent byId(SeleniumComponent parent, String id)
-    {
+public final class HtmlComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+
+    public static HtmlComponent byId(SeleniumComponent parent, String id) {
         return new HtmlComponent(parent, WebElementSelector.selectById(id));
     }
 
-    public static HtmlComponent byTagName(SeleniumComponent parent, String tagName)
-    {
+    public static HtmlComponent byTagName(SeleniumComponent parent, String tagName) {
         return new HtmlComponent(parent, WebElementSelector.selectByTagName(tagName));
     }
 
-    public static HtmlComponent byTestId(SeleniumComponent parent, String testId)
-    {
+    public static HtmlComponent byTestId(SeleniumComponent parent, String testId) {
         return new HtmlComponent(parent, WebElementSelector.selectByTestId(testId));
     }
 
-    public static HtmlComponent byText(SeleniumComponent parent, String tagName, String partialText)
-    {
+    public static HtmlComponent byText(SeleniumComponent parent, String tagName, String partialText) {
         return new HtmlComponent(parent, WebElementSelector.selectByText(tagName, partialText));
     }
 
-    public static HtmlComponent byClassName(SeleniumComponent parent, String className)
-    {
+    public static HtmlComponent byClassName(SeleniumComponent parent, String className) {
         return new HtmlComponent(parent, WebElementSelector.selectByClassName(className));
     }
 
-    public static HtmlComponent byClassNameAndText(SeleniumComponent parent, String className, String text)
-    {
+    public static HtmlComponent byClassNameAndText(SeleniumComponent parent, String className, String text) {
         return new HtmlComponent(parent, WebElementSelector.selectByClassNameAndText(className, text));
     }
 
-    public static HtmlComponent byClassNameAndText(SeleniumComponent parent, String tagName, String className,
-        String text)
-    {
+    public static HtmlComponent byClassNameAndText(
+        SeleniumComponent parent,
+        String tagName,
+        String className,
+        String text
+    ) {
         return new HtmlComponent(parent, WebElementSelector.selectByClassNameAndText(tagName, className, text));
     }
 
-    public static HtmlComponent byCss(SeleniumComponent parent, String css)
-    {
+    public static HtmlComponent byCss(SeleniumComponent parent, String css) {
         return new HtmlComponent(parent, WebElementSelector.selectByCss(css));
     }
 
-    public static HtmlComponent byXPath(SeleniumComponent parent, String xpath)
-    {
+    public static HtmlComponent byXPath(SeleniumComponent parent, String xpath) {
         return new HtmlComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
@@ -67,33 +62,27 @@ public final class HtmlComponent extends AbstractSeleniumComponent implements Ac
      * @param parent the parent
      * @param selector the selector for the element
      */
-    public HtmlComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public HtmlComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
     @Override
-    public String getTagName()
-    {
+    public String getTagName() {
         return super.getTagName();
     }
 
     @Override
-    public String getText()
-    {
+    public String getText() {
         return super.getText();
     }
 
     @Override
-    public String getAttribute(String name)
-    {
+    public String getAttribute(String name) {
         return SeleniumUtils.getAttribute(this, name);
     }
 
     @Override
-    public boolean containsClassName(String className)
-    {
+    public boolean containsClassName(String className) {
         return super.containsClassName(className);
     }
-
 }

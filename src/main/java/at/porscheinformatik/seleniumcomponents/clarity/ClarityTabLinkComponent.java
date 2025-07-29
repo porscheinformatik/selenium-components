@@ -6,38 +6,32 @@ import at.porscheinformatik.seleniumcomponents.SeleniumUtils;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.ButtonComponent;
 
-public class ClarityTabLinkComponent extends AbstractSeleniumComponent
-{
+public class ClarityTabLinkComponent extends AbstractSeleniumComponent {
 
-    private final ButtonComponent button =
-        new ButtonComponent(this, WebElementSelector.selectByCss("button[role='tab']"));
+    private final ButtonComponent button = new ButtonComponent(
+        this,
+        WebElementSelector.selectByCss("button[role='tab']")
+    );
 
-    public ClarityTabLinkComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public ClarityTabLinkComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public String getLabel()
-    {
+    public String getLabel() {
         return button.getLabel();
     }
 
-    public void click()
-    {
+    public void click() {
         button.click();
     }
 
-    public void activate()
-    {
-        if (!isActive())
-        {
+    public void activate() {
+        if (!isActive()) {
             click();
         }
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return SeleniumUtils.containsClassName(button, "active");
     }
-
 }

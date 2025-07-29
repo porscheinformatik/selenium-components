@@ -5,8 +5,7 @@ package at.porscheinformatik.seleniumcomponents;
  *
  * @author HAM
  */
-public enum ScreenshotOutputType
-{
+public enum ScreenshotOutputType {
     BASE64,
-    FILE;
+    FILE,
 }

@@ -2,28 +2,24 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
-import org.openqa.selenium.Keys;
-
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.InputComponent;
+import org.openqa.selenium.Keys;
 
-public class ClarityInputContainerComponent extends ClarityFormControlContainer
-{
+public class ClarityInputContainerComponent extends ClarityFormControlContainer {
+
     private static final String CLR_INPUT_CONTAINER = "clr-input-container";
 
-    public static ClarityInputContainerComponent within(SeleniumComponent parent)
-    {
+    public static ClarityInputContainerComponent within(SeleniumComponent parent) {
         return new ClarityInputContainerComponent(parent, selectByTagName(CLR_INPUT_CONTAINER));
     }
 
-    public static ClarityInputContainerComponent byTestId(SeleniumComponent parent, String testId)
-    {
+    public static ClarityInputContainerComponent byTestId(SeleniumComponent parent, String testId) {
         return new ClarityInputContainerComponent(parent, selectByTestId(CLR_INPUT_CONTAINER, testId));
     }
 
-    public static ClarityInputContainerComponent byText(SeleniumComponent parent, String partialText)
-    {
+    public static ClarityInputContainerComponent byText(SeleniumComponent parent, String partialText) {
         return new ClarityInputContainerComponent(parent, selectByText(CLR_INPUT_CONTAINER, partialText));
     }
 
@@ -31,13 +27,11 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
      * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
      */
     @Deprecated(forRemoval = true)
-    public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey)
-    {
+    public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
         return new ClarityInputContainerComponent(parent, selectBySeleniumKey(CLR_INPUT_CONTAINER, seleniumKey));
     }
 
-    public static ClarityInputContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId)
-    {
+    public static ClarityInputContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId) {
         String xpath = String.format(".//clr-input-container[.//input[@data-testid='%s']]", testId);
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
@@ -47,52 +41,46 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
      * @deprecated Use {@link #byTestIdOfInput(SeleniumComponent, String)} instead
      */
     @Deprecated(forRemoval = true)
-    public static ClarityInputContainerComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey)
-    {
+    public static ClarityInputContainerComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey) {
         String xpath = String.format(".//clr-input-container[.//input[@selenium-key='%s']]", seleniumKey);
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
-    public static ClarityInputContainerComponent byFormControlName(SeleniumComponent parent, String formControlName)
-    {
+    public static ClarityInputContainerComponent byFormControlName(SeleniumComponent parent, String formControlName) {
         String xpath = String.format(".//clr-input-container[.//input[@formcontrolname='%s']]", formControlName);
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
-    public static ClarityInputContainerComponent byLabel(SeleniumComponent parent, String label)
-    {
+    public static ClarityInputContainerComponent byLabel(SeleniumComponent parent, String label) {
         String xpath = String.format(
-            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]", label);
+            ".//clr-input-container[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]",
+            label
+        );
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
     private final InputComponent input = new InputComponent(this);
 
-    public ClarityInputContainerComponent(SeleniumComponent parent, WebElementSelector selector)
-    {
+    public ClarityInputContainerComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 
-    public String getValue()
-    {
+    public String getValue() {
         return input.getValue();
     }
 
-    public void setValue(String value)
-    {
+    public void setValue(String value) {
         input.enter(value);
     }
 
-    public void appendValue(String value)
-    {
+    public void appendValue(String value) {
         input.sendKeys(value);
     }
 
-    public void clear()
-    {
+    public void clear() {
         // Mark the whole input text and delete it
         input.sendKeys(Keys.chord(Keys.CONTROL, "A"), Keys.BACK_SPACE);
     }
@@ -102,9 +90,7 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer
      *
      * @return true if the input control has been disabled, and true otherwise
      */
-    public boolean isDisabled()
-    {
+    public boolean isDisabled() {
         return input.isDisabled();
     }
-
 }

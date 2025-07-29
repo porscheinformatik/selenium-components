@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
 import org.openqa.selenium.StaleElementReferenceException;
 
 /**
@@ -24,22 +23,23 @@ import org.openqa.selenium.StaleElementReferenceException;
  *
  * @author ham
  */
-public final class SeleniumUtils
-{
+public final class SeleniumUtils {
+
     private static final SeleniumLogger LOG = new SeleniumLogger(SeleniumUtils.class);
 
     private static final AtomicInteger POOL_THREAD_ID = new AtomicInteger(1);
     private static final ExecutorService POOL_THREAD_POOL = Executors.newCachedThreadPool(runnable -> {
-        Thread thread = new Thread(runnable,
-            Utils.toClassName(SeleniumUtils.class) + " Pool Thread #" + POOL_THREAD_ID.getAndIncrement());
+        Thread thread = new Thread(
+            runnable,
+            Utils.toClassName(SeleniumUtils.class) + " Pool Thread #" + POOL_THREAD_ID.getAndIncrement()
+        );
 
         thread.setDaemon(true);
 
         return thread;
     });
 
-    private SeleniumUtils()
-    {
+    private SeleniumUtils() {
         super();
     }
 
@@ -50,10 +50,8 @@ public final class SeleniumUtils
      * @param component the component
      * @return the root component
      */
-    public static SeleniumComponent root(SeleniumComponent component)
-    {
-        while (component.parent() != null)
-        {
+    public static SeleniumComponent root(SeleniumComponent component) {
+        while (component.parent() != null) {
             component = component.parent();
         }
 
@@ -67,12 +65,9 @@ public final class SeleniumUtils
      * @param predicate the predicate
      * @return the component, null if not found
      */
-    public static SeleniumComponent findParent(SeleniumComponent component, Predicate<SeleniumComponent> predicate)
-    {
-        while (component != null)
-        {
-            if (predicate.test(component))
-            {
+    public static SeleniumComponent findParent(SeleniumComponent component, Predicate<SeleniumComponent> predicate) {
+        while (component != null) {
+            if (predicate.test(component)) {
                 return component;
             }
 
@@ -91,8 +86,7 @@ public final class SeleniumUtils
      * @return the component
      */
     @SuppressWarnings("unchecked")
-    public static <T extends SeleniumComponent> T findParentByType(SeleniumComponent component, Class<T> type)
-    {
+    public static <T extends SeleniumComponent> T findParentByType(SeleniumComponent component, Class<T> type) {
         return (T) findParent(component, parent -> type.equals(parent.getClass()));
     }
 
@@ -103,8 +97,7 @@ public final class SeleniumUtils
      * @param component the component
      * @return the tag name
      */
-    public static String getTagName(SeleniumComponent component)
-    {
+    public static String getTagName(SeleniumComponent component) {
         return retryOnStale(() -> component.element().getTagName());
     }
 
@@ -115,8 +108,7 @@ public final class SeleniumUtils
      * @param name the name of the attribute
      * @return the value
      */
-    public static String getAttribute(SeleniumComponent component, String name)
-    {
+    public static String getAttribute(SeleniumComponent component, String name) {
         return retryOnStale(() -> component.element().getAttribute(name));
     }
 
@@ -126,8 +118,7 @@ public final class SeleniumUtils
      * @param component the component
      * @return the value
      */
-    public static String getClassAttribute(SeleniumComponent component)
-    {
+    public static String getClassAttribute(SeleniumComponent component) {
         return getAttribute(component, "class");
     }
 
@@ -138,21 +129,17 @@ public final class SeleniumUtils
      * @param className the className
      * @return the true if the class attribute contains the specified string (ignores case)
      */
-    public static boolean containsClassName(SeleniumComponent component, String className)
-    {
+    public static boolean containsClassName(SeleniumComponent component, String className) {
         String attribute = getClassAttribute(component);
 
-        if (attribute == null)
-        {
+        if (attribute == null) {
             return false;
         }
 
         String[] classNames = attribute.split(" ");
 
-        for (String currentClassName : classNames)
-        {
-            if (Objects.equals(currentClassName, className))
-            {
+        for (String currentClassName : classNames) {
+            if (Objects.equals(currentClassName, className)) {
                 return true;
             }
         }
@@ -167,8 +154,7 @@ public final class SeleniumUtils
      * @param component the component
      * @return the text
      */
-    public static String getText(SeleniumComponent component)
-    {
+    public static String getText(SeleniumComponent component) {
         return retryOnStale(() -> component.element().getText().trim());
     }
 
@@ -179,8 +165,7 @@ public final class SeleniumUtils
      * @param selector the selector
      * @return true if one component was found
      */
-    public static boolean containsDescendant(SeleniumComponent component, WebElementSelector selector)
-    {
+    public static boolean containsDescendant(SeleniumComponent component, WebElementSelector selector) {
         return !selector.findAll(component.searchContext()).isEmpty();
     }
 
@@ -194,22 +179,14 @@ public final class SeleniumUtils
      * @return the optional result
      * @throws SeleniumException on occasion
      */
-    public static <Any> Optional<Any> optional(Callable<Any> callable) throws SeleniumException
-    {
-        try
-        {
+    public static <Any> Optional<Any> optional(Callable<Any> callable) throws SeleniumException {
+        try {
             return Optional.ofNullable(callable.call());
-        }
-        catch (SeleniumTimeoutException | SeleniumInterruptedException e)
-        {
+        } catch (SeleniumTimeoutException | SeleniumInterruptedException e) {
             return Optional.empty();
-        }
-        catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             throw e;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new SeleniumException(LOG.hintAt("Call failed"), e);
         }
     }
@@ -219,18 +196,14 @@ public final class SeleniumUtils
      *
      * @param seconds the seconds to wait
      */
-    public static void waitForSeconds(double seconds)
-    {
-        try
-        {
+    public static void waitForSeconds(double seconds) {
+        try {
             double scaledSeconds = scaleTime(seconds);
 
             LOG.trace("Waiting for %,.3f seconds ...", scaledSeconds);
 
             Thread.sleep((long) (scaledSeconds * 1000));
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             throw new SeleniumException("WaitForSeconds got interrupted", e);
         }
     }
@@ -240,23 +213,18 @@ public final class SeleniumUtils
      *
      * @param timeMillis the time millis
      */
-    protected static void waitUntil(long timeMillis)
-    {
+    protected static void waitUntil(long timeMillis) {
         long waitForMillis = timeMillis - System.currentTimeMillis();
 
-        if (waitForMillis <= 0)
-        {
+        if (waitForMillis <= 0) {
             return;
         }
 
-        try
-        {
+        try {
             LOG.trace("Waiting for %,.3f seconds ...", waitForMillis / 1000d);
 
             Thread.sleep(waitForMillis);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             throw new SeleniumException("WaitUntil got interrupted", e);
         }
     }
@@ -273,8 +241,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static void waitUntil(Supplier<Boolean> check) throws SeleniumException
-    {
+    public static void waitUntil(Supplier<Boolean> check) throws SeleniumException {
         keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), () -> check.get() ? true : null);
     }
 
@@ -290,8 +257,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumException
-    {
+    public static void waitUntil(double timeoutInSeconds, Supplier<Boolean> check) throws SeleniumException {
         keepTrying(timeoutInSeconds, () -> check.get() ? true : null);
     }
 
@@ -307,8 +273,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static void retryOnFail(Runnable runnable) throws SeleniumException
-    {
+    public static void retryOnFail(Runnable runnable) throws SeleniumException {
         retryOnFail(SeleniumGlobals.getShortTimeoutInSeconds(), runnable, 0.1);
     }
 
@@ -325,8 +290,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static void retryOnFail(double timeoutInSeconds, Runnable runnable) throws SeleniumException
-    {
+    public static void retryOnFail(double timeoutInSeconds, Runnable runnable) throws SeleniumException {
         retryOnFail(timeoutInSeconds, runnable, 0.1);
     }
 
@@ -342,13 +306,16 @@ public final class SeleniumUtils
      * @throws SeleniumFailException if the call fails to produce a value in time
      */
     public static void retryOnFail(double timeoutInSeconds, Runnable runnable, double delayInSeconds)
-        throws SeleniumFailException
-    {
-        keepTrying(timeoutInSeconds, () -> {
-            runnable.run();
+        throws SeleniumFailException {
+        keepTrying(
+            timeoutInSeconds,
+            () -> {
+                runnable.run();
 
-            return true;
-        }, delayInSeconds);
+                return true;
+            },
+            delayInSeconds
+        );
     }
 
     /**
@@ -365,8 +332,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static <Any> Any keepTrying(Callable<Any> callable) throws SeleniumException
-    {
+    public static <Any> Any keepTrying(Callable<Any> callable) throws SeleniumException {
         return keepTrying(SeleniumGlobals.getShortTimeoutInSeconds(), callable, 0.1);
     }
 
@@ -385,8 +351,7 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable) throws SeleniumException
-    {
+    public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable) throws SeleniumException {
         return keepTrying(timeoutInSeconds, callable, 0.1);
     }
 
@@ -405,95 +370,71 @@ public final class SeleniumUtils
      * @throws SeleniumFailException if the call fails to produce a value in time
      */
     public static <Any> Any keepTrying(double timeoutInSeconds, Callable<Any> callable, double delayInSeconds)
-        throws SeleniumFailException
-    {
+        throws SeleniumFailException {
         double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
         double maxDelayInSeconds = scaledTimeoutInSeconds / 20;
 
-        if ((long) (scaledTimeoutInSeconds * 1000) <= 0)
-        {
+        if ((long) (scaledTimeoutInSeconds * 1000) <= 0) {
             return tryOnce(callable);
         }
 
-        try
-        {
+        try {
             Any result = null;
             long endMillis = (long) (System.currentTimeMillis() + scaledTimeoutInSeconds * 1000);
 
-            while (true)
-            {
+            while (true) {
                 long nextTickMillis = (long) (System.currentTimeMillis() + delayInSeconds * 1000);
 
                 // slowly increase the delay to reduce resource usage
                 delayInSeconds = Math.min(delayInSeconds * 1.2, maxDelayInSeconds);
 
-                try
-                {
+                try {
                     result = callable.call();
-                }
-                catch (Throwable e)
-                {
-                    if (System.currentTimeMillis() > endMillis)
-                    {
+                } catch (Throwable e) {
+                    if (System.currentTimeMillis() > endMillis) {
                         throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
                     }
                 }
 
-                if (result instanceof Optional)
-                {
-                    if (((Optional<?>) result).isPresent())
-                    {
+                if (result instanceof Optional) {
+                    if (((Optional<?>) result).isPresent()) {
                         return result;
                     }
-                }
-                else if (result != null)
-                {
+                } else if (result != null) {
                     return result;
                 }
 
                 long currentMillis = System.currentTimeMillis();
 
-                if (currentMillis > endMillis)
-                {
+                if (currentMillis > endMillis) {
                     throw new SeleniumFailException(
-                        LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds));
+                        LOG.hintAt("Keep trying timed out (%,.1f seconds)", scaledTimeoutInSeconds)
+                    );
                 }
 
                 waitUntil(nextTickMillis);
             }
-        }
-        catch (SeleniumFailException e)
-        {
+        } catch (SeleniumFailException e) {
             throw e;
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
             throw new SeleniumFailException(LOG.hintAt("Keep trying failed"), e);
         }
     }
 
-    private static <Any> Any tryOnce(Callable<Any> callable)
-    {
+    private static <Any> Any tryOnce(Callable<Any> callable) {
         Any result;
 
-        try
-        {
+        try {
             result = callable.call();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new SeleniumFailException(LOG.hintAt("Try once failed"), e);
         }
 
-        if (result instanceof Optional)
-        {
-            if (((Optional<?>) result).isPresent())
-            {
+        if (result instanceof Optional) {
+            if (((Optional<?>) result).isPresent()) {
                 return result;
             }
-        }
-        else if (result != null)
-        {
+        } else if (result != null) {
             return result;
         }
 
@@ -513,42 +454,35 @@ public final class SeleniumUtils
      * @throws SeleniumTimeoutException on timeout
      */
     public static <Any> Any callWithTimeout(double timeoutInSeconds, Callable<Any> callable)
-        throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException
-    {
+        throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException {
         double scaledTimeoutInSeconds = scaleTimeout(timeoutInSeconds);
 
         Future<Any> future = POOL_THREAD_POOL.submit(ThreadUtils.persistCallLine(callable));
 
-        try
-
-        {
-            if (Double.isNaN(scaledTimeoutInSeconds)
-                || Double.isInfinite(scaledTimeoutInSeconds)
-                || (long) (scaledTimeoutInSeconds * 1000) <= 0)
-            {
+        try {
+            if (
+                Double.isNaN(scaledTimeoutInSeconds) ||
+                Double.isInfinite(scaledTimeoutInSeconds) ||
+                (long) (scaledTimeoutInSeconds * 1000) <= 0
+            ) {
                 return future.get();
             }
 
             return future.get((long) (scaledTimeoutInSeconds * 1000), TimeUnit.MILLISECONDS);
-        }
-        catch (ExecutionException e)
-        {
+        } catch (ExecutionException e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
 
-            if (cause instanceof SeleniumException)
-            {
+            if (cause instanceof SeleniumException) {
                 throw (SeleniumException) cause;
             }
 
             throw new SeleniumException(LOG.hintAt("Call failed in callWithTimeout()"), cause);
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             throw new SeleniumInterruptedException(
-                String.format("Call interrupted at %s", ThreadUtils.describeCallLine()), e);
-        }
-        catch (TimeoutException e)
-        {
+                String.format("Call interrupted at %s", ThreadUtils.describeCallLine()),
+                e
+            );
+        } catch (TimeoutException e) {
             throw new SeleniumTimeoutException(LOG.hintAt("Call timed out (%,.1f seconds)", scaledTimeoutInSeconds), e);
         }
     }
@@ -560,8 +494,7 @@ public final class SeleniumUtils
      * @param callable the {@link Callable}
      * @return the future for the {@link Callable}
      */
-    public static <Any> Future<Any> meanwhile(Callable<Any> callable)
-    {
+    public static <Any> Future<Any> meanwhile(Callable<Any> callable) {
         return meanwhile(callable, null, null);
     }
 
@@ -573,8 +506,7 @@ public final class SeleniumUtils
      * @param successCallback the callback on success, may be null
      * @return the future for the {@link Callable}
      */
-    public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback)
-    {
+    public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback) {
         return meanwhile(callable, successCallback, null);
     }
 
@@ -587,30 +519,27 @@ public final class SeleniumUtils
      * @param errorCallback the callback on failure, may be null
      * @return the future for the {@link Callable}
      */
-    public static <Any> Future<Any> meanwhile(Callable<Any> callable, Consumer<Any> successCallback,
-        Consumer<Exception> errorCallback)
-    {
+    public static <Any> Future<Any> meanwhile(
+        Callable<Any> callable,
+        Consumer<Any> successCallback,
+        Consumer<Exception> errorCallback
+    ) {
         Callable<Any> parallelTask = ThreadUtils.persistCallLine(callable);
 
         return POOL_THREAD_POOL.submit(() -> {
             Any result = null;
 
-            try
-            {
+            try {
                 result = parallelTask.call();
-            }
-            catch (Exception e)
-            {
-                if (errorCallback != null)
-                {
+            } catch (Exception e) {
+                if (errorCallback != null) {
                     errorCallback.accept(e);
                 }
 
                 throw e;
             }
 
-            if (successCallback != null)
-            {
+            if (successCallback != null) {
                 successCallback.accept(result);
             }
 
@@ -633,17 +562,17 @@ public final class SeleniumUtils
      * @throws SeleniumInterruptedException on process interruption
      * @throws SeleniumTimeoutException on timeout
      */
-    public static <Any> List<Any> parallel(int iterationCount, int threadCount, double timeoutPerCallableInSeconds,
-        Callable<Any> callable) throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException
-    {
+    public static <Any> List<Any> parallel(
+        int iterationCount,
+        int threadCount,
+        double timeoutPerCallableInSeconds,
+        Callable<Any> callable
+    ) throws SeleniumException, SeleniumInterruptedException, SeleniumTimeoutException {
         Semaphore semaphore = new Semaphore(threadCount);
         Callable<Any> worker = () -> {
-            try
-            {
+            try {
                 return callable.call();
-            }
-            finally
-            {
+            } finally {
                 semaphore.release();
             }
         };
@@ -652,20 +581,16 @@ public final class SeleniumUtils
         timeoutPerCallableInSeconds = timeoutPerCallableInSeconds * (1 + Math.log10(threadCount));
 
         // the total timeout shrinks with the thread count
-        double totalTimeoutInSeconds = timeoutPerCallableInSeconds * iterationCount / threadCount;
+        double totalTimeoutInSeconds = (timeoutPerCallableInSeconds * iterationCount) / threadCount;
 
         return callWithTimeout(totalTimeoutInSeconds, () -> {
             List<Future<Any>> futures = new ArrayList<>();
 
-            for (int i = 0; i < iterationCount; i += 1)
-            {
-                try
-                {
+            for (int i = 0; i < iterationCount; i += 1) {
+                try {
                     // make sure, that not too many callables are executed parallel
                     semaphore.acquire();
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
                     throw new SeleniumInterruptedException("Adding callables to thread pool got interrupted");
                 }
 
@@ -674,8 +599,7 @@ public final class SeleniumUtils
 
             List<Any> results = new ArrayList<>();
 
-            for (Future<Any> future : futures)
-            {
+            for (Future<Any> future : futures) {
                 results.add(future.get());
             }
 
@@ -683,15 +607,12 @@ public final class SeleniumUtils
         });
     }
 
-    private static double scaleTime(double time)
-    {
+    private static double scaleTime(double time) {
         return time * SeleniumGlobals.getTimeMultiplier();
     }
 
-    private static double scaleTimeout(double timeout)
-    {
-        if (SeleniumGlobals.isDebug())
-        {
+    private static double scaleTimeout(double timeout) {
+        if (SeleniumGlobals.isDebug()) {
             return Double.POSITIVE_INFINITY;
         }
 
@@ -707,40 +628,29 @@ public final class SeleniumUtils
      * @param callable the operation to perform
      * @return the operations result
      */
-    public static <Any> Any retryOnStale(Callable<Any> callable)
-    {
+    public static <Any> Any retryOnStale(Callable<Any> callable) {
         int attempts = 3;
 
-        while (true)
-        {
+        while (true) {
             long nextTickMillis = System.currentTimeMillis() + 100;
 
-            try
-            {
+            try {
                 return callable.call();
-            }
-            catch (StaleElementReferenceException e)
-            {
-                if (!SeleniumGlobals.isDebug())
-                {
+            } catch (StaleElementReferenceException e) {
+                if (!SeleniumGlobals.isDebug()) {
                     attempts--;
                 }
 
-                if (attempts <= 0)
-                {
+                if (attempts <= 0) {
                     throw e;
                 }
 
                 LOG.trace("Element is stale, retrying ...");
 
                 waitUntil(nextTickMillis);
-            }
-            catch (RuntimeException e)
-            {
+            } catch (RuntimeException e) {
                 throw e;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new SeleniumException(LOG.hintAt("Call failed in retryOnStale()"), e);
             }
         }
@@ -753,45 +663,33 @@ public final class SeleniumUtils
      *
      * @param runnable the operation to perform
      */
-    public static void retryOnStale(Runnable runnable)
-    {
+    public static void retryOnStale(Runnable runnable) {
         int attempts = 3;
 
-        while (true)
-        {
+        while (true) {
             long nextTickMillis = System.currentTimeMillis() + 100;
 
-            try
-            {
+            try {
                 runnable.run();
 
                 return;
-            }
-            catch (StaleElementReferenceException e)
-            {
-                if (!SeleniumGlobals.isDebug())
-                {
+            } catch (StaleElementReferenceException e) {
+                if (!SeleniumGlobals.isDebug()) {
                     attempts--;
                 }
 
-                if (attempts <= 0)
-                {
+                if (attempts <= 0) {
                     throw e;
                 }
 
                 LOG.trace("Element is stale, retrying ...");
 
                 waitUntil(nextTickMillis);
-            }
-            catch (RuntimeException e)
-            {
+            } catch (RuntimeException e) {
                 throw e;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new SeleniumException(LOG.hintAt("Call failed in retryOnStale()"), e);
             }
         }
     }
-
 }
