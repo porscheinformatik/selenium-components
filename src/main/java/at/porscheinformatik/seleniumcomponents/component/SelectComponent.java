@@ -109,6 +109,13 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
         );
     }
 
+    public OptionComponent optionByLabelContains(String label) {
+        return new OptionComponent(
+            this,
+            WebElementSelector.selectByXPath(".//option[contains(normalize-space(.), " + Quotes.escape(label) + ")]")
+        );
+    }
+
     public void selectByIndex(int index) {
         LOG.interaction("Selecting item of %s by index: %s", describe(), index);
 
@@ -175,6 +182,21 @@ public class SelectComponent extends AbstractSeleniumComponent implements Active
 
     public void selectByLabel(Predicate<String> labelPredicate) {
         select(option -> labelPredicate.test(option.getLabel()));
+    }
+
+    public void selectByLabelContains(String label) {
+        LOG.interaction("Selecting item of %s by label: %s", describe(), label);
+
+        SeleniumAsserts.assertThatSoon(
+            "Select item by label: " + label,
+            () -> {
+                optionByLabelContains(label).select();
+
+                // it's intended, that the option is searched again (the element may change on select an become stale)
+                return optionByLabelContains(label);
+            },
+            SeleniumMatchers.isSelected()
+        );
     }
 
     public void select(Predicate<OptionComponent> predicate) {

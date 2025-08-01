@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.13.1
+
+- Added some more selectors to select containers.
+- Added a selectByLabelContains to select containers
+
 ## selenium-components-0.13.0
 
 - Introduce Prettier for formatting code (company standard) and reformat all code.

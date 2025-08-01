@@ -1,7 +1,5 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
-
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
@@ -18,7 +16,7 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     public static ClaritySingleSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent> within(
         SeleniumComponent parent
     ) {
-        return within(parent, DefaultClarityComboboxOptionComponent::new);
+        return ClaritySingleSelectComboboxContainerComponent.within(parent, DefaultClarityComboboxOptionComponent::new);
     }
 
     public static <
@@ -29,7 +27,7 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     ) {
         return new ClaritySingleSelectComboboxContainerComponent<>(
             parent,
-            selectByTagName("clr-combobox-container"),
+            WebElementSelector.selectByTagName("clr-combobox-container"),
             optionFactory
         );
     }
@@ -38,7 +36,11 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
         SeleniumComponent parent,
         String testId
     ) {
-        return byTestId(parent, testId, DefaultClarityComboboxOptionComponent::new);
+        return ClaritySingleSelectComboboxContainerComponent.byTestId(
+            parent,
+            testId,
+            DefaultClarityComboboxOptionComponent::new
+        );
     }
 
     public static <
@@ -48,14 +50,46 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
         String testId,
         SeleniumComponentFactory<OPTION_TYPE> optionFactory
     ) {
-        return new ClaritySingleSelectComboboxContainerComponent<>(parent, selectByTestId(testId), optionFactory);
+        return new ClaritySingleSelectComboboxContainerComponent<>(
+            parent,
+            WebElementSelector.selectByTestId(testId),
+            optionFactory
+        );
+    }
+
+    public static ClaritySingleSelectComboboxContainerComponent<
+        DefaultClarityComboboxOptionComponent
+    > byFormControlName(SeleniumComponent parent, String formControlName) {
+        return ClaritySingleSelectComboboxContainerComponent.byFormControlName(
+            parent,
+            formControlName,
+            DefaultClarityComboboxOptionComponent::new
+        );
+    }
+
+    public static <
+        OPTION_TYPE extends AbstractClarityComboboxOptionComponent
+    > ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE> byFormControlName(
+        SeleniumComponent parent,
+        String formControlName,
+        SeleniumComponentFactory<OPTION_TYPE> optionFactory
+    ) {
+        return new ClaritySingleSelectComboboxContainerComponent<>(
+            parent,
+            WebElementSelector.selectByTagNameContainingFormControlName("clr-combobox-container", formControlName),
+            optionFactory
+        );
     }
 
     public static ClaritySingleSelectComboboxContainerComponent<DefaultClarityComboboxOptionComponent> byLabel(
         SeleniumComponent parent,
         String partialLabel
     ) {
-        return byLabel(parent, partialLabel, DefaultClarityComboboxOptionComponent::new);
+        return ClaritySingleSelectComboboxContainerComponent.byLabel(
+            parent,
+            partialLabel,
+            DefaultClarityComboboxOptionComponent::new
+        );
     }
 
     public static <
@@ -67,7 +101,7 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     ) {
         return new ClaritySingleSelectComboboxContainerComponent<>(
             parent,
-            selectByTagNameContainingLabel("clr-combobox-container", partialLabel),
+            WebElementSelector.selectByTagNameContainingLabel("clr-combobox-container", partialLabel),
             optionFactory
         );
     }
@@ -85,7 +119,7 @@ public class ClaritySingleSelectComboboxContainerComponent<OPTION_TYPE extends A
     ) {
         return new ClaritySingleSelectComboboxContainerComponent<>(
             parent,
-            selectBySeleniumKey(seleniumKey),
+            WebElementSelector.selectBySeleniumKey(seleniumKey),
             optionFactory
         );
     }

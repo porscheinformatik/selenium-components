@@ -1,7 +1,5 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
-import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
-
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
@@ -9,15 +7,21 @@ import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
 public class ClaritySelectContainerComponent extends ClarityFormControlContainer {
 
     public static ClaritySelectContainerComponent within(SeleniumComponent parent) {
-        return new ClaritySelectContainerComponent(parent, selectByTagName("clr-select-container"));
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByTagName("clr-select-container"));
     }
 
     public static ClaritySelectContainerComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClaritySelectContainerComponent(parent, selectByTestId("clr-select-container", testId));
+        return new ClaritySelectContainerComponent(
+            parent,
+            WebElementSelector.selectByTestId("clr-select-container", testId)
+        );
     }
 
     public static ClaritySelectContainerComponent byText(SeleniumComponent parent, String partialText) {
-        return new ClaritySelectContainerComponent(parent, selectByText("clr-select-container", partialText));
+        return new ClaritySelectContainerComponent(
+            parent,
+            WebElementSelector.selectByText("clr-select-container", partialText)
+        );
     }
 
     public static ClaritySelectContainerComponent byFormControlName(SeleniumComponent parent, String formControlName) {
@@ -38,7 +42,10 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
      */
     @Deprecated(forRemoval = true)
     public static ClaritySelectContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new ClaritySelectContainerComponent(parent, selectBySeleniumKey("clr-select-container", seleniumKey));
+        return new ClaritySelectContainerComponent(
+            parent,
+            WebElementSelector.selectBySeleniumKey("clr-select-container", seleniumKey)
+        );
     }
 
     public final SelectComponent select = new SelectComponent(this);
@@ -65,5 +72,9 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
 
     public void selectByLabel(String label) {
         select.selectByLabel(label);
+    }
+
+    public void selectByLabelContains(String label) {
+        select.selectByLabelContains(label);
     }
 }
