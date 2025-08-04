@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ClarityComboboxOptionsComponent<OPTION_TYPE extends AbstractClarityComboboxOptionComponent>
-    extends AbstractSeleniumComponent {
+    extends AbstractSeleniumComponent
+    implements WithClarityControlHelpers {
 
     private final SeleniumComponentListFactory<OPTION_TYPE> options;
 

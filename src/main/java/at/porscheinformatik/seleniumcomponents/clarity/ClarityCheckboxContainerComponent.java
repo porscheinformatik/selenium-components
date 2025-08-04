@@ -19,49 +19,54 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  *
  * @author Daniel Furtlehner
  */
-public class ClarityCheckboxComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
+public class ClarityCheckboxContainerComponent
+    extends AbstractSeleniumComponent
+    implements ActiveSeleniumComponent, WithClarityControlHelpers {
 
-    public static ClarityCheckboxComponent within(SeleniumComponent parent) {
-        return new ClarityCheckboxComponent(parent, selectByTagName("clr-checkbox-wrapper"));
+    public static ClarityCheckboxContainerComponent within(SeleniumComponent parent) {
+        return new ClarityCheckboxContainerComponent(parent, selectByTagName("clr-checkbox-container"));
     }
 
-    public static ClarityCheckboxComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClarityCheckboxComponent(parent, selectByTestId("clr-checkbox-wrapper", testId));
+    public static ClarityCheckboxContainerComponent byTestId(SeleniumComponent parent, String testId) {
+        return new ClarityCheckboxContainerComponent(parent, selectByTestId("clr-checkbox-container", testId));
     }
 
-    public static ClarityCheckboxComponent byText(SeleniumComponent parent, String partialText) {
-        return new ClarityCheckboxComponent(parent, selectByText("clr-checkbox-wrapper", partialText));
+    public static ClarityCheckboxContainerComponent byText(SeleniumComponent parent, String partialText) {
+        return new ClarityCheckboxContainerComponent(parent, selectByText("clr-checkbox-container", partialText));
     }
 
-    public static ClarityCheckboxComponent byName(SeleniumComponent parent, String name) {
-        String xpath = String.format(".//clr-checkbox-wrapper[.//input[@name='%s']]", name);
+    public static ClarityCheckboxContainerComponent byName(SeleniumComponent parent, String name) {
+        String xpath = String.format(".//clr-checkbox-container[.//input[@name='%s']]", name);
 
-        return new ClarityCheckboxComponent(parent, WebElementSelector.selectByXPath(xpath));
+        return new ClarityCheckboxContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
-    public static ClarityCheckboxComponent byFormControlName(SeleniumComponent parent, String formControlName) {
-        String xpath = String.format(".//clr-checkbox-wrapper[.//input[@formcontrolname='%s']]", formControlName);
+    public static ClarityCheckboxContainerComponent byFormControlName(
+        SeleniumComponent parent,
+        String formControlName
+    ) {
+        String xpath = String.format(".//clr-checkbox-container[.//input[@formcontrolname='%s']]", formControlName);
 
-        return new ClarityCheckboxComponent(parent, WebElementSelector.selectByXPath(xpath));
+        return new ClarityCheckboxContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
-    public static ClarityCheckboxComponent byLabel(SeleniumComponent parent, String label) {
+    public static ClarityCheckboxContainerComponent byLabel(SeleniumComponent parent, String label) {
         String xpath = String.format(
-            ".//clr-checkbox-wrapper[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]",
+            ".//clr-checkbox-container[.//label[contains(@class, 'clr-control-label') and contains(.,'%s')]]",
             label
         );
 
-        return new ClarityCheckboxComponent(parent, WebElementSelector.selectByXPath(xpath));
+        return new ClarityCheckboxContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
     private final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
     private final CheckboxComponent checkbox = new CheckboxComponent(this);
 
-    public ClarityCheckboxComponent(SeleniumComponent parent) {
-        this(parent, selectByTagName("clr-checkbox-wrapper"));
+    public ClarityCheckboxContainerComponent(SeleniumComponent parent) {
+        this(parent, selectByTagName("clr-checkbox-container"));
     }
 
-    public ClarityCheckboxComponent(SeleniumComponent parent, WebElementSelector selector) {
+    public ClarityCheckboxContainerComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }
 

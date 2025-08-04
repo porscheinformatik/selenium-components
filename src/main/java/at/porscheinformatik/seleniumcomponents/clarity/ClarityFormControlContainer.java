@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author ham
  */
-public class ClarityFormControlContainer extends AbstractSeleniumComponent {
+public class ClarityFormControlContainer extends AbstractSeleniumComponent implements WithClarityControlHelpers {
 
     public static ClarityFormControlContainer within(SeleniumComponent parent) {
         return new ClarityFormControlContainer(parent, selectByClassName("clr-form-control"));

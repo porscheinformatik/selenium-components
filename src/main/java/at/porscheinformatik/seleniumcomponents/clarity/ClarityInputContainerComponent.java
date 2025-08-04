@@ -47,6 +47,12 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
+    public static ClarityInputContainerComponent byName(SeleniumComponent parent, String name) {
+        String xpath = String.format(".//clr-input-container[.//input[@name='%s']]", name);
+
+        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     public static ClarityInputContainerComponent byFormControlName(SeleniumComponent parent, String formControlName) {
         String xpath = String.format(".//clr-input-container[.//input[@formcontrolname='%s']]", formControlName);
 

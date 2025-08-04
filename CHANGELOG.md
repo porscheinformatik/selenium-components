@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.13.2
+
+- Deprecated an open method to avoid ambiguous method calls.
+- Add helpers to Clarity form components
+
 ## selenium-components-0.13.1
 
 - Added some more selectors to select containers.

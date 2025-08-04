@@ -16,7 +16,6 @@
     "editor.formatOnSave": true,
     "java.cleanup.actions": [
         "renameFileToType",
-        "qualifyStaticMembers",
         "addOverride",
         "addDeprecated",
         "invertEquals",

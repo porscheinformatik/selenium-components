@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
@@ -69,7 +68,9 @@ public interface SeleniumEnvironment {
      * @param url the URL
      * @param pageFactory the factory for the page
      * @return the page
+     * @deprecated Provokes "ambiguous method call" error in Java 21. Use {@link #open(String, Function)} instead.
      */
+    @Deprecated
     default <T extends AbstractSeleniumPage> T open(String url, Function<SeleniumEnvironment, T> pageFactory) {
         return open(url, pageFactory.apply(this));
     }
@@ -135,16 +136,16 @@ public interface SeleniumEnvironment {
      * @return either a Base64 image or the path to the file. May be null if screenshots are not possible.
      */
     default String takeScreenshot(ScreenshotOutputType screenshotOutputType) {
-        switch (screenshotOutputType) {
-            case BASE64:
-                return takeScreenshotAsBase64();
-            case FILE:
+        return switch (screenshotOutputType) {
+            case BASE64 -> takeScreenshotAsBase64();
+            case FILE -> {
                 File file = takeScreenshotAsFile();
-
-                return file != null ? file.toURI().toString() : null;
-            default:
-                throw new UnsupportedOperationException("ScreenshotOutputType not supported: " + screenshotOutputType);
-        }
+                yield file != null ? file.toURI().toString() : null;
+            }
+            default -> throw new UnsupportedOperationException(
+                "ScreenshotOutputType not supported: " + screenshotOutputType
+            );
+        };
     }
 
     /**
@@ -300,7 +301,7 @@ public interface SeleniumEnvironment {
         try {
             driver.switchTo().window(windowHandle);
 
-            SeleniumAsserts.assertThatSoon(this::getWindowHandle, Matchers.is(windowHandle));
+            assertThatSoon(this::getWindowHandle, is(windowHandle));
 
             return new SubWindow(this, originalHandle, windowHandle);
         } catch (SeleniumException e) {
@@ -355,7 +356,7 @@ public interface SeleniumEnvironment {
 
                     driver.switchTo().window(windowHandle);
 
-                    SeleniumAsserts.assertThatSoon(this::getWindowHandle, Matchers.is(windowHandle));
+                    assertThatSoon(this::getWindowHandle, is(windowHandle));
 
                     return new SubWindow(this, originalHandle, windowHandle);
                 }

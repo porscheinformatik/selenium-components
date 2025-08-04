@@ -30,6 +30,12 @@ public class ClarityPasswordContainerComponent extends ClarityFormControlContain
         return new ClarityPasswordContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
 
+    public static ClarityPasswordContainerComponent byName(SeleniumComponent parent, String name) {
+        String xpath = String.format(".//clr-password-container[.//input[@name='%s']]", name);
+
+        return new ClarityPasswordContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
+    }
+
     public static ClarityPasswordContainerComponent byFormControlName(
         SeleniumComponent parent,
         String formControlName
