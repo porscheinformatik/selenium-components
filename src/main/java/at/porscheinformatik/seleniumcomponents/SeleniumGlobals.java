@@ -200,7 +200,6 @@ public final class SeleniumGlobals {
         );
     }
 
-    @SuppressWarnings("null")
     private static void initializeFromProperties() {
         String debug = System.getProperty(DEBUG_KEY);
 
@@ -384,3 +383,4 @@ public final class SeleniumGlobals {
         }
     }
 }
+

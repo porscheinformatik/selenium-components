@@ -23,7 +23,15 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  *
  * @author Daniel Furtlehner
  */
-public abstract class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent {
+public class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent {
+
+    public static ClarityWizardComponent within(SeleniumComponent parent) {
+        return new ClarityWizardComponent(parent, WebElementSelector.selectByTagName("clr-wizard"));
+    }
+
+    public static ClarityModalComponent byTestId(SeleniumComponent parent, String testId) {
+        return new ClarityModalComponent(parent, selectByTestId("clr-wizard", testId));
+    }
 
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
     private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("modal-title-text"));
