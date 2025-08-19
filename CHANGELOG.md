@@ -1,5 +1,14 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.13.4
+
+- Add optional timeouts to methods in ClarityWizardComponent
+- Increased default timeout for ClarityWizardComponent to 10 seconds
+
+## selenium-components-0.13.3
+
+- Add mixins for Clarity modals and wizards
+
 ## selenium-components-0.13.2
 
 - Deprecated an open method to avoid ambiguous method calls.

@@ -12,6 +12,7 @@ import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentList;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
+import at.porscheinformatik.seleniumcomponents.SeleniumGlobals;
 import at.porscheinformatik.seleniumcomponents.SeleniumMatchers;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.ButtonComponent;
@@ -88,11 +89,20 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
      * Click the "next" button and expect the page title to change.
      */
     public void next() {
+        next(SeleniumGlobals.getLongTimeoutInSeconds());
+    }
+
+    public void next(double timeoutInSeconds) {
         String pageTitle = getPageTitle();
 
         clickNext();
 
-        SeleniumAsserts.assertThatSoon("Page title should change", this::getPageTitle, not(equalTo(pageTitle)));
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Page title should change",
+            this::getPageTitle,
+            not(equalTo(pageTitle))
+        );
     }
 
     /**
@@ -106,11 +116,20 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
      * Click the "previous" button and expect the page title to change.
      */
     public void previous() {
+        previous(SeleniumGlobals.getLongTimeoutInSeconds());
+    }
+
+    public void previous(double timeoutInSeconds) {
         String pageTitle = getPageTitle();
 
         clickPrevious();
 
-        SeleniumAsserts.assertThatSoon("Page title should change", this::getPageTitle, not(equalTo(pageTitle)));
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Page title should change",
+            this::getPageTitle,
+            not(equalTo(pageTitle))
+        );
     }
 
     /**
@@ -124,9 +143,18 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
      * Click the "finish" button and expect the wizard to close itself.
      */
     public void finish() {
+        finish(SeleniumGlobals.getLongTimeoutInSeconds());
+    }
+
+    public void finish(double timeoutInSeconds) {
         clickFinish();
 
-        SeleniumAsserts.assertThatSoon("Wizard should be closed", () -> this, SeleniumMatchers.isNotVisible());
+        SeleniumAsserts.assertThatSoon(
+            timeoutInSeconds,
+            "Wizard should be closed",
+            () -> this,
+            SeleniumMatchers.isNotVisible()
+        );
     }
 
     /**
