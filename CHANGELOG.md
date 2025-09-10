@@ -2,6 +2,10 @@
 
 ## selenium-components-0.13.4
 
+- Method for initializing environment before WebDriver creation
+
+## selenium-components-0.13.4
+
 - Add optional timeouts to methods in ClarityWizardComponent
 - Increased default timeout for ClarityWizardComponent to 10 seconds
 

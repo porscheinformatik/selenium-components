@@ -10,6 +10,13 @@ import org.openqa.selenium.WebDriver;
 @FunctionalInterface
 public interface WebDriverFactory {
     /**
+     * Called once before the {@link WebDriver} is created. Can be used to initialize the environment.
+     */
+    default void initializeEnvironment() {
+        // intentionally left blank
+    }
+
+    /**
      * Create the {@link WebDriver}.
      *
      * @param sessionName the name of the session
