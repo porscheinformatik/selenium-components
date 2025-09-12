@@ -1,10 +1,29 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.clarity.ClarityWizardComponent.ClarityWizardPageComponent;
+import org.hamcrest.Matchers;
 
 public interface ClarityWizardComponentMixin extends SeleniumComponent {
     default ClarityWizardComponent wizardComponent() {
         return ClarityWizardComponent.within(this);
+    }
+
+    default ClarityWizardPageComponent wizardPageByTestId(String testId) {
+        return ClarityWizardComponent.ClarityWizardPageComponent.byTestId(wizardComponent(), testId);
+    }
+
+    default String getWizardTitle() {
+        return wizardComponent().getTitle();
+    }
+
+    default String getWizardPageTitle() {
+        return wizardComponent().getPageTitle();
+    }
+
+    default void assertWizardPageActiveSoon(String title) {
+        SeleniumAsserts.assertThatLater(this::getWizardPageTitle, Matchers.equalTo(title));
     }
 
     /**

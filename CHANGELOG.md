@@ -1,6 +1,10 @@
 # selenium-components-0 (alpha)
 
-## selenium-components-0.13.4
+## selenium-components-0.13.6
+
+- Improve ClarityWizardComponentMixin
+
+## selenium-components-0.13.5
 
 - Method for initializing environment before WebDriver creation
 
