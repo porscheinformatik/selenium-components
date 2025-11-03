@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package at.porscheinformatik.seleniumcomponents.component;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
@@ -23,6 +21,10 @@ public class ButtonComponent extends AbstractSeleniumComponent implements Active
 
     public static ButtonComponent byText(SeleniumComponent parent, String partialText) {
         return new ButtonComponent(parent, WebElementSelector.selectByText("button", partialText));
+    }
+
+    public static ButtonComponent byClassName(SeleniumComponent parent, String className) {
+        return new ButtonComponent(parent, WebElementSelector.selectByClassName("button", className));
     }
 
     /**
