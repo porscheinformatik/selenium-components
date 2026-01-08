@@ -27,13 +27,13 @@ public final class LocaleUtils {
         String[] values = value.split("[_-]");
 
         if (values.length >= 3) {
-            return Locale.of(values[0], values[1], values[2]);
+            return new Locale(values[0], values[1], values[2]);
         }
 
         if (values.length == 2) {
-            return Locale.of(values[0], values[1]);
+            return new Locale(values[0], values[1]);
         }
 
-        return Locale.of(values[0]);
+        return new Locale(values[0]);
     }
 }
