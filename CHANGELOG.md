@@ -1,5 +1,13 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.14.2
+
+- Add methods to manipulate local storage in SeleniumEnvironment
+
+## selenium-components-0.14.1
+
+- Restore compatibility with Java 17
+
 ## selenium-components-0.14.0
 
 - Update dependencies to latest versions

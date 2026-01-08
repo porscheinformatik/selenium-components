@@ -542,6 +542,25 @@ public interface SeleniumEnvironment {
         remoteWebDriver.executeScript("window.localStorage.clear();");
     }
 
+    default String localStorageGetItem(String key) {
+        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) getDriver();
+        Object result = remoteWebDriver.executeScript("return window.localStorage.getItem(arguments[0]);", key);
+
+        return result != null ? result.toString() : null;
+    }
+
+    default void localStorageSetItem(String key, String value) {
+        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) getDriver();
+
+        remoteWebDriver.executeScript("window.localStorage.setItem(arguments[0], arguments[1]);", key, value);
+    }
+
+    default void localStorageRemoveItem(String key) {
+        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) getDriver();
+
+        remoteWebDriver.executeScript("window.localStorage.removeItem(arguments[0]);", key);
+    }
+
     /**
      * Quits the Selenium driver.
      */
