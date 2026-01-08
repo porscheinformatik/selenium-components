@@ -6,8 +6,7 @@ package at.porscheinformatik.seleniumcomponents;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -193,7 +192,7 @@ public interface WebElementSelector {
      * @param attributeValue the value of the attribute. When null only the attribute name must match
      * @return the selector
      */
-    static WebElementSelector selectByAttribute(String tagName, String attributeName, @Nullable String attributeValue) {
+    static WebElementSelector selectByAttribute(String tagName, String attributeName, String attributeValue) {
         if (attributeValue == null) {
             return WebElementSelector.selectByXPath(String.format(".//%s[@%s]", tagName, attributeName));
         }
@@ -314,62 +313,6 @@ public interface WebElementSelector {
      */
     static WebElementSelector selectByTestId(String tagName, String testId) {
         return WebElementSelector.selectByAttribute(tagName, "data-testid", testId);
-    }
-
-    /**
-     * A selector that uses the value of the "data-testid" or "selenium-key" attribute of an element. This selector
-     * respects the hierarchy of components. The implementation is bases on a CSS selector query.
-     *
-     * @param key the expected value of the "data-testid" or "selenium-key" attribute of the element
-     * @return the selector
-     * @deprecated use {@link #selectByTestId(String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    static WebElementSelector selectByTestIdOrSeleniumKey(String key) {
-        return WebElementSelector.selectByTestIdOrSeleniumKey("*", key);
-    }
-
-    /**
-     * A selector that uses a tagName and the value of the the "data-testid" or "selenium-key" attribute of an element.
-     * This selector respects the hierarchy of components. The implementation is bases on a CSS selector query.
-     *
-     * @param tagName the tag name of the element
-     * @param key the expected value of the the "data-testid" or "selenium-key" attribute of the element
-     * @return the selector
-     * @deprecated use {@link #selectByTestId(String, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    static WebElementSelector selectByTestIdOrSeleniumKey(String tagName, String key) {
-        return WebElementSelector.selectByXPath(
-            String.format(".//%s[@data-testid='%s' or @selenium-key='%s']", tagName, key, key)
-        );
-    }
-
-    /**
-     * A selector that uses the value of the "selenium-key" attribute of an element. This selector respects the
-     * hierarchy of components. The implementation is bases on a CSS selector query.
-     *
-     * @param key the expected value of the "selenium-key" attribute of the element
-     * @return the selector
-     * @deprecated use {@link #selectByTestId(String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    static WebElementSelector selectBySeleniumKey(String key) {
-        return WebElementSelector.selectBySeleniumKey("*", key);
-    }
-
-    /**
-     * A selector that uses a tagName and the value of the "selenium-key" attribute of an element. This selector
-     * respects the hierarchy of components. The implementation is bases on a CSS selector query.
-     *
-     * @param tagName the tag name of the element
-     * @param key the expected value of the "selenium-key" attribute of the element
-     * @return the selector
-     * @deprecated use {@link #selectByTestId(String, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    static WebElementSelector selectBySeleniumKey(String tagName, String key) {
-        return WebElementSelector.selectByAttribute(tagName, "selenium-key", key);
     }
 
     /**
@@ -695,7 +638,7 @@ public interface WebElementSelector {
      * @return the combined selector or null if one of the selectors is not combinable
      */
     @Nullable
-    default WebElementSelector combine(@Nonnull WebElementSelector selector) {
+    default WebElementSelector combine(WebElementSelector selector) {
         return null;
     }
 }

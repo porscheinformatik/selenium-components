@@ -23,26 +23,8 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer 
         return new ClarityInputContainerComponent(parent, selectByText(CLR_INPUT_CONTAINER, partialText));
     }
 
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityInputContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new ClarityInputContainerComponent(parent, selectBySeleniumKey(CLR_INPUT_CONTAINER, seleniumKey));
-    }
-
     public static ClarityInputContainerComponent byTestIdOfInput(SeleniumComponent parent, String testId) {
         String xpath = String.format(".//clr-input-container[.//input[@data-testid='%s']]", testId);
-
-        return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestIdOfInput(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityInputContainerComponent bySelenumKeyOfInput(SeleniumComponent parent, String seleniumKey) {
-        String xpath = String.format(".//clr-input-container[.//input[@selenium-key='%s']]", seleniumKey);
 
         return new ClarityInputContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }

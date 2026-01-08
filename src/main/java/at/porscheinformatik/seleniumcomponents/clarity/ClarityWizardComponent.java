@@ -26,12 +26,14 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
  */
 public class ClarityWizardComponent extends AbstractSeleniumComponent implements AnimatedSeleniumComponent {
 
+    private static final String TAG_NAME = "clr-wizard";
+
     public static ClarityWizardComponent within(SeleniumComponent parent) {
-        return new ClarityWizardComponent(parent, WebElementSelector.selectByTagName("clr-wizard"));
+        return new ClarityWizardComponent(parent, WebElementSelector.selectByTagName(TAG_NAME));
     }
 
     public static ClarityModalComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClarityModalComponent(parent, selectByTestId("clr-wizard", testId));
+        return new ClarityModalComponent(parent, selectByTestId(TAG_NAME, testId));
     }
 
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
@@ -61,7 +63,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
     );
 
     public ClarityWizardComponent(SeleniumComponent parent) {
-        this(parent, selectByTagName("clr-wizard"));
+        this(parent, selectByTagName(TAG_NAME));
     }
 
     public ClarityWizardComponent(SeleniumComponent parent, WebElementSelector selector) {
@@ -93,7 +95,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
     }
 
     public void next(double timeoutInSeconds) {
-        String pageTitle = getPageTitle();
+        String title = getPageTitle();
 
         clickNext();
 
@@ -101,7 +103,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
             timeoutInSeconds,
             "Page title should change",
             this::getPageTitle,
-            not(equalTo(pageTitle))
+            not(equalTo(title))
         );
     }
 
@@ -120,7 +122,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
     }
 
     public void previous(double timeoutInSeconds) {
-        String pageTitle = getPageTitle();
+        String title = getPageTitle();
 
         clickPrevious();
 
@@ -128,7 +130,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
             timeoutInSeconds,
             "Page title should change",
             this::getPageTitle,
-            not(equalTo(pageTitle))
+            not(equalTo(title))
         );
     }
 
@@ -190,14 +192,6 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
         }
 
         private final ClarityWizardComponent wizard;
-
-        /**
-         * @deprecated Use {@link #ClarityWizardPageComponent(ClarityWizardComponent, WebElementSelector)} instead
-         */
-        @Deprecated(forRemoval = true)
-        public ClarityWizardPageComponent(ClarityWizardComponent wizard, String seleniumKey) {
-            this(wizard, WebElementSelector.selectByTestIdOrSeleniumKey(seleniumKey));
-        }
 
         public ClarityWizardPageComponent(ClarityWizardComponent wizard, WebElementSelector selector) {
             super(wizard.wizardContent, selector);

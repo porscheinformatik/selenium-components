@@ -39,14 +39,6 @@ public class ImageComponent extends AbstractSeleniumComponent implements ActiveS
         this(parent, selectByTagName("img"));
     }
 
-    /**
-     * @deprecated Use {@link #ImageComponent(SeleniumComponent, WebElementSelector)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public ImageComponent(SeleniumComponent parent, String seleniumKey) {
-        this(parent, selectByTestIdOrSeleniumKey("img", seleniumKey));
-    }
-
     public ImageComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }

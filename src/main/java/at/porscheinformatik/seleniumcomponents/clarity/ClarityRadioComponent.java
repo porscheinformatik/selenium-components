@@ -18,38 +18,22 @@ import at.porscheinformatik.seleniumcomponents.component.RadioComponent;
  */
 public class ClarityRadioComponent extends AbstractSeleniumComponent implements ActiveSeleniumComponent {
 
+    private static final String TAG_NAME = "clr-radio-wrapper";
+
     public static ClarityRadioComponent within(SeleniumComponent parent) {
-        return new ClarityRadioComponent(parent, selectByTagName("clr-radio-wrapper"));
+        return new ClarityRadioComponent(parent, selectByTagName(TAG_NAME));
     }
 
     public static ClarityRadioComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClarityRadioComponent(parent, selectByTestId("clr-radio-wrapper", testId));
+        return new ClarityRadioComponent(parent, selectByTestId(TAG_NAME, testId));
     }
 
     public static ClarityRadioComponent byLabel(SeleniumComponent parent, String partialLabel) {
-        return new ClarityRadioComponent(parent, selectByTagNameContainingLabel("clr-radio-wrapper", partialLabel));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityRadioComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new ClarityRadioComponent(parent, selectBySeleniumKey("clr-radio-wrapper", seleniumKey));
+        return new ClarityRadioComponent(parent, selectByTagNameContainingLabel(TAG_NAME, partialLabel));
     }
 
     public static ClarityRadioComponent byTestIdOfInput(SeleniumComponent parent, String testId) {
         String xpath = String.format(".//clr-radio-wrapper[.//input[@data-testid='%s']]", testId);
-
-        return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestIdOfInput(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityRadioComponent bySeleniumKeyOfInput(SeleniumComponent parent, String seleniumKey) {
-        String xpath = String.format(".//clr-radio-wrapper[.//input[@selenium-key='%s']]", seleniumKey);
 
         return new ClarityRadioComponent(parent, WebElementSelector.selectByXPath(xpath));
     }
@@ -64,7 +48,7 @@ public class ClarityRadioComponent extends AbstractSeleniumComponent implements 
     public final HtmlComponent label = new HtmlComponent(this, selectByTagName("label"));
 
     public ClarityRadioComponent(SeleniumComponent parent) {
-        this(parent, selectByClassName("clr-radio-wrapper"));
+        this(parent, selectByClassName(TAG_NAME));
     }
 
     public ClarityRadioComponent(SeleniumComponent parent, WebElementSelector selector) {

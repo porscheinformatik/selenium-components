@@ -1,5 +1,10 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.14.0
+
+- Update dependencies to latest versions
+- Remove deprecated methods involving `selenium-key` in favor of `data-testid`
+
 ## selenium-components-0.13.6
 
 - Improve ClarityWizardComponentMixin

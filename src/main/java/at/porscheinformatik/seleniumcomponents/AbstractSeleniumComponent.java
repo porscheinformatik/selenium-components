@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
@@ -13,7 +12,7 @@ import org.openqa.selenium.WebElement;
 public abstract class AbstractSeleniumComponent implements SeleniumComponent {
 
     private final SeleniumComponent parent;
-    private final @Nonnull WebElementSelector selector;
+    private final WebElementSelector selector;
 
     /**
      * Creates a new {@link SeleniumComponent} with the specified parent and the specified selector.
@@ -21,8 +20,7 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent {
      * @param parent the mandatory parent
      * @param selector the mandatory selector
      */
-    public AbstractSeleniumComponent(SeleniumComponent parent, WebElementSelector selector) {
-        super();
+    protected AbstractSeleniumComponent(SeleniumComponent parent, WebElementSelector selector) {
         this.parent = Objects.requireNonNull(parent, "Parent is null");
         this.selector = Objects.requireNonNull(selector, "Selector is null");
     }
@@ -41,9 +39,8 @@ public abstract class AbstractSeleniumComponent implements SeleniumComponent {
         }
     }
 
-    protected WebElement element(@Nonnull WebElementSelector selector) {
-        if (parent instanceof AbstractSeleniumComponent) {
-            AbstractSeleniumComponent seleniumP = (AbstractSeleniumComponent) parent;
+    protected WebElement element(WebElementSelector selector) {
+        if (parent instanceof AbstractSeleniumComponent seleniumP) {
             WebElementSelector combinedSelector = seleniumP.getSelector().combine(selector);
 
             if (combinedSelector != null) {

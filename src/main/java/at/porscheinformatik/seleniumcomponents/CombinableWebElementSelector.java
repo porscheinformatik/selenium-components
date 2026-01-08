@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
@@ -24,7 +23,6 @@ public class CombinableWebElementSelector implements WebElementSelector {
     private By by;
 
     public CombinableWebElementSelector(String... cssSelectors) {
-        super();
         this.cssSelectors = cssSelectors;
     }
 
@@ -48,12 +46,12 @@ public class CombinableWebElementSelector implements WebElementSelector {
     }
 
     @Override
-    public WebElementSelector combine(@Nonnull WebElementSelector child) {
-        if (child instanceof CombinableWebElementSelector) {
+    public WebElementSelector combine(WebElementSelector child) {
+        if (child instanceof CombinableWebElementSelector combinablewebelementselector) {
             List<String> combinedSelectors = new ArrayList<>();
 
             for (String cssSelector : cssSelectors) {
-                for (String childsCssSelector : ((CombinableWebElementSelector) child).cssSelectors) {
+                for (String childsCssSelector : combinablewebelementselector.cssSelectors) {
                     combinedSelectors.add(format("%s %s", cssSelector, childsCssSelector));
                 }
             }

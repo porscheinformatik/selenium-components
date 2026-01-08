@@ -6,22 +6,18 @@ import at.porscheinformatik.seleniumcomponents.component.SelectComponent;
 
 public class ClaritySelectContainerComponent extends ClarityFormControlContainer {
 
+    private static final String TAG_NAME = "clr-select-container";
+
     public static ClaritySelectContainerComponent within(SeleniumComponent parent) {
-        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByTagName("clr-select-container"));
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByTagName(TAG_NAME));
     }
 
     public static ClaritySelectContainerComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClaritySelectContainerComponent(
-            parent,
-            WebElementSelector.selectByTestId("clr-select-container", testId)
-        );
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByTestId(TAG_NAME, testId));
     }
 
     public static ClaritySelectContainerComponent byText(SeleniumComponent parent, String partialText) {
-        return new ClaritySelectContainerComponent(
-            parent,
-            WebElementSelector.selectByText("clr-select-container", partialText)
-        );
+        return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByText(TAG_NAME, partialText));
     }
 
     public static ClaritySelectContainerComponent byFormControlName(SeleniumComponent parent, String formControlName) {
@@ -35,17 +31,6 @@ public class ClaritySelectContainerComponent extends ClarityFormControlContainer
             label
         );
         return new ClaritySelectContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClaritySelectContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new ClaritySelectContainerComponent(
-            parent,
-            WebElementSelector.selectBySeleniumKey("clr-select-container", seleniumKey)
-        );
     }
 
     public final SelectComponent select = new SelectComponent(this);

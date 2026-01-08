@@ -10,9 +10,7 @@ import java.util.Locale;
  */
 public final class LocaleUtils {
 
-    private LocaleUtils() {
-        super();
-    }
+    private LocaleUtils() {}
 
     /**
      * Parses the locale from the specified string. Expects the locale in the form of: language [SEPARATOR country
@@ -22,20 +20,20 @@ public final class LocaleUtils {
      * @return the locale
      */
     public static Locale toLocale(String value) {
-        if (value == null || value.trim().length() == 0) {
+        if (value == null || value.trim().isEmpty()) {
             return Locale.ROOT;
         }
 
         String[] values = value.split("[_-]");
 
         if (values.length >= 3) {
-            return new Locale(values[0], values[1], values[2]);
+            return Locale.of(values[0], values[1], values[2]);
         }
 
         if (values.length == 2) {
-            return new Locale(values[0], values[1]);
+            return Locale.of(values[0], values[1]);
         }
 
-        return new Locale(values[0]);
+        return Locale.of(values[0]);
     }
 }

@@ -13,12 +13,12 @@ import java.util.function.Predicate;
  * @author TechScar
  */
 public class ClarityMultiSelectComboboxContainerComponent<
-    OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-    PILL_TYPE extends AbstractClarityComboboxLabelPillComponent
+    O extends AbstractClarityComboboxOptionComponent,
+    P extends AbstractClarityComboboxLabelPillComponent
 >
     extends ClarityFormControlContainer {
 
-    public final ClarityMultiSelectComboboxComponent<OPTION_TYPE, PILL_TYPE> multiSelect;
+    public final ClarityMultiSelectComboboxComponent<O, P> multiSelect;
 
     public static ClarityMultiSelectComboboxContainerComponent<
         DefaultClarityComboboxOptionComponent,
@@ -32,12 +32,12 @@ public class ClarityMultiSelectComboboxContainerComponent<
     }
 
     public static <
-        OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent
-    > ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> within(
+        O extends AbstractClarityComboboxOptionComponent,
+        P extends AbstractClarityComboboxLabelPillComponent
+    > ClarityMultiSelectComboboxContainerComponent<O, P> within(
         SeleniumComponent parent,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-        SeleniumComponentFactory<PILL_TYPE> pillFactory
+        SeleniumComponentFactory<O> optionFactory,
+        SeleniumComponentFactory<P> pillFactory
     ) {
         return new ClarityMultiSelectComboboxContainerComponent<>(
             parent,
@@ -60,13 +60,13 @@ public class ClarityMultiSelectComboboxContainerComponent<
     }
 
     public static <
-        OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent
-    > ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> byTestId(
+        O extends AbstractClarityComboboxOptionComponent,
+        P extends AbstractClarityComboboxLabelPillComponent
+    > ClarityMultiSelectComboboxContainerComponent<O, P> byTestId(
         SeleniumComponent parent,
         String testId,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-        SeleniumComponentFactory<PILL_TYPE> pillFactory
+        SeleniumComponentFactory<O> optionFactory,
+        SeleniumComponentFactory<P> pillFactory
     ) {
         return new ClarityMultiSelectComboboxContainerComponent<>(
             parent,
@@ -89,13 +89,13 @@ public class ClarityMultiSelectComboboxContainerComponent<
     }
 
     public static <
-        OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent
-    > ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> byLabel(
+        O extends AbstractClarityComboboxOptionComponent,
+        P extends AbstractClarityComboboxLabelPillComponent
+    > ClarityMultiSelectComboboxContainerComponent<O, P> byLabel(
         SeleniumComponent parent,
         String partialLabel,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-        SeleniumComponentFactory<PILL_TYPE> pillFactory
+        SeleniumComponentFactory<O> optionFactory,
+        SeleniumComponentFactory<P> pillFactory
     ) {
         return new ClarityMultiSelectComboboxContainerComponent<>(
             parent,
@@ -105,33 +105,11 @@ public class ClarityMultiSelectComboboxContainerComponent<
         );
     }
 
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String, SeleniumComponentFactory, SeleniumComponentFactory)}
-     * instead
-     */
-    @Deprecated(forRemoval = true)
-    public static <
-        OPTION_TYPE extends AbstractClarityComboboxOptionComponent,
-        PILL_TYPE extends AbstractClarityComboboxLabelPillComponent
-    > ClarityMultiSelectComboboxContainerComponent<OPTION_TYPE, PILL_TYPE> bySeleniumKey(
-        SeleniumComponent parent,
-        String seleniumKey,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-        SeleniumComponentFactory<PILL_TYPE> pillFactory
-    ) {
-        return new ClarityMultiSelectComboboxContainerComponent<>(
-            parent,
-            selectBySeleniumKey(seleniumKey),
-            optionFactory,
-            pillFactory
-        );
-    }
-
     public ClarityMultiSelectComboboxContainerComponent(
         SeleniumComponent parent,
         WebElementSelector selector,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory,
-        SeleniumComponentFactory<PILL_TYPE> pillFactory
+        SeleniumComponentFactory<O> optionFactory,
+        SeleniumComponentFactory<P> pillFactory
     ) {
         super(parent, selector);
         multiSelect = new ClarityMultiSelectComboboxComponent<>(this, optionFactory, pillFactory);
@@ -145,11 +123,11 @@ public class ClarityMultiSelectComboboxContainerComponent<
         multiSelect.selectByLabel(partialText);
     }
 
-    public PILL_TYPE findLabelPill(Predicate<PILL_TYPE> predicate) {
+    public P findLabelPill(Predicate<P> predicate) {
         return multiSelect.findLabelPill(predicate);
     }
 
-    public PILL_TYPE getPillByLabel(String partialText) {
+    public P getPillByLabel(String partialText) {
         return multiSelect.getPillByLabel(partialText);
     }
 
@@ -157,7 +135,7 @@ public class ClarityMultiSelectComboboxContainerComponent<
         multiSelect.assertSelected(partialText);
     }
 
-    public SeleniumComponentListFactory<PILL_TYPE> getLabelPills() {
+    public SeleniumComponentListFactory<P> getLabelPills() {
         return multiSelect.getLabelPills();
     }
 

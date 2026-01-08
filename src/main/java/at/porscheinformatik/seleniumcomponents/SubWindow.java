@@ -30,4 +30,3 @@ public class SubWindow implements AutoCloseable {
         environment.switchToWindow(parentWindowHandle);
     }
 }
-

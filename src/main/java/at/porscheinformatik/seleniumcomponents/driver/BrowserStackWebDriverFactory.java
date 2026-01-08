@@ -46,8 +46,6 @@ public class BrowserStackWebDriverFactory extends AbstractWebDriverFactory {
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability("browser", "Firefox");
-        //        caps.setCapability("browser", "Chrome");
-        //        caps.setCapability("browser", "edge");
         caps.setCapability("os", "Windows");
         caps.setCapability("os_version", "10");
         caps.setCapability("resolution", "1280x1024");

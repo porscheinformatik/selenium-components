@@ -9,44 +9,22 @@ import org.openqa.selenium.Keys;
 
 public class ClarityTextareaContainerComponent extends ClarityFormControlContainer {
 
+    private static final String TAG_NAME = "clr-textarea-container";
+
     public static ClarityTextareaContainerComponent within(SeleniumComponent parent) {
-        return new ClarityTextareaContainerComponent(parent, selectByTagName("clr-textarea-container"));
+        return new ClarityTextareaContainerComponent(parent, selectByTagName(TAG_NAME));
     }
 
     public static ClarityTextareaContainerComponent byTestId(SeleniumComponent parent, String testId) {
-        return new ClarityTextareaContainerComponent(parent, selectByTestId("clr-textarea-container", testId));
+        return new ClarityTextareaContainerComponent(parent, selectByTestId(TAG_NAME, testId));
     }
 
     public static ClarityTextareaContainerComponent byText(SeleniumComponent parent, String partialText) {
-        return new ClarityTextareaContainerComponent(parent, selectByText("clr-textarea-container", partialText));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityTextareaContainerComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new ClarityTextareaContainerComponent(
-            parent,
-            selectBySeleniumKey("clr-textarea-container", seleniumKey)
-        );
+        return new ClarityTextareaContainerComponent(parent, selectByText(TAG_NAME, partialText));
     }
 
     public static ClarityTextareaContainerComponent byTestIdOfTextarea(SeleniumComponent parent, String testId) {
         String xpath = String.format(".//clr-textarea-container[.//textarea[@data-testid='%s']]", testId);
-
-        return new ClarityTextareaContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
-    }
-
-    /**
-     * @deprecated Use {@link #byTestIdOfTextarea(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static ClarityTextareaContainerComponent bySelenumKeyOfTextarea(
-        SeleniumComponent parent,
-        String seleniumKey
-    ) {
-        String xpath = String.format(".//clr-textarea-container[.//textarea[@selenium-key='%s']]", seleniumKey);
 
         return new ClarityTextareaContainerComponent(parent, WebElementSelector.selectByXPath(xpath));
     }

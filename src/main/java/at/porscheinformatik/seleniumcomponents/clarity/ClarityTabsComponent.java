@@ -23,14 +23,6 @@ public class ClarityTabsComponent extends AbstractSeleniumComponent {
         super(parent, WebElementSelector.selectByTagName("clr-tabs"));
     }
 
-    /**
-     * @deprecated Use {@link #ClarityTabsComponent(SeleniumComponent, WebElementSelector)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public ClarityTabsComponent(SeleniumComponent parent, String seleniumKey) {
-        super(parent, WebElementSelector.selectByTestIdOrSeleniumKey("clr-tabs", seleniumKey));
-    }
-
     public ClarityTabsComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }

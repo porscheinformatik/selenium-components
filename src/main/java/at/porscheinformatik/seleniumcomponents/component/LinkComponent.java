@@ -34,14 +34,6 @@ public class LinkComponent extends AbstractSeleniumComponent implements ActiveSe
         this(parent, selectByTagName("a"));
     }
 
-    /**
-     * @deprecated Use {@link #LinkComponent(SeleniumComponent, WebElementSelector)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public LinkComponent(SeleniumComponent parent, String seleniumKey) {
-        this(parent, selectBySeleniumKey("a", seleniumKey));
-    }
-
     public LinkComponent(SeleniumComponent parent, WebElementSelector selector) {
         super(parent, selector);
     }

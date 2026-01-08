@@ -38,14 +38,6 @@ public class InputComponent extends AbstractSeleniumComponent implements ActiveS
         );
     }
 
-    /**
-     * @deprecated Use {@link #byTestId(SeleniumComponent, String)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public static InputComponent bySeleniumKey(SeleniumComponent parent, String seleniumKey) {
-        return new InputComponent(parent, WebElementSelector.selectBySeleniumKey(seleniumKey));
-    }
-
     public InputComponent(SeleniumComponent parent) {
         this(parent, WebElementSelector.selectByTagName("input"));
     }

@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -23,10 +22,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.html5.LocalStorage;
-import org.openqa.selenium.remote.RemoteExecuteMethod;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.html5.RemoteWebStorage;
 
 /**
  * Environment for Selenium tests.
@@ -59,20 +55,6 @@ public interface SeleniumEnvironment {
      */
     default String url() {
         return getDriver().getCurrentUrl();
-    }
-
-    /**
-     * Calls the URL, assumes that the result is compatible to the specified page and waits until the page gets ready.
-     *
-     * @param <T> the type of page
-     * @param url the URL
-     * @param pageFactory the factory for the page
-     * @return the page
-     * @deprecated Provokes "ambiguous method call" error in Java 21. Use {@link #open(String, Function)} instead.
-     */
-    @Deprecated
-    default <T extends AbstractSeleniumPage> T open(String url, Function<SeleniumEnvironment, T> pageFactory) {
-        return open(url, pageFactory.apply(this));
     }
 
     /**
@@ -201,7 +183,7 @@ public interface SeleniumEnvironment {
      * @return the parsed date
      */
     default LocalDate parseDate(String dateAsString, FormatStyle style) {
-        if (dateAsString == null || dateAsString.trim().length() == 0) {
+        if (dateAsString == null || dateAsString.trim().isEmpty()) {
             return null;
         }
 
@@ -551,27 +533,13 @@ public interface SeleniumEnvironment {
         getDriver().manage().deleteCookieNamed(cookieName);
     }
 
-    default LocalStorage localStorage() {
-        WebDriver driver = getDriver();
-
-        if (driver instanceof RemoteWebDriver remoteWebDriver) {
-            RemoteExecuteMethod executeMethod = new RemoteExecuteMethod(remoteWebDriver);
-            RemoteWebStorage webStorage = new RemoteWebStorage(executeMethod);
-
-            return webStorage.getLocalStorage();
-        } else {
-            throw new UnsupportedOperationException("Unsupported driver: " + driver.getClass().getName());
-        }
-    }
-
     /**
      * Clears the local storage
-     *
-     * @deprecated use {@link #localStorage()}.clear() instead
      */
-    @Deprecated(forRemoval = true)
     default void clearLocalStorage() {
-        localStorage().clear();
+        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) getDriver();
+
+        remoteWebDriver.executeScript("window.localStorage.clear();");
     }
 
     /**
