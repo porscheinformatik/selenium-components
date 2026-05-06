@@ -1,7 +1,6 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
 import static at.porscheinformatik.seleniumcomponents.SeleniumAsserts.*;
-import static org.hamcrest.Matchers.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
@@ -14,12 +13,13 @@ import at.porscheinformatik.seleniumcomponents.clarity.ClarityComboboxOptionsCom
 import at.porscheinformatik.seleniumcomponents.component.ButtonComponent;
 import at.porscheinformatik.seleniumcomponents.component.InputComponent;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.openqa.selenium.Keys;
 
 /**
  * @author TechScar
  */
-public abstract class AbstractClarityComboboxComponent<OPTION_TYPE extends AbstractClarityComboboxOptionComponent>
+public abstract class AbstractClarityComboboxComponent<O extends AbstractClarityComboboxOptionComponent>
     extends AbstractSeleniumComponent
     implements ActiveSeleniumComponent {
 
@@ -30,25 +30,23 @@ public abstract class AbstractClarityComboboxComponent<OPTION_TYPE extends Abstr
         WebElementSelector.selectByClassName("clr-combobox-trigger")
     );
 
-    protected final ClarityComboboxOptionsComponent<OPTION_TYPE> options;
+    protected final ClarityComboboxOptionsComponent<O> options;
 
     protected AbstractClarityComboboxComponent(
         SeleniumComponent parent,
         WebElementSelector selector,
-        SeleniumComponentFactory<OPTION_TYPE> optionFactory
+        SeleniumComponentFactory<O> optionFactory
     ) {
         super(parent, selector);
         options = new ClarityComboboxOptionsComponent<>(SeleniumUtils.root(this), optionFactory);
     }
 
-    @Override
-    public abstract void clear();
-
     public void selectByLabel(String partialText) {
         input.clear();
         input.enter(partialText);
 
-        assertThatSoon(options::isVisible, is(true));
+        assertThatSoon(() -> options, SeleniumMatchers.isVisible());
+        assertThatSoon(() -> options.getOptionByLabel(partialText), SeleniumMatchers.isVisible());
 
         options.selectOptionByLabel(partialText);
 
@@ -56,12 +54,27 @@ public abstract class AbstractClarityComboboxComponent<OPTION_TYPE extends Abstr
         input.type(Keys.TAB);
     }
 
+    public List<String> getOptionLabels(String partialText) {
+        input.clear();
+        input.enter(partialText);
+
+        assertThatSoon(() -> options, SeleniumMatchers.isVisible());
+        assertThatSoon(() -> options.getOptionByLabel(partialText), SeleniumMatchers.isVisible());
+
+        List<String> labels = options.getOptionLabels();
+
+        // blur in order to make sure, that the options are closed
+        input.type(Keys.TAB);
+
+        return labels;
+    }
+
     public List<String> getOptionLabels() {
         trigger.click();
 
         assertThatSoon(() -> options, SeleniumMatchers.isVisible());
 
-        List<String> labels = options.getOptionLabels();
+        List<String> labels = assertThatSoon(options::getOptionLabels, Matchers.not(Matchers.empty()));
 
         // blur in order to make sure, that the options are closed
         input.type(Keys.TAB);

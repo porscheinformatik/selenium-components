@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.14.3
+
+- Add option labels getter to ClaritySelectContainerComponent based on a partial text
+
 ## selenium-components-0.14.2
 
 - Add methods to manipulate local storage in SeleniumEnvironment
