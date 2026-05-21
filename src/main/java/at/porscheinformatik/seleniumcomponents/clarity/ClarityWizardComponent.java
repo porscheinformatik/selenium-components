@@ -37,7 +37,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
     }
 
     private final HtmlComponent wizardTitle = new HtmlComponent(this, selectByTagName("clr-wizard-title"));
-    private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("modal-title-text"));
+    private final HtmlComponent pageTitle = new HtmlComponent(this, selectByClassName("clr-wizard-page-title-text"));
 
     private final SeleniumComponentListFactory<ClarityWizardStepnavEntry> stepNav = new SeleniumComponentListFactory<>(
         this,
@@ -95,7 +95,7 @@ public class ClarityWizardComponent extends AbstractSeleniumComponent implements
     }
 
     public void next(double timeoutInSeconds) {
-        String title = getPageTitle();
+        String title = SeleniumAsserts.assertThatSoon(timeoutInSeconds, this::getPageTitle, not(emptyOrNullString()));
 
         clickNext();
 
