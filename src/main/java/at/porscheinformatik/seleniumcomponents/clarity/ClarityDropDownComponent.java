@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.*;
 
 import at.porscheinformatik.seleniumcomponents.AbstractSeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.ActiveSeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumAsserts;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentFactory;
 import at.porscheinformatik.seleniumcomponents.SeleniumComponentListFactory;
@@ -14,7 +15,7 @@ import at.porscheinformatik.seleniumcomponents.component.HtmlComponent;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import org.openqa.selenium.Keys;
+import org.hamcrest.Matchers;
 
 /**
  * @param <T> the type of item
@@ -56,9 +57,12 @@ public class ClarityDropDownComponent<T extends AbstractSeleniumComponent & Acti
     }
 
     public boolean isExpanded() {
-        String classAttribute = SeleniumUtils.getClassAttribute(toggle);
+        String expanded = SeleniumAsserts.assertThatSoon(
+            () -> SeleniumUtils.getAttribute(toggle, "aria-expanded"),
+            Matchers.oneOf("true", "false")
+        );
 
-        return classAttribute.contains("active") || classAttribute.contains("open");
+        return "true".equals(expanded);
     }
 
     public void expand() {
@@ -79,7 +83,7 @@ public class ClarityDropDownComponent<T extends AbstractSeleniumComponent & Acti
                 return true;
             }
 
-            entryWrapper.sendKeys(Keys.ESCAPE);
+            toggle.click();
 
             return null;
         });

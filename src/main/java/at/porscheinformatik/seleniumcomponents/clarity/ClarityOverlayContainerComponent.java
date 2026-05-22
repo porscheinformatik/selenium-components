@@ -7,6 +7,10 @@ import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 
 public class ClarityOverlayContainerComponent extends AbstractSeleniumComponent {
 
+    public static ClarityOverlayContainerComponent of(SeleniumComponent parent) {
+        return new ClarityOverlayContainerComponent(parent);
+    }
+
     protected ClarityOverlayContainerComponent(SeleniumComponent parent) {
         super(SeleniumUtils.root(parent), WebElementSelector.selectByClassName("cdk-overlay-container"));
     }
