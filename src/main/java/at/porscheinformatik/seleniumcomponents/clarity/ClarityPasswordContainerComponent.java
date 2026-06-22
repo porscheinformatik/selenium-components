@@ -1,9 +1,9 @@
 package at.porscheinformatik.seleniumcomponents.clarity;
 
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumKeyboardShortcuts;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.InputComponent;
-import org.openqa.selenium.Keys;
 
 /**
  * @author scar
@@ -75,7 +75,8 @@ public class ClarityPasswordContainerComponent extends ClarityFormControlContain
      * form control won't be marked as dirty.
      */
     public void clear() {
-        input.sendKeys(Keys.chord(Keys.CONTROL, "A"), Keys.BACK_SPACE);
+        // Mark the whole input text and delete it, because clear() does not trigger the change detection in Angular.
+        input.sendKeys(SeleniumKeyboardShortcuts.deleteAll());
     }
 
     /**
@@ -85,3 +86,4 @@ public class ClarityPasswordContainerComponent extends ClarityFormControlContain
         return input.isDisabled();
     }
 }
+

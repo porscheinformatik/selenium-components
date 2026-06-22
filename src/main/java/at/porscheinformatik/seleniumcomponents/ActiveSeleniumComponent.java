@@ -454,3 +454,4 @@ public interface ActiveSeleniumComponent extends SeleniumComponent {
         }
     }
 }
+

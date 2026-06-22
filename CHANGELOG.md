@@ -1,5 +1,9 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.14.7
+
+- Fix keyboard shortcuts for Mac
+
 ## selenium-components-0.14.4-6
 
 - Fixes for Clarity 18
@@ -587,3 +591,4 @@
 ## selenium-components-0.0.1
 
 Initial release.
+

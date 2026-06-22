@@ -3,9 +3,9 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumKeyboardShortcuts;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.TextAreaComponent;
-import org.openqa.selenium.Keys;
 
 public class ClarityTextareaContainerComponent extends ClarityFormControlContainer {
 
@@ -66,8 +66,8 @@ public class ClarityTextareaContainerComponent extends ClarityFormControlContain
     }
 
     public void clear() {
-        // Mark the whole textarea text and delete it
-        textarea.sendKeys(Keys.chord(Keys.CONTROL, "A"), Keys.BACK_SPACE);
+        // Mark the whole input text and delete it, because clear() does not trigger the change detection in Angular.
+        textarea.sendKeys(SeleniumKeyboardShortcuts.deleteAll());
     }
 
     /**

@@ -3,9 +3,9 @@ package at.porscheinformatik.seleniumcomponents.clarity;
 import static at.porscheinformatik.seleniumcomponents.WebElementSelector.*;
 
 import at.porscheinformatik.seleniumcomponents.SeleniumComponent;
+import at.porscheinformatik.seleniumcomponents.SeleniumKeyboardShortcuts;
 import at.porscheinformatik.seleniumcomponents.WebElementSelector;
 import at.porscheinformatik.seleniumcomponents.component.InputComponent;
-import org.openqa.selenium.Keys;
 
 public class ClarityInputContainerComponent extends ClarityFormControlContainer {
 
@@ -69,8 +69,8 @@ public class ClarityInputContainerComponent extends ClarityFormControlContainer 
     }
 
     public void clear() {
-        // Mark the whole input text and delete it
-        input.sendKeys(Keys.chord(Keys.CONTROL, "A"), Keys.BACK_SPACE);
+        // Mark the whole input text and delete it, because clear() does not trigger the change detection in Angular.
+        input.sendKeys(SeleniumKeyboardShortcuts.deleteAll());
     }
 
     /**
