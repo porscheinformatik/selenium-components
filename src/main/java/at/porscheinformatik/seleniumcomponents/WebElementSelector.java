@@ -104,7 +104,18 @@ public interface WebElementSelector {
      * @return the selector
      */
     static WebElementSelector selectByFormControlName(String formControlName) {
-        return WebElementSelector.selectByAttribute("input", "formControlName", formControlName);
+        return WebElementSelector.selectByFormControlName("input", formControlName);
+    }
+
+    /**
+     * A selector that uses the value of the "formControlName" attribute of an element with the specified tag name. This selector respects the hierarchy of components.
+     *
+     * @param tagName the tag name of the element
+     * @param formControlName the expected value of the "formControlName" attribute of the element
+     * @return the selector
+     */
+    static WebElementSelector selectByFormControlName(String tagName, String formControlName) {
+        return WebElementSelector.selectByAttribute(tagName, "formControlName", formControlName);
     }
 
     /**
@@ -117,6 +128,19 @@ public interface WebElementSelector {
     static WebElementSelector selectByTagNameContainingFormControlName(String tagName, String formControlName) {
         return WebElementSelector.selectByXPath(
             String.format(".//%s[.//*[@formControlName='%s']]", tagName, formControlName)
+        );
+    }
+
+    /**
+     * A selector that finds an element with the specified tag name within an element that has the given "formControlName" attribute.
+     *
+     * @param formControlName the expected value of the "formControlName" attribute of the parent element
+     * @param tagName the tag name of the element to select within the parent
+     * @return the selector
+     */
+    static WebElementSelector selectByTagNameWithinFormControlName(String formControlName, String tagName) {
+        return WebElementSelector.selectByXPath(
+            String.format(".//*[@formControlName='%s']//%s", formControlName, tagName)
         );
     }
 

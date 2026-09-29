@@ -1,5 +1,13 @@
 # selenium-components-0 (alpha)
 
+## selenium-components-0.14.9
+
+- Add more formControl selectors
+
+## selenium-components-0.14.8
+
+- Fix invalid label selector
+
 ## selenium-components-0.14.7
 
 - Fix keyboard shortcuts for Mac
@@ -591,4 +599,3 @@
 ## selenium-components-0.0.1
 
 Initial release.
-
