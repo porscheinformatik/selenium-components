@@ -106,6 +106,10 @@ public class ClaritySingleSelectComboboxContainerComponent<T extends AbstractCla
         singleSelect.clear();
     }
 
+    public void clearAndMarkDirty() {
+        singleSelect.clearAndMarkDirty();
+    }
+
     public void selectByLabel(String partialText) {
         singleSelect.selectByLabel(partialText);
     }

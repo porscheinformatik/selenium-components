@@ -41,6 +41,9 @@ public class ClaritySingleSelectComboboxComponent<OPTION_TYPE extends AbstractCl
 
         // we need to do this here or the formControl will not recognize the value having changed
         input.sendKeys(".", Keys.BACK_SPACE);
+
+        // blur in order to close the options
+        input.type(Keys.TAB);
     }
 
     public String getSelectedLabel() {
